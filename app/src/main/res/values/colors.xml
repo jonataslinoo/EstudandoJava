@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#A128D3</color>
+    <color name="colorPrimaryDark">#6E1C92</color>
+    <color name="colorAccent">#C27BDE</color>
+
+    <color name="corRoxoEscuro">#6E1C92</color>
+    <color name="corRoxoMedio">#A128D3</color>
+    <color name="corRoxo">#AE52D4</color>
+    <color name="corRoxoClaro">#C27BDE</color>
+    <color name="corBranca">#FFFFFF</color>
+    <color name="corPreto">#000000</color>
+    <color name="corCinza">#808080</color>
+    <color name="corCinzaClaro">#CCCCCC</color>
+    <color name="corTransparente">#00000000</color>
+</resources>

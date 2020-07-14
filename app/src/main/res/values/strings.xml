@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">R J G</string>
+    <string name="email">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="login">Login</string>
+    <string name="titulo_principal_splash_screen">R J G</string>
+    <string name="titulo_secundario_splash_screen">CONFECÇÕES</string>
+    <string name="sobrenome">Sobrenome</string>
+    <string name="nome_produto">Nome produto</string>
+    <string name="confirmar_senha">Confirmar senha</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="permitir_cadastro">Permitir cadastro</string>
+    <string name="sair">Sair</string>
+    <string name="novo_usuario">Novo Usuário</string>
+
+    <!-- Mensagens de sucesso -->
+    <string name="msg_sucesso_login">Sucesso ao efetuar login.</string>
+    <string name="msg_sucesso_cadastrar_usuario">Sucesso ao cadastrar usuario!</string>
+    <string name="msg_sucesso_cadastrar_cliente">Sucesso ao cadastrar cliente!</string>
+    <string name="msg_sucesso_cadastrar_produto">Sucesso ao cadastrar produto!</string>
+
+    <!-- Mensagens de erro -->
+    <string name="msg_erro_senha_branco">O campo de senha não pode estar em branco!</string>
+    <string name="msg_erro_senha_minimo_6">A senha deve ter o mínimo de 6 caracteres!</string>
+    <string name="msg_erro_senhas_nao_correspondem">As senhas não correspondem.</string>
+    <string name="msg_erro_campos_cadastro_branco">Os campos de cadastro não podem estar em branco!</string>
+    <string name="msg_erro_campos_login_branco">Os campos de email e senha não podem estar em branco!</string>
+    <string name="msg_erro_email_invalido">O e-mail digita é invalido. Digite outro e-mail.</string>
+    <string name="msg_erro_email_em_uso">Esse e-mail já está em uso. Utilize outro email.</string>
+    <string name="msg_erro">\"Erro: \"</string>
+    <string name="msg_erro_dados_usuario_nao_encontrados">Dados do usuário não encontrados.</string>
+    <string name="msg_erro_email_nao_existe_desabilitado">Este e-mail não existe ou foi desabilitado.</string>
+    <string name="msg_erro_senha_incorreta">Senha incorreta.</string>
+    <string name="msg_erro_conexao_efetue_login_novamente">Falha na conexão, efetue o login novamente.</string>
+    <string name="msg_erro_nenhum_usuario_logado">Nenhum usuario logado!</string>
+    <string name="msg_erro_cadastrar_usuario">Erro ao cadastrar usuario!</string>
+    <string name="msg_erro_cliente_ja_cadastrado">Esse cliente já possui cadastro!</string>
+    <string name="msg_erro_produto_ja_cadastrado">Esse produto já possui cadastro!</string>
+
+    <!-- Menus -->
+    <string name="menu_cadastrar_usuario">Cadastrar Usuario</string>
+    <string name="menu_pedidos">Pedidos</string>
+    <string name="menu_clientes">Clientes</string>
+    <string name="menu_pedidos_finalizados">Pedidos Finalizados</string>
+    <string name="menu_opcoes">Opções</string>
+    <string name="menu_novo_pedido">Novo Pedido</string>
+
+    <!-- Toolbars -->
+    <string name="toolbar_titulo_pedidos">Pedidos</string>
+    <string name="toolbar_titulo_opcoes">Opções</string>
+    <string name="cod_telefone">Telefone</string>
+    <string name="cod_area">DDD</string>
+    <string name="tipo_sexo">M/F</string>
+    <string name="preco_produto">Preço produto</string>
+    <string name="kit">Kit</string>
+    <string name="menu_produtos">Produtos</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_novo_produto">Novo Produto</string>
+
+</resources>

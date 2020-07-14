@@ -1,0 +1,51 @@
+package com.rjgconfeccoes.model;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+import com.rjgconfeccoes.config.ConfiguracaoFirebase;
+
+public class Produto {
+
+    private String id;
+    private String nome;
+    private String tipoSexo;
+    private double preco;
+
+    public void salvar() {
+        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
+        databaseReference.child("produtos").child(getId()).setValue(this);
+    }
+
+    @Exclude
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getTipoSexo() {
+        return tipoSexo;
+    }
+
+    public void setTipoSexo(String tipoSexo) {
+        this.tipoSexo = tipoSexo;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+}
