@@ -44,18 +44,19 @@
     <string name="menu_pedidos_finalizados">Pedidos Finalizados</string>
     <string name="menu_opcoes">Opções</string>
     <string name="menu_novo_pedido">Novo Pedido</string>
+    <string name="menu_novo_produto">Novo Produto</string>
 
     <!-- Toolbars -->
     <string name="toolbar_titulo_pedidos">Pedidos</string>
     <string name="toolbar_titulo_opcoes">Opções</string>
     <string name="cod_telefone">Telefone</string>
     <string name="cod_area">DDD</string>
-    <string name="tipo_sexo">M/F</string>
-    <string name="preco_produto">Preço produto</string>
-    <string name="kit">Kit</string>
+    <string name="zero">0</string>
+    <string name="quantidade_feminina">Quantidade Feminina</string>
+    <string name="quantidade_masculina">Quantidade Masculina</string>
+    <string name="preco">Preço</string>
+    <string name="kit_infantil">Kit Infantil</string>
+    <string name="kit_adulto">Kit Adulto</string>
     <string name="menu_produtos">Produtos</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="menu_novo_produto">Novo Produto</string>
 
 </resources>

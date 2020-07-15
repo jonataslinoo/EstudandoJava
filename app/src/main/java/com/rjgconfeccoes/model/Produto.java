@@ -8,7 +8,8 @@ public class Produto {
 
     private String id;
     private String nome;
-    private String tipoSexo;
+    private int quantidadeMasculina;
+    private int quantidadeFeminina;
     private double preco;
 
     public void salvar() {
@@ -33,12 +34,20 @@ public class Produto {
         this.nome = nome;
     }
 
-    public String getTipoSexo() {
-        return tipoSexo;
+    public int getQuantidadeMasculina() {
+        return quantidadeMasculina;
     }
 
-    public void setTipoSexo(String tipoSexo) {
-        this.tipoSexo = tipoSexo;
+    public void setQuantidadeMasculina(int quantidadeMasculina) {
+        this.quantidadeMasculina = quantidadeMasculina;
+    }
+
+    public int getQuantidadeFeminina() {
+        return quantidadeFeminina;
+    }
+
+    public void setQuantidadeFeminina(int quantidadeFeminina) {
+        this.quantidadeFeminina = quantidadeFeminina;
     }
 
     public double getPreco() {

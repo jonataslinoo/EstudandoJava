@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,16 +23,25 @@ import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.ui.util.Base64Custom;
 import com.rjgconfeccoes.ui.util.Util;
 
-public class CadastroProdutoActivity extends AppCompatActivity {
+public class CadastroProdutoActivity extends AppCompatActivity{
 
     private static final String TITULO_APPBAR = "Novo Produto";
+    private DatabaseReference databaseReference;
     private Toolbar toolbar;
     private ConstraintLayout constraintLayout;
     private EditText nome;
-    private EditText tipoSexo;
+    private TextView qtdeMasculina;
+    private TextView qtdeFeminina;
     private EditText preco;
-    private DatabaseReference databaseReference;
-    private CheckBox kit;
+    private CheckBox kitAdulto;
+    private CheckBox kitInfantil;
+    private ImageView botaoAdicionarMasculina;
+    private ImageView botaoRemoverMasculina;
+    private ImageView botaoAdicionarFeminina;
+    private ImageView botaoRemoverFeminina;
+
+    private int quantidadeClicadaMasculina = 0;
+    private int quantidadeClicadaFeminina = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +50,65 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
         inicializaCampos();
         configuraToolbar();
-        configuraKit();
+        configuraAdicionarRemoverQuantidade();
         configuraBotaoCadastrar();
-//        criaFormatacaoTelefone();
+    }
+
+    private void configuraAdicionarRemoverQuantidade() {
+        botaoAdicionarMasculina = findViewById(R.id.botao_adicionar_masculina_cadastrar_produto);
+        botaoRemoverMasculina = findViewById(R.id.botao_remover_masculina_cadastrar_produto);
+        botaoAdicionarFeminina = findViewById(R.id.botao_adicionar_feminina_cadastrar_produto);
+        botaoRemoverFeminina = findViewById(R.id.botao_remover_feminina_cadastrar_produto);
+
+        botaoAdicionarMasculina.setOnClickListener(this::somaQuantidadeClicada);
+        botaoRemoverMasculina.setOnClickListener(this::somaQuantidadeClicada);
+        botaoAdicionarFeminina.setOnClickListener(this::somaQuantidadeClicada);
+        botaoRemoverFeminina.setOnClickListener(this::somaQuantidadeClicada);
+
+//        botaoAdicionarMasculina.setOnClickListener(this);
+//        botaoRemoverMasculina.setOnClickListener(this);
+//        botaoAdicionarFeminina.setOnClickListener(this);
+//        botaoRemoverFeminina.setOnClickListener(this);
+    }
+
+//    @Override
+//    public void onClick(View view) {
+//        if (view == botaoAdicionarMasculina) {
+//            quantidadeClicadaMasculina += 1;
+//        } else if (view == botaoRemoverMasculina) {
+//            quantidadeClicadaMasculina -= 1;
+//        } else if (view == botaoAdicionarFeminina) {
+//            quantidadeClicadaFeminina += 1;
+//        } else if (view == botaoRemoverFeminina) {
+//            quantidadeClicadaFeminina -= 1;
+//        }
+//        qtdeMasculina.setText(String.valueOf(quantidadeClicadaMasculina));
+//        qtdeFeminina.setText(String.valueOf(quantidadeClicadaFeminina));
+//    }
+
+    public void somaQuantidadeClicada(View view) {
+        if (view == botaoAdicionarMasculina) {
+            quantidadeClicadaMasculina += 1;
+        } else if (view == botaoRemoverMasculina) {
+            quantidadeClicadaMasculina -= 1;
+        } else if (view == botaoAdicionarFeminina) {
+            quantidadeClicadaFeminina += 1;
+        } else if (view == botaoRemoverFeminina) {
+            quantidadeClicadaFeminina -= 1;
+        }
+        qtdeMasculina.setText(String.valueOf(quantidadeClicadaMasculina));
+        qtdeFeminina.setText(String.valueOf(quantidadeClicadaFeminina));
     }
 
     private void inicializaCampos() {
         toolbar = findViewById(R.id.toolbar);
         constraintLayout = findViewById(R.id.constraint_layout_cadastrar_produto);
         nome = findViewById(R.id.et_nome_cadastrar_produto);
-        tipoSexo = findViewById(R.id.et_tipo_cadastrar_produto);
+        qtdeMasculina = findViewById(R.id.et_quanditade_masculina_cadastrar_produto);
+        qtdeFeminina = findViewById(R.id.et_quantidade_feminina_cadastrar_produto);
         preco = findViewById(R.id.et_preco_cadastrar_produto);
+        kitAdulto = findViewById(R.id.checkBox_kit_adulto_cadastrar_produto);
+        kitInfantil = findViewById(R.id.checkBox_kit_infantil_cadastrar_produto);
     }
 
     private void configuraToolbar() {
@@ -59,20 +118,6 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(view -> finish());
     }
 
-    private void configuraKit() {
-        kit = findViewById(R.id.checkBox_kit_cadastrar_produto);
-        kit.setOnClickListener(v -> verificaProdutoEhKit());
-    }
-
-    private void verificaProdutoEhKit() {
-        if (kit.isChecked()) {
-            tipoSexo.setVisibility(View.INVISIBLE);
-            tipoSexo.setText("");
-        } else {
-            tipoSexo.setVisibility(View.VISIBLE);
-        }
-    }
-
     private void configuraBotaoCadastrar() {
         Button botaoCadastrarProduto = findViewById(R.id.bt_cadastrar_cadastrar_produto);
         botaoCadastrarProduto.setOnClickListener(v -> validaCamposDigitados());
@@ -80,44 +125,47 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
     private void validaCamposDigitados() {
         String nomeDigitado = nome.getText().toString();
-        String tipoSexoDigitada = tipoSexo.getText().toString();
+        int quantidadeMasculina = Integer.parseInt(qtdeMasculina.getText().toString());
+        int quantidadeFeminina = Integer.parseInt(qtdeFeminina.getText().toString());
         double precoDigitado = Double.parseDouble(preco.getText().toString());
-        boolean kitMarcadao = kit.isChecked();
-        if (!kitMarcadao) {
-            if (nomeDigitado.isEmpty() || tipoSexoDigitada.isEmpty() || precoDigitado == 0) {
+        boolean kitAdultoMarcado = kitAdulto.isChecked();
+        boolean kitInfantilMarcado = kitInfantil.isChecked();
+        int quantidadeTotal = 0;
+
+        quantidadeTotal = quantidadeMasculina + quantidadeFeminina;
+
+        if (kitAdultoMarcado) {
+            if (nomeDigitado.isEmpty() || quantidadeTotal != 3 || precoDigitado == 0) {
                 Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
             } else {
-                preencheCampos(nomeDigitado, tipoSexoDigitada, precoDigitado);
+                preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeMasculina, precoDigitado);
             }
+        } else if (kitInfantilMarcado) {
+            if (nomeDigitado.isEmpty() || quantidadeTotal != 4 || precoDigitado == 0) {
+                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
+            } else {
+                preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeMasculina, precoDigitado);
+            }
+        } else if (nomeDigitado.isEmpty() || quantidadeTotal != 1 || precoDigitado == 0) {
+            Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
         } else {
-            if (nomeDigitado.isEmpty() || precoDigitado == 0) {
-                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
-            } else {
-                preencheCampos(nomeDigitado, tipoSexoDigitada, precoDigitado);
-            }
+            preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
         }
     }
 
-    private void preencheCampos(String nome, String tipoSexo, double preco) {
+    private void preencheCampos(String nome, int quantidadeMasculina, int quantidadeFeminina, double preco) {
         Produto produto = new Produto();
         produto.setNome(nome);
-        produto.setTipoSexo(tipoSexo);
+        produto.setQuantidadeMasculina(quantidadeMasculina);
+        produto.setQuantidadeFeminina(quantidadeFeminina);
         produto.setPreco(preco);
 
         salvaProduto(produto);
-
-
-//        String formataTelefone;
-//        if (telefoneSemFormatacao.length() == 11) {
-//            formataTelefone = telefoneSemFormatacao.substring(0, 3) + " " + telefoneSemFormatacao.substring(3, 7) + "-" + telefoneSemFormatacao.substring(7);
-//        } else {
-//            formataTelefone = telefoneSemFormatacao.substring(0, 3) + " " + telefoneSemFormatacao.substring(3, 8) + "-" + telefoneSemFormatacao.substring(8);
-//        }
     }
 
     private void salvaProduto(Produto produto) {
         //codifica o telefone em base64 para usar como id do cliente
-        String idProduto = Base64Custom.codificarStringBase64(produto.getNome()+produto.getTipoSexo());
+        String idProduto = Base64Custom.codificarStringBase64(produto.getNome() + produto.getQuantidadeMasculina());
 
         //Instancio uma referencia ao banco de dados
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child("produtos").child(idProduto);
@@ -151,8 +199,11 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
     private void limpaCampos() {
         nome.setText("");
-        tipoSexo.setText("");
+        qtdeMasculina.setText("");
+        qtdeFeminina.setText("");
         preco.setText("");
+        kitAdulto.setChecked(false);
+        kitInfantil.setChecked(false);
     }
 
     private void vaiParaTelaDashboard() {

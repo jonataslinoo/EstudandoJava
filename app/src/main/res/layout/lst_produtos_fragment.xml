@@ -38,7 +38,7 @@
             tools:text="Mascara bico de pato adulto" />
 
         <TextView
-            android:id="@+id/tv_tipo_produto_fragment"
+            android:id="@+id/tv_quantidade_masculina_produto_fragment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/corPreto"
@@ -49,14 +49,25 @@
             tools:text="Masculina" />
 
         <TextView
+            android:id="@+id/tv_quantidade_feminina_produto_fragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/corPreto"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tv_quantidade_masculina_produto_fragment"
+            app:layout_constraintStart_toStartOf="@id/tv_quantidade_masculina_produto_fragment"
+            app:layout_constraintTop_toBottomOf="@id/tv_quantidade_masculina_produto_fragment"
+            tools:text="Feminina" />
+
+        <TextView
             android:id="@+id/tv_preco_produto_fragment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/corPreto"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@id/tv_tipo_produto_fragment"
-            app:layout_constraintStart_toStartOf="@+id/tv_tipo_produto_fragment"
-            app:layout_constraintTop_toBottomOf="@id/tv_tipo_produto_fragment"
+            app:layout_constraintEnd_toEndOf="@id/tv_quantidade_feminina_produto_fragment"
+            app:layout_constraintStart_toStartOf="@+id/tv_quantidade_feminina_produto_fragment"
+            app:layout_constraintTop_toBottomOf="@id/tv_quantidade_feminina_produto_fragment"
             tools:text="R$ 4,50" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

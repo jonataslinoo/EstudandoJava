@@ -46,26 +46,47 @@ public class AdapterProdutosFragment extends RecyclerView.Adapter<AdapterProduto
 
     public class ViewHolderProdutos extends RecyclerView.ViewHolder {
 
-        public final TextView idProduto;
-        public final TextView nomePoduto;
-        public final TextView tipoSexoProduto;
-        public final TextView precoProduto;
+        private final TextView idProduto;
+        private final TextView nomePoduto;
+        private final TextView quantidadeMasculina;
+        private final TextView quantidadeFemina;
+        private final TextView precoProduto;
 
         public ViewHolderProdutos(@NonNull View itemView) {
             super(itemView);
 
             idProduto = itemView.findViewById(R.id.tv_id_produto_fragment);
             nomePoduto = itemView.findViewById(R.id.tv_nome_produto_fragment);
-            tipoSexoProduto = itemView.findViewById(R.id.tv_tipo_produto_fragment);
+            quantidadeMasculina = itemView.findViewById(R.id.tv_quantidade_masculina_produto_fragment);
+            quantidadeFemina = itemView.findViewById(R.id.tv_quantidade_feminina_produto_fragment);
             precoProduto = itemView.findViewById(R.id.tv_preco_produto_fragment);
         }
 
         public void vincula(Produto produto) {
             String idProd = Base64Custom.codificarStringBase64(produto.getNome());
+            int quantidadeTotal = 0;
+
+            quantidadeTotal = produto.getQuantidadeMasculina() + produto.getQuantidadeFeminina();
 
             idProduto.setText(idProd);
             nomePoduto.setText(produto.getNome());
-            tipoSexoProduto.setText(produto.getTipoSexo().toUpperCase());
+
+            if (quantidadeTotal == 1) {
+                if (produto.getQuantidadeMasculina() == 0) {
+                    quantidadeMasculina.setVisibility(View.GONE);
+                    quantidadeFemina.setVisibility(View.VISIBLE);
+                    quantidadeFemina.setText(produto.getQuantidadeFeminina());
+                } else {
+                    quantidadeFemina.setVisibility(View.GONE);
+                    quantidadeMasculina.setVisibility(View.VISIBLE);
+                    quantidadeMasculina.setText(produto.getQuantidadeMasculina());
+                }
+            } else {
+                quantidadeFemina.setVisibility(View.VISIBLE);
+                quantidadeMasculina.setVisibility(View.VISIBLE);
+                quantidadeFemina.setText(produto.getQuantidadeMasculina());
+                quantidadeMasculina.setText(produto.getQuantidadeMasculina());
+            }
             precoProduto.setText("R$ " + produto.getPreco());
         }
 
