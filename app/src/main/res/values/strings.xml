@@ -12,6 +12,7 @@
     <string name="permitir_cadastro">Permitir cadastro</string>
     <string name="sair">Sair</string>
     <string name="novo_usuario">Novo Usuário</string>
+    <string name="gravar_pedido">Gravar Pedido</string>
 
     <!-- Mensagens de sucesso -->
     <string name="msg_sucesso_login">Sucesso ao efetuar login.</string>
@@ -63,5 +64,6 @@
     <string name="kit_infantil">Kit Infantil</string>
     <string name="kit_adulto">Kit Adulto</string>
     <string name="menu_produtos">Produtos</string>
+    <string name="nao_existem_produtos">NÃO EXISTEM PRODUTOS</string>
 
 </resources>

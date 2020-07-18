@@ -52,6 +52,39 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         configuraToolbar();
         configuraAdicionarRemoverQuantidade();
         configuraBotaoCadastrar();
+        configuraKits();
+    }
+
+    private void inicializaCampos() {
+        toolbar = findViewById(R.id.toolbar);
+        constraintLayout = findViewById(R.id.constraint_layout_cadastrar_produto);
+        nome = findViewById(R.id.et_nome_cadastrar_produto);
+        qtdeMasculina = findViewById(R.id.et_quanditade_masculina_cadastrar_produto);
+        qtdeFeminina = findViewById(R.id.et_quantidade_feminina_cadastrar_produto);
+        preco = findViewById(R.id.et_preco_cadastrar_produto);
+    }
+
+    private void configuraToolbar() {
+        setTitle(TITULO_APPBAR);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_action_voltar);
+        toolbar.setNavigationOnClickListener(view -> finish());
+    }
+
+    private void configuraKits() {
+        kitAdulto = findViewById(R.id.checkBox_kit_adulto_cadastrar_produto);
+        kitInfantil = findViewById(R.id.checkBox_kit_infantil_cadastrar_produto);
+        //Define os listeners da tela
+        kitAdulto.setOnClickListener(this::vailidaKitMarcado);
+        kitInfantil.setOnClickListener(this::vailidaKitMarcado);
+    }
+
+    private void vailidaKitMarcado(View view) {
+        if (view == kitAdulto) {
+            kitInfantil.setChecked(false);
+        } else if (view == kitInfantil) {
+            kitAdulto.setChecked(false);
+        }
     }
 
     private void configuraAdicionarRemoverQuantidade() {
@@ -59,34 +92,14 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         botaoRemoverMasculina = findViewById(R.id.botao_remover_masculina_cadastrar_produto);
         botaoAdicionarFeminina = findViewById(R.id.botao_adicionar_feminina_cadastrar_produto);
         botaoRemoverFeminina = findViewById(R.id.botao_remover_feminina_cadastrar_produto);
-
+        //Define os listeners da tela
         botaoAdicionarMasculina.setOnClickListener(this::somaQuantidadeClicada);
         botaoRemoverMasculina.setOnClickListener(this::somaQuantidadeClicada);
         botaoAdicionarFeminina.setOnClickListener(this::somaQuantidadeClicada);
         botaoRemoverFeminina.setOnClickListener(this::somaQuantidadeClicada);
-
-//        botaoAdicionarMasculina.setOnClickListener(this);
-//        botaoRemoverMasculina.setOnClickListener(this);
-//        botaoAdicionarFeminina.setOnClickListener(this);
-//        botaoRemoverFeminina.setOnClickListener(this);
     }
 
-//    @Override
-//    public void onClick(View view) {
-//        if (view == botaoAdicionarMasculina) {
-//            quantidadeClicadaMasculina += 1;
-//        } else if (view == botaoRemoverMasculina) {
-//            quantidadeClicadaMasculina -= 1;
-//        } else if (view == botaoAdicionarFeminina) {
-//            quantidadeClicadaFeminina += 1;
-//        } else if (view == botaoRemoverFeminina) {
-//            quantidadeClicadaFeminina -= 1;
-//        }
-//        qtdeMasculina.setText(String.valueOf(quantidadeClicadaMasculina));
-//        qtdeFeminina.setText(String.valueOf(quantidadeClicadaFeminina));
-//    }
-
-    public void somaQuantidadeClicada(View view) {
+    private void somaQuantidadeClicada(View view) {
         if (view == botaoAdicionarMasculina) {
             quantidadeClicadaMasculina++;
         } else if (view == botaoRemoverMasculina) {
@@ -98,24 +111,6 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         }
         qtdeMasculina.setText(String.valueOf(quantidadeClicadaMasculina));
         qtdeFeminina.setText(String.valueOf(quantidadeClicadaFeminina));
-    }
-
-    private void inicializaCampos() {
-        toolbar = findViewById(R.id.toolbar);
-        constraintLayout = findViewById(R.id.constraint_layout_cadastrar_produto);
-        nome = findViewById(R.id.et_nome_cadastrar_produto);
-        qtdeMasculina = findViewById(R.id.et_quanditade_masculina_cadastrar_produto);
-        qtdeFeminina = findViewById(R.id.et_quantidade_feminina_cadastrar_produto);
-        preco = findViewById(R.id.et_preco_cadastrar_produto);
-        kitAdulto = findViewById(R.id.checkBox_kit_adulto_cadastrar_produto);
-        kitInfantil = findViewById(R.id.checkBox_kit_infantil_cadastrar_produto);
-    }
-
-    private void configuraToolbar() {
-        setTitle(TITULO_APPBAR);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_action_voltar);
-        toolbar.setNavigationOnClickListener(view -> finish());
     }
 
     private void configuraBotaoCadastrar() {
@@ -135,7 +130,7 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         quantidadeTotal = quantidadeMasculina + quantidadeFeminina;
 
         if (kitAdultoMarcado) {
-            if (nomeDigitado.isEmpty() ||quantidadeTotal == 0 || precoDigitado == 0) {
+            if (nomeDigitado.isEmpty() || quantidadeTotal == 0 || precoDigitado == 0) {
                 Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
             } else {
                 if (quantidadeTotal != 3) {
@@ -145,16 +140,16 @@ public class CadastroProdutoActivity extends AppCompatActivity {
                 preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
             }
         } else if (kitInfantilMarcado) {
-            if (nomeDigitado.isEmpty() ||quantidadeTotal == 0 || precoDigitado == 0) {
-                                   Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
-                           } else {
+            if (nomeDigitado.isEmpty() || quantidadeTotal == 0 || precoDigitado == 0) {
+                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
+            } else {
                 if (quantidadeTotal != 4) {
                     Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_infantil));
                     return;
                 }
                 preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
             }
-        } else if (nomeDigitado.isEmpty() || quantidadeTotal == 0 ||precoDigitado == 0) {
+        } else if (nomeDigitado.isEmpty() || quantidadeTotal == 0 || precoDigitado == 0) {
             Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
         } else {
             if (quantidadeTotal != 1) {

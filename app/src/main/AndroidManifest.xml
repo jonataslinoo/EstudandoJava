@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.activity.CadastroProdutoActivity"/>
         <activity android:name=".ui.activity.CadastroClienteActivity" />
-        <activity android:name=".ui.activity.NovoPedidoActivity" />
+        <activity android:name=".ui.activity.CadastroPedidoActivity" />
         <activity android:name=".ui.activity.CadastroUsuarioActivity" />
         <activity android:name=".ui.activity.DashboardActivity" />
         <activity android:name=".ui.activity.LoginActivity" />

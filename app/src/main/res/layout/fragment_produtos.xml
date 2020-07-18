@@ -10,7 +10,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:padding="5dp"
-        android:text="NÃO EXISTEM PRODUTOS"
+        android:text="@string/nao_existem_produtos"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

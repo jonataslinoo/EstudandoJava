@@ -65,7 +65,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     }
 
     private void configuraBotaoCadastrar() {
-        Button botaoCadastrarUsuario = findViewById(R.id.bt_cadastrar_cadastrar_usuario);
+        Button botaoCadastrarUsuario = findViewById(R.id.bt_gravar_cadastrar_pedido);
         botaoCadastrarUsuario.setOnClickListener(v -> validaCamposDigitados());
     }
 
