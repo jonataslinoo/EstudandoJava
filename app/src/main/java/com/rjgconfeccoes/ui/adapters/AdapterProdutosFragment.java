@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rjgconfeccoes.R;
-import com.rjgconfeccoes.model.Cliente;
 import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.ui.util.Base64Custom;
 
@@ -46,7 +45,6 @@ public class AdapterProdutosFragment extends RecyclerView.Adapter<AdapterProduto
 
     public class ViewHolderProdutos extends RecyclerView.ViewHolder {
 
-        private final TextView idProduto;
         private final TextView nomePoduto;
         private final TextView quantidadeMasculina;
         private final TextView quantidadeFemina;
@@ -55,7 +53,6 @@ public class AdapterProdutosFragment extends RecyclerView.Adapter<AdapterProduto
         public ViewHolderProdutos(@NonNull View itemView) {
             super(itemView);
 
-            idProduto = itemView.findViewById(R.id.tv_id_produto_fragment);
             nomePoduto = itemView.findViewById(R.id.tv_nome_produto_fragment);
             quantidadeMasculina = itemView.findViewById(R.id.tv_quantidade_masculina_produto_fragment);
             quantidadeFemina = itemView.findViewById(R.id.tv_quantidade_feminina_produto_fragment);
@@ -68,31 +65,35 @@ public class AdapterProdutosFragment extends RecyclerView.Adapter<AdapterProduto
 
             quantidadeTotal = produto.getQuantidadeMasculina() + produto.getQuantidadeFeminina();
 
-            idProduto.setText(idProd);
             nomePoduto.setText(produto.getNome());
+
+            quantidadeMasculina.setVisibility(View.GONE);
+            quantidadeFemina.setVisibility(View.GONE);
 
             if (quantidadeTotal == 1) {
                 if (produto.getQuantidadeMasculina() == 0) {
-                    quantidadeMasculina.setVisibility(View.GONE);
                     quantidadeFemina.setVisibility(View.VISIBLE);
-                    quantidadeFemina.setText(produto.getQuantidadeFeminina());
+                    quantidadeFemina.setText("Feminina");
                 } else {
-                    quantidadeFemina.setVisibility(View.GONE);
                     quantidadeMasculina.setVisibility(View.VISIBLE);
-                    quantidadeMasculina.setText(produto.getQuantidadeMasculina());
+                    quantidadeMasculina.setText("Masculina");
                 }
+            } else if (quantidadeTotal == 3) {
+                if (produto.getQuantidadeMasculina() == 3) {
+                    quantidadeMasculina.setVisibility(View.VISIBLE);
+                } else if (produto.getQuantidadeFeminina() == 3) {
+                    quantidadeFemina.setVisibility(View.VISIBLE);
+                }
+                quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
+                quantidadeFemina.setText("Feminina: " + produto.getQuantidadeFeminina());
             } else {
-                quantidadeFemina.setVisibility(View.VISIBLE);
                 quantidadeMasculina.setVisibility(View.VISIBLE);
-                quantidadeFemina.setText(produto.getQuantidadeMasculina());
-                quantidadeMasculina.setText(produto.getQuantidadeMasculina());
+                quantidadeFemina.setVisibility(View.VISIBLE);
+                quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
+                quantidadeFemina.setText("Feminina: " + produto.getQuantidadeFeminina());
             }
-            precoProduto.setText("R$ " + produto.getPreco());
-        }
 
-        private void preencheCampos(Cliente cliente) {
-            nomePoduto.setText(cliente.getNome());
-            idProduto.setText(cliente.getTelefoneComArea());
+            precoProduto.setText("R$ " + String.valueOf(produto.getPreco()));
         }
     }
 }

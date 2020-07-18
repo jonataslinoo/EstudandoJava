@@ -23,7 +23,7 @@ import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.ui.util.Base64Custom;
 import com.rjgconfeccoes.ui.util.Util;
 
-public class CadastroProdutoActivity extends AppCompatActivity{
+public class CadastroProdutoActivity extends AppCompatActivity {
 
     private static final String TITULO_APPBAR = "Novo Produto";
     private DatabaseReference databaseReference;
@@ -88,13 +88,13 @@ public class CadastroProdutoActivity extends AppCompatActivity{
 
     public void somaQuantidadeClicada(View view) {
         if (view == botaoAdicionarMasculina) {
-            quantidadeClicadaMasculina += 1;
+            quantidadeClicadaMasculina++;
         } else if (view == botaoRemoverMasculina) {
-            quantidadeClicadaMasculina -= 1;
+            if (quantidadeClicadaMasculina != 0) quantidadeClicadaMasculina--;
         } else if (view == botaoAdicionarFeminina) {
-            quantidadeClicadaFeminina += 1;
+            quantidadeClicadaFeminina++;
         } else if (view == botaoRemoverFeminina) {
-            quantidadeClicadaFeminina -= 1;
+            if (quantidadeClicadaMasculina != 0) quantidadeClicadaFeminina--;
         }
         qtdeMasculina.setText(String.valueOf(quantidadeClicadaMasculina));
         qtdeFeminina.setText(String.valueOf(quantidadeClicadaFeminina));
@@ -135,20 +135,32 @@ public class CadastroProdutoActivity extends AppCompatActivity{
         quantidadeTotal = quantidadeMasculina + quantidadeFeminina;
 
         if (kitAdultoMarcado) {
-            if (nomeDigitado.isEmpty() || quantidadeTotal != 3 || precoDigitado == 0) {
+            if (nomeDigitado.isEmpty() ||quantidadeTotal == 0 || precoDigitado == 0) {
                 Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
             } else {
-                preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeMasculina, precoDigitado);
+                if (quantidadeTotal != 3) {
+                    Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_adulto));
+                    return;
+                }
+                preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
             }
         } else if (kitInfantilMarcado) {
-            if (nomeDigitado.isEmpty() || quantidadeTotal != 4 || precoDigitado == 0) {
-                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
-            } else {
-                preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeMasculina, precoDigitado);
+            if (nomeDigitado.isEmpty() ||quantidadeTotal == 0 || precoDigitado == 0) {
+                                   Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
+                           } else {
+                if (quantidadeTotal != 4) {
+                    Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_infantil));
+                    return;
+                }
+                preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
             }
-        } else if (nomeDigitado.isEmpty() || quantidadeTotal != 1 || precoDigitado == 0) {
+        } else if (nomeDigitado.isEmpty() || quantidadeTotal == 0 ||precoDigitado == 0) {
             Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
         } else {
+            if (quantidadeTotal != 1) {
+                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_tipo));
+                return;
+            }
             preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
         }
     }
