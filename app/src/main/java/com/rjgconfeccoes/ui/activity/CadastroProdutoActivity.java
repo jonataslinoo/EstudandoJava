@@ -175,7 +175,7 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         String idProduto = Base64Custom.codificarStringBase64(produto.getNome() + produto.getQuantidadeMasculina());
 
         //Instancio uma referencia ao banco de dados
-        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child("produtos").child(idProduto);
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PRODUTOS).child(idProduto);
 
         //Recupero o cliente pelo id caso exista
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {

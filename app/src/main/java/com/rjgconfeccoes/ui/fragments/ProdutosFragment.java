@@ -55,11 +55,11 @@ public class ProdutosFragment extends Fragment {
         tv_nao_existe_produto_fragment = view.findViewById(R.id.tv_nao_existe_produto_fragment);
 
         //Abre o progresso de busca dos produtos
-        alertDialog = Util.criaProgressBar(getContext());
+        alertDialog = Util.criaProgressBar(getContext(), "Carregando Produtos");
         alertDialog.show();
 
         //recupero os clientes salvos no banco
-        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child("produtos");
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PRODUTOS);
         valueEventListenerProdutos = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

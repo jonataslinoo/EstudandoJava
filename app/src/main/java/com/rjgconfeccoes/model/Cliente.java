@@ -3,6 +3,7 @@ package com.rjgconfeccoes.model;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
+import com.rjgconfeccoes.ui.util.Util;
 
 public class Cliente {
 
@@ -12,7 +13,7 @@ public class Cliente {
 
     public void salvar() {
         DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
-        databaseReference.child("clientes").child(getId()).setValue(this);
+        databaseReference.child(Util.CLIENTES).child(getId()).setValue(this);
     }
 
     @Exclude
@@ -38,5 +39,10 @@ public class Cliente {
 
     public void setTelefoneComArea(String telefoneComArea) {
         this.telefoneComArea = telefoneComArea;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
     }
 }

@@ -18,6 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Cliente;
+import com.rjgconfeccoes.model.Dados;
 import com.rjgconfeccoes.ui.adapters.AdapterClientesFragment;
 import com.rjgconfeccoes.ui.util.Util;
 
@@ -28,7 +29,7 @@ import java.util.List;
 public class ClientesFragment extends Fragment {
 
     private AdapterClientesFragment adapter;
-    private List<Cliente> listClientes = new ArrayList<>();
+    private ArrayList<Cliente> listClientes = new ArrayList<>();
     private RecyclerView recyclerViewClientes;
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListenerContatos;
@@ -52,12 +53,12 @@ public class ClientesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_clientes, container, false);
 
-        alertDialog = Util.criaProgressBar(getContext());
+        alertDialog = Util.criaProgressBar(getContext(), "Carregando Clientes");
         alertDialog.show();
 
 
         //recupero os clientes salvos no banco
-        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child("clientes");
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.CLIENTES);
         valueEventListenerContatos = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -77,6 +78,11 @@ public class ClientesFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         };
+
+        //Recupero os dados do sistema e atualizo a lista de clientes e salvo nos dados
+        Dados dados = Util.recuperaDados();
+        dados.listaClientes = listClientes;
+        Util.defineDados(dados);
 
         adapter = new AdapterClientesFragment(getActivity(), listClientes);
         recyclerViewClientes = view.findViewById(R.id.recyclerview_clientes);

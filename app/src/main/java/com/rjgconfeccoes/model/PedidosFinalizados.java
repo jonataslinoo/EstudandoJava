@@ -2,6 +2,7 @@ package com.rjgconfeccoes.model;
 
 import com.google.firebase.database.DatabaseReference;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
+import com.rjgconfeccoes.ui.util.Util;
 
 public class PedidosFinalizados {
 
@@ -14,7 +15,7 @@ public class PedidosFinalizados {
 
     public void salva() {
         DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
-        databaseReference.child("pedidosfinalizados").push().setValue(this);
+        databaseReference.child(Util.PEDIDOS_FINALIZADOS).push().setValue(this);
     }
 
     public String getId() {

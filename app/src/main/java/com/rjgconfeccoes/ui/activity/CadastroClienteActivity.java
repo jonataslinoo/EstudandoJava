@@ -98,7 +98,7 @@ public class CadastroClienteActivity extends AppCompatActivity {
         String idCliente = Base64Custom.codificarStringBase64(cliente.getTelefoneComArea());
 
         //Instancio uma referencia ao banco de dados
-        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child("clientes").child(idCliente);
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.CLIENTES).child(idCliente);
 
         //Recupero o cliente pelo id caso exista
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {

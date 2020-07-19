@@ -3,6 +3,7 @@ package com.rjgconfeccoes.model;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
+import com.rjgconfeccoes.ui.util.Util;
 
 public class Usuario {
 
@@ -17,7 +18,7 @@ public class Usuario {
 
     public void salvar() {
         DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
-        databaseReference.child("usuarios").child(getId()).setValue(this);
+        databaseReference.child(Util.USUARIOS).child(getId()).setValue(this);
     }
 
     @Exclude

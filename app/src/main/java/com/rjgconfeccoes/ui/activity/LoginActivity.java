@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
 
                 //Recuperar instancia do firebase recebendo o usuario logado pelo identificador
-                databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios").child(identificacaoUsuario);
+                databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.USUARIOS).child(identificacaoUsuario);
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

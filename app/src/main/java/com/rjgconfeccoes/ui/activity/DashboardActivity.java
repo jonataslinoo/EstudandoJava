@@ -67,6 +67,11 @@ public class DashboardActivity extends AppCompatActivity implements BottomNaviga
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
+            case R.id.menu_novo_pedido: {
+                intent = new Intent(DashboardActivity.this, CadastroPedidoActivity.class);
+                startActivity(intent);
+                break;
+            }
             case R.id.menu_novo_cliente: {
                 intent = new Intent(DashboardActivity.this, CadastroClienteActivity.class);
                 startActivity(intent);

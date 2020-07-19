@@ -11,8 +11,35 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.rjgconfeccoes.R;
+import com.rjgconfeccoes.model.Dados;
 
 public abstract class Util {
+
+    //Variáveis do apoio
+    private static Dados dados = null;
+    public static String USUARIOS = "usuarios";
+    public static String CLIENTES = "clientes";
+    public static String PRODUTOS = "produtos";
+    public static String PEDIDOS = "pedidos";
+    public static String PEDIDOS_FINALIZADOS = "pedidos_finalizados";
+
+
+    /**
+     * Retorna a instancia da InfoControle a ativa no sistema
+     */
+    public static Dados recuperaDados() {
+        if (dados == null) {
+            dados = new Dados();
+        }
+        return dados;
+    }
+
+    /**
+     * Define a variável de Dados
+     */
+    public static void defineDados(Dados dadosParam) {
+        dados = dadosParam;
+    }
 
     public static void mensagemDeAlerta(Context context, View view, String alerta) {
         Snackbar.make(view, alerta, Snackbar.LENGTH_LONG)
@@ -22,8 +49,7 @@ public abstract class Util {
     /**
      * Cria o progress bar
      */
-    public static AlertDialog criaProgressBar(Context context)
-    {
+    public static AlertDialog criaProgressBar(Context context, String mensagem) {
         AlertDialog.Builder builder = null;
         AlertDialog dlgProgressBar = null;
         LayoutInflater inflaterTela = null;
@@ -32,8 +58,7 @@ public abstract class Util {
         TextView lblMensagem = null;
 
         //Instancia o dialog
-        if (context != null)
-        {
+        if (context != null) {
             builder = new AlertDialog.Builder(context);
         }
 
@@ -48,8 +73,14 @@ public abstract class Util {
         prgBar = viewDialog.findViewById(R.id.progressBar);
         lblMensagem = viewDialog.findViewById(R.id.lblMensagemDialog);
 
-        //Esconde a mensagem
-        lblMensagem.setVisibility(View.GONE);
+        if (mensagem.isEmpty()) {
+            //Esconde a mensagem
+            lblMensagem.setVisibility(View.GONE);
+        } else {
+            //mostra a mensagem enviada
+            lblMensagem.setVisibility(View.VISIBLE);
+            lblMensagem.setText(mensagem);
+        }
 
         //Coloca a cor branco no progressbar
         prgBar.getIndeterminateDrawable().setColorFilter(context.getResources().getColor(R.color.corBranca), PorterDuff.Mode.SRC_IN);
@@ -66,14 +97,11 @@ public abstract class Util {
     /**
      * Some o alertDialog com progressBar
      */
-    public static void escondeProgressBar(AlertDialog dlgAlerta)
-    {
+    public static void escondeProgressBar(AlertDialog dlgAlerta) {
         //Verifica se o alertDialog é nulo
-        if (dlgAlerta != null)
-        {
+        if (dlgAlerta != null) {
             //Verifica se o alerta está mostrando
-            if (dlgAlerta.isShowing())
-            {
+            if (dlgAlerta.isShowing()) {
                 //Da dismiss no alertDialog
                 dlgAlerta.dismiss();
             }

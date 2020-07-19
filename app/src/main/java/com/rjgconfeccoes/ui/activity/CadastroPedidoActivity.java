@@ -1,6 +1,7 @@
 package com.rjgconfeccoes.ui.activity;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
@@ -11,6 +12,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rjgconfeccoes.R;
+import com.rjgconfeccoes.model.Cliente;
+import com.rjgconfeccoes.model.Dados;
+import com.rjgconfeccoes.ui.util.Util;
 
 public class CadastroPedidoActivity extends AppCompatActivity {
 
@@ -31,6 +35,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
 
         inicializaCampos();
         configuraToolbar();
+        preencheListaClientes();
 //        configuraAdicionarRemoverQuantidade();
 //        configuraBotaoCadastrar();
 //        configuraKits();
@@ -50,5 +55,21 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_action_voltar);
         toolbar.setNavigationOnClickListener(view -> finish());
+    }
+
+    /**
+     * Carrega o combo de cores
+     */
+    private void preencheListaClientes() {
+        Dados dados = Util.recuperaDados();
+
+        //Cria o adapter
+        ArrayAdapter<Cliente> dadosAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dados.obtemListaClientes());
+
+        //Seta o adapter no dropdown
+        dadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //Atacha o adapter ao controle
+        spinnerCliente.setAdapter(dadosAdapter);
     }
 }
