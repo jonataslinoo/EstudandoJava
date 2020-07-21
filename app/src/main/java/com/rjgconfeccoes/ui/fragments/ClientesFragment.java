@@ -70,6 +70,12 @@ public class ClientesFragment extends Fragment {
                     Cliente cliente = clientesBanco.getValue(Cliente.class);
                     listClientes.add(cliente);
                 }
+
+                //Recupero os dados do sistema e atualizo a lista de clientes e salvo nos dados
+                Dados dados = Util.recuperaDados();
+                dados.obtemListaClientes().addAll(listClientes);
+                Util.defineDados(dados);
+
                 adapter.notifyDataSetChanged();
                 Util.escondeProgressBar(alertDialog);
             }
@@ -78,11 +84,6 @@ public class ClientesFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         };
-
-        //Recupero os dados do sistema e atualizo a lista de clientes e salvo nos dados
-        Dados dados = Util.recuperaDados();
-        dados.listaClientes = listClientes;
-        Util.defineDados(dados);
 
         adapter = new AdapterClientesFragment(getActivity(), listClientes);
         recyclerViewClientes = view.findViewById(R.id.recyclerview_clientes);

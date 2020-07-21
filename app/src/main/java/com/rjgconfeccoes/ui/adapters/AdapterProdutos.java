@@ -4,23 +4,27 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rjgconfeccoes.R;
+import com.rjgconfeccoes.model.Dados;
 import com.rjgconfeccoes.model.Produto;
-import com.rjgconfeccoes.ui.util.Base64Custom;
+import com.rjgconfeccoes.ui.activity.CadastroPedidoProdutoActivity;
+import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.List;
 
-public class AdapterProdutosFragment extends RecyclerView.Adapter<AdapterProdutosFragment.ViewHolderProdutos> {
+public class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ViewHolderProdutos> {
 
     private final Context context;
     private final List<Produto> listProdutos;
+    private Dados dados = Util.recuperaDados();
 
-    public AdapterProdutosFragment(Context context, List<Produto> listProdutos) {
+    public AdapterProdutos(Context context, List<Produto> listProdutos) {
         this.context = context;
         this.listProdutos = listProdutos;
     }
@@ -36,11 +40,20 @@ public class AdapterProdutosFragment extends RecyclerView.Adapter<AdapterProduto
     public void onBindViewHolder(@NonNull ViewHolderProdutos holder, int position) {
         Produto produto = listProdutos.get(position);
         holder.vincula(produto);
+        holder.checkBoxAdicionarProduto.setOnClickListener(view -> enviaProdutos(produto));
     }
 
     @Override
     public int getItemCount() {
         return listProdutos.size();
+    }
+
+    public void enviaProdutos(Produto produto) {
+        if (dados.obtemListaProdutosSelecionados().contains(produto)) {
+            dados.obtemListaProdutosSelecionados().remove(produto);
+        } else {
+            dados.obtemListaProdutosSelecionados().add(produto);
+        }
     }
 
     public class ViewHolderProdutos extends RecyclerView.ViewHolder {
@@ -49,6 +62,7 @@ public class AdapterProdutosFragment extends RecyclerView.Adapter<AdapterProduto
         private final TextView quantidadeMasculina;
         private final TextView quantidadeFemina;
         private final TextView precoProduto;
+        private final CheckBox checkBoxAdicionarProduto;
 
         public ViewHolderProdutos(@NonNull View itemView) {
             super(itemView);
@@ -57,43 +71,26 @@ public class AdapterProdutosFragment extends RecyclerView.Adapter<AdapterProduto
             quantidadeMasculina = itemView.findViewById(R.id.tv_quantidade_masculina_produto_fragment);
             quantidadeFemina = itemView.findViewById(R.id.tv_quantidade_feminina_produto_fragment);
             precoProduto = itemView.findViewById(R.id.tv_preco_produto_fragment);
+            checkBoxAdicionarProduto = itemView.findViewById(R.id.checkbox_adicionar_pedido_produto);
         }
 
         public void vincula(Produto produto) {
-            String idProd = Base64Custom.codificarStringBase64(produto.getNome());
-            int quantidadeTotal = 0;
-
-            quantidadeTotal = produto.getQuantidadeMasculina() + produto.getQuantidadeFeminina();
-
-            nomePoduto.setText(produto.getNome());
-
-            quantidadeMasculina.setVisibility(View.GONE);
-            quantidadeFemina.setVisibility(View.GONE);
-
-            if (quantidadeTotal == 1) {
-                if (produto.getQuantidadeMasculina() == 0) {
-                    quantidadeFemina.setVisibility(View.VISIBLE);
-                    quantidadeFemina.setText("Feminina");
-                } else {
-                    quantidadeMasculina.setVisibility(View.VISIBLE);
-                    quantidadeMasculina.setText("Masculina");
-                }
-            } else if (quantidadeTotal == 3) {
-                if (produto.getQuantidadeMasculina() == 3) {
-                    quantidadeMasculina.setVisibility(View.VISIBLE);
-                } else if (produto.getQuantidadeFeminina() == 3) {
-                    quantidadeFemina.setVisibility(View.VISIBLE);
-                }
-                quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
-                quantidadeFemina.setText("Feminina: " + produto.getQuantidadeFeminina());
+            if (context instanceof CadastroPedidoProdutoActivity) {
+                checkBoxAdicionarProduto.setVisibility(View.VISIBLE);
             } else {
-                quantidadeMasculina.setVisibility(View.VISIBLE);
-                quantidadeFemina.setVisibility(View.VISIBLE);
-                quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
-                quantidadeFemina.setText("Feminina: " + produto.getQuantidadeFeminina());
+                checkBoxAdicionarProduto.setVisibility(View.GONE);
+                checkBoxAdicionarProduto.setChecked(false);
             }
 
-            precoProduto.setText("R$ " + String.valueOf(produto.getPreco()));
+            if(dados.obtemListaProdutosSelecionados().contains(produto)){
+                checkBoxAdicionarProduto.setChecked(true);
+            }
+
+            nomePoduto.setText(produto.getNome());
+            quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
+            quantidadeFemina.setText("Feminina: " + produto.getQuantidadeFeminina());
+            precoProduto.setText("R$ " + produto.getPreco());
         }
+
     }
 }

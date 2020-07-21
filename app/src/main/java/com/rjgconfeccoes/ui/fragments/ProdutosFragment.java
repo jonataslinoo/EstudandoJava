@@ -18,8 +18,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
+import com.rjgconfeccoes.model.Dados;
 import com.rjgconfeccoes.model.Produto;
-import com.rjgconfeccoes.ui.adapters.AdapterProdutosFragment;
+import com.rjgconfeccoes.ui.adapters.AdapterProdutos;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class ProdutosFragment extends Fragment {
 
-    private AdapterProdutosFragment adapter;
+    private AdapterProdutos adapter;
     private List<Produto> listProdutos = new ArrayList<>();
     private RecyclerView recyclerViewProdutos;
     private DatabaseReference databaseReference;
@@ -72,7 +73,6 @@ public class ProdutosFragment extends Fragment {
                         Produto produto = produtosBanco.getValue(Produto.class);
                         listProdutos.add(produto);
                     }
-                    adapter.notifyDataSetChanged();
 
                     tv_nao_existe_produto_fragment.setVisibility(View.GONE);
                     recyclerViewProdutos.setVisibility(View.VISIBLE);
@@ -81,7 +81,14 @@ public class ProdutosFragment extends Fragment {
                     recyclerViewProdutos.setVisibility(View.GONE);
                 }
 
-                //finaliza o progresso de busca dos produtos
+                //Recupero os dados do sistema e atualizo a lista de clientes e salvo nos dados
+                Dados dados = Util.recuperaDados();
+                dados.obtemListaProdutos().clear();
+                dados.obtemListaProdutos().addAll(listProdutos);
+                Util.defineDados(dados);
+
+                //Atualiza lista e finaliza o progresso de busca dos produtos
+                adapter.notifyDataSetChanged();
                 Util.escondeProgressBar(alertDialog);
             }
 
@@ -90,7 +97,7 @@ public class ProdutosFragment extends Fragment {
             }
         };
 
-        adapter = new AdapterProdutosFragment(getActivity(), listProdutos);
+        adapter = new AdapterProdutos(getActivity(), listProdutos);
         recyclerViewProdutos = view.findViewById(R.id.recyclerview_produtos);
         recyclerViewProdutos.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewProdutos.setAdapter(adapter);

@@ -1,5 +1,6 @@
 package com.rjgconfeccoes.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -9,12 +10,17 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Cliente;
 import com.rjgconfeccoes.model.Dados;
+import com.rjgconfeccoes.model.Produto;
+import com.rjgconfeccoes.ui.adapters.AdapterProdutos;
 import com.rjgconfeccoes.ui.util.Util;
+
+import java.util.ArrayList;
 
 public class CadastroPedidoActivity extends AppCompatActivity {
 
@@ -23,10 +29,12 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     private Spinner spinnerCliente;
     private RecyclerView recyclerViewProdutos;
+    private AdapterProdutos adapterProdutos;
     private Button botaoGravarPedido;
     private Button botaoListaProdutos;
     private CheckBox kitAdulto;
     private CheckBox kitInfantil;
+    Dados dados = Util.recuperaDados();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +44,16 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         inicializaCampos();
         configuraToolbar();
         preencheListaClientes();
+        configuraBotaoProdutos();
 //        configuraAdicionarRemoverQuantidade();
 //        configuraBotaoCadastrar();
 //        configuraKits();
+
+        if(dados.obtemListaProdutosSelecionados() != null){
+            adapterProdutos = new AdapterProdutos(this, dados.obtemListaProdutosSelecionados());
+            recyclerViewProdutos.setLayoutManager(new LinearLayoutManager(this));
+            recyclerViewProdutos.setAdapter(adapterProdutos);
+        }
     }
 
     private void inicializaCampos() {
@@ -54,12 +69,26 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         setTitle(TITULO_APPBAR);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_action_voltar);
-        toolbar.setNavigationOnClickListener(view -> finish());
+        toolbar.setNavigationOnClickListener(view -> limpaDadosEFinalizaTela());
     }
 
-    /**
-     * Carrega o combo de cores
-     */
+    private void limpaDadosEFinalizaTela(){
+        dados.obtemListaProdutosSelecionados().clear();
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        limpaDadosEFinalizaTela();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapterProdutos.notifyDataSetChanged();
+    }
+
     private void preencheListaClientes() {
         Dados dados = Util.recuperaDados();
 
@@ -71,5 +100,14 @@ public class CadastroPedidoActivity extends AppCompatActivity {
 
         //Atacha o adapter ao controle
         spinnerCliente.setAdapter(dadosAdapter);
+    }
+
+    private void configuraBotaoProdutos() {
+        botaoListaProdutos.setOnClickListener(view -> abreListaProdutos());
+    }
+
+    private void abreListaProdutos() {
+        Intent intent = new Intent(CadastroPedidoActivity.this, CadastroPedidoProdutoActivity.class);
+        startActivity(intent);
     }
 }
