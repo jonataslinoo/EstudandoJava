@@ -8,9 +8,10 @@ import com.rjgconfeccoes.ui.util.Util;
 public class Produto {
 
     private String id;
-    private String nome;
+    private String descricao;
     private int quantidadeMasculina;
     private int quantidadeFeminina;
+    private int quantidadeTotalProdutoPedido;
     private double preco;
 
     public void salvar() {
@@ -27,12 +28,12 @@ public class Produto {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public int getQuantidadeMasculina() {
@@ -57,5 +58,13 @@ public class Produto {
 
     public void setPreco(double preco) {
         this.preco = preco;
+    }
+
+    public int getQuantidadeTotalProdutoPedido() {
+        return quantidadeTotalProdutoPedido;
+    }
+
+    public void setQuantidadeTotalProdutoPedido(int quantidadeTotalProdutoPedido) {
+        this.quantidadeTotalProdutoPedido = quantidadeTotalProdutoPedido;
     }
 }

@@ -46,6 +46,14 @@ public abstract class Util {
                 .setBackgroundTint(context.getResources().getColor(R.color.corBranca)).show();
     }
 
+    public static String formataPreco(double dValor) {
+        //Formata posição e valor parcela
+        String sValor = String.format("R$ %.2f", dValor);
+
+        return sValor;
+    }
+
+
     /**
      * Cria o progress bar
      */

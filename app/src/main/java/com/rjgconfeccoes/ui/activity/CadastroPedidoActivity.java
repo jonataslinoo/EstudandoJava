@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Cliente;
 import com.rjgconfeccoes.model.Dados;
-import com.rjgconfeccoes.model.Produto;
-import com.rjgconfeccoes.ui.adapters.AdapterProdutos;
+import com.rjgconfeccoes.ui.adapters.AdapterProdutoPedidoProduto;
 import com.rjgconfeccoes.ui.util.Util;
-
-import java.util.ArrayList;
 
 public class CadastroPedidoActivity extends AppCompatActivity {
 
@@ -29,11 +25,9 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     private Spinner spinnerCliente;
     private RecyclerView recyclerViewProdutos;
-    private AdapterProdutos adapterProdutos;
+    private AdapterProdutoPedidoProduto adapterProdutoPedidoProduto;
     private Button botaoGravarPedido;
     private Button botaoListaProdutos;
-    private CheckBox kitAdulto;
-    private CheckBox kitInfantil;
     Dados dados = Util.recuperaDados();
 
     @Override
@@ -49,10 +43,10 @@ public class CadastroPedidoActivity extends AppCompatActivity {
 //        configuraBotaoCadastrar();
 //        configuraKits();
 
-        if(dados.obtemListaProdutosSelecionados() != null){
-            adapterProdutos = new AdapterProdutos(this, dados.obtemListaProdutosSelecionados());
+        if (dados.obtemListaProdutosSelecionados() != null) {
+            adapterProdutoPedidoProduto = new AdapterProdutoPedidoProduto(this, dados.obtemListaProdutosSelecionados());
             recyclerViewProdutos.setLayoutManager(new LinearLayoutManager(this));
-            recyclerViewProdutos.setAdapter(adapterProdutos);
+            recyclerViewProdutos.setAdapter(adapterProdutoPedidoProduto);
         }
     }
 
@@ -72,7 +66,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(view -> limpaDadosEFinalizaTela());
     }
 
-    private void limpaDadosEFinalizaTela(){
+    private void limpaDadosEFinalizaTela() {
         dados.obtemListaProdutosSelecionados().clear();
         finish();
     }
@@ -86,7 +80,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        adapterProdutos.notifyDataSetChanged();
+        adapterProdutoPedidoProduto.notifyDataSetChanged();
     }
 
     private void preencheListaClientes() {

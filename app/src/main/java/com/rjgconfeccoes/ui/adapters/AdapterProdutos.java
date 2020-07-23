@@ -50,8 +50,10 @@ public class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ViewHo
 
     public void enviaProdutos(Produto produto) {
         if (dados.obtemListaProdutosSelecionados().contains(produto)) {
+            produto.setQuantidadeTotalProdutoPedido(0);
             dados.obtemListaProdutosSelecionados().remove(produto);
         } else {
+            produto.setQuantidadeTotalProdutoPedido(1);
             dados.obtemListaProdutosSelecionados().add(produto);
         }
     }
@@ -82,11 +84,11 @@ public class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ViewHo
                 checkBoxAdicionarProduto.setChecked(false);
             }
 
-            if(dados.obtemListaProdutosSelecionados().contains(produto)){
+            if (dados.obtemListaProdutosSelecionados().contains(produto)) {
                 checkBoxAdicionarProduto.setChecked(true);
             }
 
-            nomePoduto.setText(produto.getNome());
+            nomePoduto.setText(produto.getDescricao());
             quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
             quantidadeFemina.setText("Feminina: " + produto.getQuantidadeFeminina());
             precoProduto.setText("R$ " + produto.getPreco());

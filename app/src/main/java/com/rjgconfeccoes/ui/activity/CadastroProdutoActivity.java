@@ -103,11 +103,15 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         if (view == botaoAdicionarMasculina) {
             quantidadeClicadaMasculina++;
         } else if (view == botaoRemoverMasculina) {
-            if (quantidadeClicadaMasculina != 0) quantidadeClicadaMasculina--;
+            if (quantidadeClicadaMasculina != 0) {
+                quantidadeClicadaMasculina--;
+            }
         } else if (view == botaoAdicionarFeminina) {
             quantidadeClicadaFeminina++;
         } else if (view == botaoRemoverFeminina) {
-            if (quantidadeClicadaMasculina != 0) quantidadeClicadaFeminina--;
+            if (quantidadeClicadaMasculina != 0) {
+                quantidadeClicadaFeminina--;
+            }
         }
         qtdeMasculina.setText(String.valueOf(quantidadeClicadaMasculina));
         qtdeFeminina.setText(String.valueOf(quantidadeClicadaFeminina));
@@ -162,7 +166,7 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
     private void preencheCampos(String nome, int quantidadeMasculina, int quantidadeFeminina, double preco) {
         Produto produto = new Produto();
-        produto.setNome(nome);
+        produto.setDescricao(nome);
         produto.setQuantidadeMasculina(quantidadeMasculina);
         produto.setQuantidadeFeminina(quantidadeFeminina);
         produto.setPreco(preco);
@@ -172,7 +176,7 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
     private void salvaProduto(Produto produto) {
         //codifica o telefone em base64 para usar como id do cliente
-        String idProduto = Base64Custom.codificarStringBase64(produto.getNome() + produto.getQuantidadeMasculina());
+        String idProduto = Base64Custom.codificarStringBase64(produto.getDescricao() + produto.getQuantidadeMasculina());
 
         //Instancio uma referencia ao banco de dados
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PRODUTOS).child(idProduto);

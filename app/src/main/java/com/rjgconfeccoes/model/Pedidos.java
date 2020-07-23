@@ -9,9 +9,8 @@ public class Pedidos {
     private String id;
     private String clienteId;
     private String produtoId;
-    private int quantidadeProduto;
-    private int quantidadeTotal;
-    private double valorTotal;
+    private int quantidadeTotalProdutos;
+    private double valorTotalPedido;
 
     public void salva(){
         DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
@@ -42,27 +41,19 @@ public class Pedidos {
         this.produtoId = produtoId;
     }
 
-    public int getQuantidadeProduto() {
-        return quantidadeProduto;
+    public int getQuantidadeTotalProdutos() {
+        return quantidadeTotalProdutos;
     }
 
-    public void setQuantidadeProduto(int quantidadeProduto) {
-        this.quantidadeProduto = quantidadeProduto;
+    public void setQuantidadeTotalProdutos(int quantidadeTotalProdutos) {
+        this.quantidadeTotalProdutos = quantidadeTotalProdutos;
     }
 
-    public int getQuantidadeTotal() {
-        return quantidadeTotal;
+    public double getValorTotalPedido() {
+        return valorTotalPedido;
     }
 
-    public void setQuantidadeTotal(int quantidadeTotal) {
-        this.quantidadeTotal = quantidadeTotal;
-    }
-
-    public double getValorTotal() {
-        return valorTotal;
-    }
-
-    public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
+    public void setValorTotalPedido(double valorTotalPedido) {
+        this.valorTotalPedido = valorTotalPedido;
     }
 }
