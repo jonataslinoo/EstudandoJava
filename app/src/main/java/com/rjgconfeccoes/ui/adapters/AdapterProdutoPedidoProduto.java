@@ -1,10 +1,10 @@
 package com.rjgconfeccoes.ui.adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,42 +43,51 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
         holder.vincula(produto);
         holder.botaoAdicionar.setOnClickListener(view -> adicionaOuRemoveQuantidade(view, produto, holder));
         holder.botaoRemover.setOnClickListener(view -> adicionaOuRemoveQuantidade(view, produto, holder));
+        holder.checkBoxAdicionarProduto.setOnClickListener(view -> adicionaOuRemoveQuantidade(view, produto, holder));
     }
 
     private void adicionaOuRemoveQuantidade(View view, Produto produto, ViewHolderProdutoPedidoProduto holder) {
         int quantidadeProduto = 0;
 
+        quantidadeProduto = produto.getQuantidadeTotalProdutoPedido();
+
         if (view == holder.botaoAdicionar) {
-            quantidadeProduto = produto.getQuantidadeTotalProdutoPedido();
-            quantidadeProduto++;
-            produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
-        } else if (view == holder.botaoRemover) {
-            if (produto.getQuantidadeTotalProdutoPedido() == 1) {
-                confirmaRemoverProduto(produto);
-            } else {
-                quantidadeProduto = produto.getQuantidadeTotalProdutoPedido();
-                quantidadeProduto--;
+            if (produto.getQuantidadeTotalProdutoPedido() == 0) {
+                quantidadeProduto++;
                 produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
+                dados.obtemListaProdutosSelecionados().add(produto);
+                holder.checkBoxAdicionarProduto.setChecked(true);
+            } else {
+                quantidadeProduto++;
+                produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
+            }
+
+        } else if (view == holder.botaoRemover) {
+            if (produto.getQuantidadeTotalProdutoPedido() > 0) {
+                if (produto.getQuantidadeTotalProdutoPedido() == 1) {
+                    quantidadeProduto--;
+                    produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
+                    dados.obtemListaProdutosSelecionados().remove(produto);
+                    holder.checkBoxAdicionarProduto.setChecked(false);
+                } else {
+                    quantidadeProduto--;
+                    produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
+                }
+            }
+        } else if (view == holder.checkBoxAdicionarProduto) {
+            if (dados.obtemListaProdutosSelecionados().contains(produto)) {
+                quantidadeProduto = 0;
+                produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
+                dados.obtemListaProdutosSelecionados().remove(produto);
+            } else {
+                quantidadeProduto = 1;
+                produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
+                dados.obtemListaProdutosSelecionados().add(produto);
             }
         }
 
         holder.quantidadeProduto.setText("Quantidade: " + quantidadeProduto);
-        holder.precoTotal.setText(Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
-    }
-
-    private void confirmaRemoverProduto(Produto produto) {
-        new AlertDialog
-                .Builder(context)
-                .setTitle("Atenção")
-                .setMessage("Deseja remover este item?")
-                .setPositiveButton("Sim", (dialogInterface, i) -> removeProduto(produto))
-                .setNegativeButton("Não", null)
-                .show();
-    }
-
-    private void removeProduto(Produto produto) {
-        dados.obtemListaProdutosSelecionados().remove(produto);
-        notifyDataSetChanged();
+        holder.precoTotal.setText("Total " + Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
     }
 
     @Override
@@ -86,7 +95,7 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
         return listaProdutos.size();
     }
 
-    public static class ViewHolderProdutoPedidoProduto extends RecyclerView.ViewHolder {
+    public class ViewHolderProdutoPedidoProduto extends RecyclerView.ViewHolder {
 
         public final LinearLayout itemPedido;
         public final TextView descricaoProduto;
@@ -97,6 +106,7 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
         public final TextView precoTotal;
         public final ImageView botaoAdicionar;
         public final ImageView botaoRemover;
+        public final CheckBox checkBoxAdicionarProduto;
 
         public ViewHolderProdutoPedidoProduto(@NonNull View itemView) {
             super(itemView);
@@ -110,7 +120,7 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
             precoTotal = itemView.findViewById(R.id.tv_preco_total_produto_pedidoProduto);
             botaoAdicionar = itemView.findViewById(R.id.botao_adicionar_quantidade_total_pedidoProduto);
             botaoRemover = itemView.findViewById(R.id.botao_remover_quantidade_total_pedidoProduto);
-
+            checkBoxAdicionarProduto = itemView.findViewById(R.id.checkbox_adicionar_produto_pedidoProduto);
         }
 
         public void vincula(Produto produto) {
@@ -118,9 +128,12 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
             quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
             quantidadeFeminina.setText("Feminina: " + produto.getQuantidadeFeminina());
             precoProduto.setText(Util.formataPreco(produto.getPreco()));
-            precoTotal.setText(Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
-            precoProduto.setText(Util.formataPreco(produto.getPreco()));
             quantidadeProduto.setText("Quantidade: " + produto.getQuantidadeTotalProdutoPedido());
+            precoTotal.setText("Total " + Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
+
+            if (dados.obtemListaProdutosSelecionados().contains(produto)) {
+                checkBoxAdicionarProduto.setChecked(true);
+            }
         }
     }
 }

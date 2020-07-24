@@ -46,15 +46,6 @@
             app:layout_constraintTop_toTopOf="@+id/tv_quantidade_masculina_produto_fragment"
             tools:text="Feminina" />
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/checkbox_adicionar_pedido_produto"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginEnd="8dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_quantidade_feminina_produto_fragment" />
-
         <TextView
             android:id="@+id/tv_preco_produto_fragment"
             android:layout_width="wrap_content"

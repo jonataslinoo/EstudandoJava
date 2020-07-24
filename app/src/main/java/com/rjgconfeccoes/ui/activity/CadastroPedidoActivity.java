@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,7 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Cliente;
 import com.rjgconfeccoes.model.Dados;
-import com.rjgconfeccoes.ui.adapters.AdapterProdutoPedidoProduto;
+import com.rjgconfeccoes.model.Produto;
+import com.rjgconfeccoes.ui.adapters.AdapterProdutos;
 import com.rjgconfeccoes.ui.util.Util;
 
 public class CadastroPedidoActivity extends AppCompatActivity {
@@ -25,9 +27,10 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     private Spinner spinnerCliente;
     private RecyclerView recyclerViewProdutos;
-    private AdapterProdutoPedidoProduto adapterProdutoPedidoProduto;
+    private AdapterProdutos adapterProdutos;
     private Button botaoGravarPedido;
     private Button botaoListaProdutos;
+    private TextView valorTotalPedido;
     Dados dados = Util.recuperaDados();
 
     @Override
@@ -38,16 +41,9 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         inicializaCampos();
         configuraToolbar();
         preencheListaClientes();
-        configuraBotaoProdutos();
-//        configuraAdicionarRemoverQuantidade();
-//        configuraBotaoCadastrar();
-//        configuraKits();
-
-        if (dados.obtemListaProdutosSelecionados() != null) {
-            adapterProdutoPedidoProduto = new AdapterProdutoPedidoProduto(this, dados.obtemListaProdutosSelecionados());
-            recyclerViewProdutos.setLayoutManager(new LinearLayoutManager(this));
-            recyclerViewProdutos.setAdapter(adapterProdutoPedidoProduto);
-        }
+        configuraBotoes();
+        configuraAdapterProdutos();
+        atualizaValorTotal();
     }
 
     private void inicializaCampos() {
@@ -57,6 +53,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         recyclerViewProdutos = findViewById(R.id.recyclerView_produtos_cadastrar_pedido);
         botaoGravarPedido = findViewById(R.id.bt_gravar_cadastrar_pedido);
         botaoListaProdutos = findViewById(R.id.bt_produtos_cadastrar_pedido);
+        valorTotalPedido = findViewById(R.id.tv_valor_total_pedido);
     }
 
     private void configuraToolbar() {
@@ -66,9 +63,12 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(view -> limpaDadosEFinalizaTela());
     }
 
-    private void limpaDadosEFinalizaTela() {
-        dados.obtemListaProdutosSelecionados().clear();
-        finish();
+    private void configuraAdapterProdutos() {
+        if (dados.obtemListaProdutosSelecionados() != null) {
+            adapterProdutos = new AdapterProdutos(this, dados.obtemListaProdutosSelecionados());
+            recyclerViewProdutos.setLayoutManager(new LinearLayoutManager(this));
+            recyclerViewProdutos.setAdapter(adapterProdutos);
+        }
     }
 
     @Override
@@ -80,7 +80,19 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        adapterProdutoPedidoProduto.notifyDataSetChanged();
+        atualizaValorTotal();
+        adapterProdutos.notifyDataSetChanged();
+    }
+
+    private void atualizaValorTotal() {
+        double valorTotal = 0.0;
+
+        if (dados.obtemListaProdutosSelecionados() != null) {
+        }
+        for (Produto produto : dados.obtemListaProdutosSelecionados()) {
+            valorTotal += (produto.getPreco() * produto.getQuantidadeTotalProdutoPedido());
+        }
+        valorTotalPedido.setText("Valor Total R$ " + valorTotal);
     }
 
     private void preencheListaClientes() {
@@ -96,12 +108,23 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         spinnerCliente.setAdapter(dadosAdapter);
     }
 
-    private void configuraBotaoProdutos() {
+    private void configuraBotoes() {
         botaoListaProdutos.setOnClickListener(view -> abreListaProdutos());
+        botaoGravarPedido.setOnClickListener(view -> gravaPedido());
+    }
+
+    private void gravaPedido() {
+
     }
 
     private void abreListaProdutos() {
         Intent intent = new Intent(CadastroPedidoActivity.this, CadastroPedidoProdutoActivity.class);
         startActivity(intent);
     }
+
+    private void limpaDadosEFinalizaTela() {
+        dados.obtemListaProdutosSelecionados().clear();
+        finish();
+    }
+
 }

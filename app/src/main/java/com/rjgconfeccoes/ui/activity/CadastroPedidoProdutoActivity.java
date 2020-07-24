@@ -1,6 +1,5 @@
 package com.rjgconfeccoes.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,11 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Dados;
-import com.rjgconfeccoes.model.Produto;
-import com.rjgconfeccoes.ui.adapters.AdapterProdutos;
+import com.rjgconfeccoes.ui.adapters.AdapterProdutoPedidoProduto;
 import com.rjgconfeccoes.ui.util.Util;
-
-import java.util.ArrayList;
 
 public class CadastroPedidoProdutoActivity extends AppCompatActivity {
 
@@ -26,7 +22,7 @@ public class CadastroPedidoProdutoActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     private TextView mensagem;
     private RecyclerView recyclerViewPedidoProdutos;
-    private AdapterProdutos adapterProdutos;
+    private AdapterProdutoPedidoProduto adapterProdutos;
     private Button botaoGravar;
     private Button botaoVoltar;
 
@@ -38,6 +34,7 @@ public class CadastroPedidoProdutoActivity extends AppCompatActivity {
         inicializaCampos();
         configuraAdapterProdutos();
         configuraBotaoGravar();
+        configuraBotaoVoltar();
     }
 
     private void inicializaCampos() {
@@ -58,18 +55,16 @@ public class CadastroPedidoProdutoActivity extends AppCompatActivity {
             mensagem.setText(getString(R.string.nao_existem_produtos));
         }
 
-        adapterProdutos = new AdapterProdutos(this, dados.obtemListaProdutos());
+        adapterProdutos = new AdapterProdutoPedidoProduto(this, dados.obtemListaProdutos());
         recyclerViewPedidoProdutos.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewPedidoProdutos.setAdapter(adapterProdutos);
     }
 
-    private void configuraBotaoGravar(){
+    private void configuraBotaoGravar() {
         botaoGravar.setOnClickListener(view -> finish());
     }
 
-    private void vaiParaTelaPedido() {
-        Intent intent = new Intent(CadastroPedidoProdutoActivity.this, CadastroPedidoActivity.class);
-        startActivity(intent);
-        finish();
+    private void configuraBotaoVoltar() {
+        botaoVoltar.setOnClickListener(view -> finish());
     }
 }
