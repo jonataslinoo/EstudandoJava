@@ -19,6 +19,7 @@
     <string name="msg_sucesso_cadastrar_usuario">Sucesso ao cadastrar usuario!</string>
     <string name="msg_sucesso_cadastrar_cliente">Sucesso ao cadastrar cliente!</string>
     <string name="msg_sucesso_cadastrar_produto">Sucesso ao cadastrar produto!</string>
+    <string name="msg_sucesso_cadastrar_pedido">Sucesso ao cadastrar pedido!</string>
 
     <!-- Mensagens de erro -->
     <string name="msg_erro_senha_branco">O campo de senha não pode estar em branco!</string>
@@ -37,6 +38,8 @@
     <string name="msg_erro_cadastrar_usuario">Erro ao cadastrar usuario!</string>
     <string name="msg_erro_cliente_ja_cadastrado">Esse cliente já possui cadastro!</string>
     <string name="msg_erro_produto_ja_cadastrado">Esse produto já possui cadastro!</string>
+    <string name="msg_erro_selecione_cliente">O cliente não pode estar em branco, selecione algum cliente!</string>
+    <string name="msg_erro_pedido_sem_produto">O pedido deve ter ao menos um produto!</string>
 
     <string name="msg_erro_quantidade_produtos_tipo">Para produto avulso, cadastrar uma quantidade de item!</string>
     <string name="msg_erro_quantidade_produtos_kit_adulto">Para o kit adulto, cadastrar três quantidades de itens!</string>

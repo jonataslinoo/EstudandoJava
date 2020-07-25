@@ -176,7 +176,7 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
     private void salvaProduto(Produto produto) {
         //codifica o telefone em base64 para usar como id do cliente
-        String idProduto = Base64Custom.codificarStringBase64(produto.getDescricao() + produto.getQuantidadeMasculina());
+        String idProduto = Base64Custom.codificarStringBase64(produto.getDescricao());
 
         //Instancio uma referencia ao banco de dados
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PRODUTOS).child(idProduto);

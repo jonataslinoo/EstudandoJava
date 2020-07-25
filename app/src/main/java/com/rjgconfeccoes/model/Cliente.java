@@ -11,6 +11,9 @@ public class Cliente {
     private String nome;
     private String telefoneComArea;
 
+    public Cliente() {
+    }
+
     public void salvar() {
         DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
         databaseReference.child(Util.CLIENTES).child(getId()).setValue(this);

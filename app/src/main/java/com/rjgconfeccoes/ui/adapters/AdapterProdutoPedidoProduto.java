@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Dados;
 import com.rjgconfeccoes.model.Produto;
+import com.rjgconfeccoes.ui.activity.CadastroPedidoActivity;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.List;
@@ -87,7 +88,7 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
         }
 
         holder.quantidadeProduto.setText("Quantidade: " + quantidadeProduto);
-        holder.precoTotal.setText("Total " + Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
+        holder.precoTotal.setText("Total R$" + Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
     }
 
     @Override
@@ -107,6 +108,7 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
         public final ImageView botaoAdicionar;
         public final ImageView botaoRemover;
         public final CheckBox checkBoxAdicionarProduto;
+        public final LinearLayout layoutBotoesProdutoPedido;
 
         public ViewHolderProdutoPedidoProduto(@NonNull View itemView) {
             super(itemView);
@@ -121,15 +123,24 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
             botaoAdicionar = itemView.findViewById(R.id.botao_adicionar_quantidade_total_pedidoProduto);
             botaoRemover = itemView.findViewById(R.id.botao_remover_quantidade_total_pedidoProduto);
             checkBoxAdicionarProduto = itemView.findViewById(R.id.checkbox_adicionar_produto_pedidoProduto);
+            layoutBotoesProdutoPedido = itemView.findViewById(R.id.lnl_botoes_pedidoProduto);
         }
 
         public void vincula(Produto produto) {
             descricaoProduto.setText(produto.getDescricao());
             quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
             quantidadeFeminina.setText("Feminina: " + produto.getQuantidadeFeminina());
-            precoProduto.setText(Util.formataPreco(produto.getPreco()));
+            precoProduto.setText("R$ " + Util.formataPreco(produto.getPreco()));
             quantidadeProduto.setText("Quantidade: " + produto.getQuantidadeTotalProdutoPedido());
-            precoTotal.setText("Total " + Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
+            precoTotal.setText("Total R$ " + Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
+
+            if (context instanceof CadastroPedidoActivity) {
+                checkBoxAdicionarProduto.setVisibility(View.GONE);
+                layoutBotoesProdutoPedido.setVisibility(View.GONE);
+            } else {
+                checkBoxAdicionarProduto.setVisibility(View.VISIBLE);
+                layoutBotoesProdutoPedido.setVisibility(View.VISIBLE);
+            }
 
             if (dados.obtemListaProdutosSelecionados().contains(produto)) {
                 checkBoxAdicionarProduto.setChecked(true);

@@ -1,22 +1,51 @@
 package com.rjgconfeccoes.model;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.ui.util.Util;
+
+import java.util.ArrayList;
 
 public class Pedidos {
 
     private String id;
     private String clienteId;
-    private String produtoId;
-    private int quantidadeTotalProdutos;
-    private double valorTotalPedido;
+    private ArrayList<ProdutoPedido> listaProdutosPedido;
+    private String valorTotalPedido;
 
-    public void salva(){
-        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
-        databaseReference.child(Util.PEDIDOS).push().setValue(this);
+    public Pedidos() {
     }
 
+    public void salvar() {
+        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
+//        databaseReference.child(Util.PEDIDOS).child(getId()).setValue(this);
+        databaseReference.child(Util.PEDIDOS).child(getId());
+
+//        databaseReference.child(Util.PEDIDOS).child(getId()).setValue(getListaProdutosPedido());
+//        databaseReference.child(Util.PEDIDOS).child(getId()).setValue(getValorTotalPedido());
+
+        databaseReference.child(Util.PEDIDOS).child(getId()).setValue("clienteId", getClienteId());
+//        databaseReference.setValue("valorTotalPedido", getValorTotalPedido());
+//        for (ProdutoPedido produtoPedido : getListaProdutosPedido()) {
+//
+//            databaseReference.setValue(produtoPedido.getProdutoId());
+//            databaseReference.setValue(produtoPedido.getQuantidadeTotalProdutos());
+////            databaseReference.setValue("produtoId", produtoPedido.getProdutoId());
+////            databaseReference.setValue("quantidadeTotalProdutos", produtoPedido.getQuantidadeTotalProdutos());
+//        }
+
+    }
+//
+//    public ArrayList<ProdutoPedido> obtemListaProdutosPedido() {
+//
+//        if (listaProdutosPedido == null) {
+//            listaProdutosPedido = new ArrayList<>();
+//        }
+//        return listaProdutosPedido;
+//    }
+
+    @Exclude
     public String getId() {
         return id;
     }
@@ -33,27 +62,23 @@ public class Pedidos {
         this.clienteId = clienteId;
     }
 
-    public String getProdutoId() {
-        return produtoId;
-    }
-
-    public void setProdutoId(String produtoId) {
-        this.produtoId = produtoId;
-    }
-
-    public int getQuantidadeTotalProdutos() {
-        return quantidadeTotalProdutos;
-    }
-
-    public void setQuantidadeTotalProdutos(int quantidadeTotalProdutos) {
-        this.quantidadeTotalProdutos = quantidadeTotalProdutos;
-    }
-
-    public double getValorTotalPedido() {
+    public String getValorTotalPedido() {
         return valorTotalPedido;
     }
 
-    public void setValorTotalPedido(double valorTotalPedido) {
+    public void setValorTotalPedido(String valorTotalPedido) {
         this.valorTotalPedido = valorTotalPedido;
+    }
+
+    @Exclude
+    public ArrayList<ProdutoPedido> getListaProdutosPedido() {
+        if (listaProdutosPedido == null) {
+            listaProdutosPedido = new ArrayList<>();
+        }
+        return listaProdutosPedido;
+    }
+
+    public void setListaProdutosPedido(ArrayList<ProdutoPedido> listaProdutosPedido) {
+        this.listaProdutosPedido = listaProdutosPedido;
     }
 }

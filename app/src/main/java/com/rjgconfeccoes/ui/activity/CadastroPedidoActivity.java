@@ -13,12 +13,19 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
 import com.rjgconfeccoes.R;
+import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Cliente;
 import com.rjgconfeccoes.model.Dados;
+import com.rjgconfeccoes.model.Pedidos;
 import com.rjgconfeccoes.model.Produto;
-import com.rjgconfeccoes.ui.adapters.AdapterProdutos;
+import com.rjgconfeccoes.model.ProdutoPedido;
+import com.rjgconfeccoes.ui.adapters.AdapterProdutoPedidoProduto;
+import com.rjgconfeccoes.ui.util.Base64Custom;
 import com.rjgconfeccoes.ui.util.Util;
+
+import java.util.ArrayList;
 
 public class CadastroPedidoActivity extends AppCompatActivity {
 
@@ -27,10 +34,11 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     private Spinner spinnerCliente;
     private RecyclerView recyclerViewProdutos;
-    private AdapterProdutos adapterProdutos;
+    private AdapterProdutoPedidoProduto adapterProdutoPedidoProduto;
     private Button botaoGravarPedido;
     private Button botaoListaProdutos;
     private TextView valorTotalPedido;
+    private DatabaseReference databaseReference;
     Dados dados = Util.recuperaDados();
 
     @Override
@@ -65,9 +73,9 @@ public class CadastroPedidoActivity extends AppCompatActivity {
 
     private void configuraAdapterProdutos() {
         if (dados.obtemListaProdutosSelecionados() != null) {
-            adapterProdutos = new AdapterProdutos(this, dados.obtemListaProdutosSelecionados());
+            adapterProdutoPedidoProduto = new AdapterProdutoPedidoProduto(this, dados.obtemListaProdutosSelecionados());
             recyclerViewProdutos.setLayoutManager(new LinearLayoutManager(this));
-            recyclerViewProdutos.setAdapter(adapterProdutos);
+            recyclerViewProdutos.setAdapter(adapterProdutoPedidoProduto);
         }
     }
 
@@ -81,7 +89,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         atualizaValorTotal();
-        adapterProdutos.notifyDataSetChanged();
+        adapterProdutoPedidoProduto.notifyDataSetChanged();
     }
 
     private void atualizaValorTotal() {
@@ -92,7 +100,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         for (Produto produto : dados.obtemListaProdutosSelecionados()) {
             valorTotal += (produto.getPreco() * produto.getQuantidadeTotalProdutoPedido());
         }
-        valorTotalPedido.setText("Valor Total R$ " + valorTotal);
+        valorTotalPedido.setText(Util.formataPreco(valorTotal));
     }
 
     private void preencheListaClientes() {
@@ -110,13 +118,70 @@ public class CadastroPedidoActivity extends AppCompatActivity {
 
     private void configuraBotoes() {
         botaoListaProdutos.setOnClickListener(view -> abreListaProdutos());
-        botaoGravarPedido.setOnClickListener(view -> gravaPedido());
+        botaoGravarPedido.setOnClickListener(view -> validaCamposDigitados());
     }
 
-    private void gravaPedido() {
-
+    private void validaCamposDigitados() {
+        String clienteSelecionado = spinnerCliente.getSelectedItem().toString();
+        ArrayList<Produto> listaProdutosSelecionados = dados.obtemListaProdutosSelecionados();
+        String valorTotal = valorTotalPedido.getText().toString();
+        if (clienteSelecionado.isEmpty()) {
+            Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_erro_selecione_cliente));
+        } else if (listaProdutosSelecionados.size() <= 0) {
+            Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_erro_pedido_sem_produto));
+        } else {
+            salvaDadosPedido(clienteSelecionado, listaProdutosSelecionados, valorTotal);
+        }
     }
 
+    private void salvaDadosPedido(String clienteSelecionado, ArrayList<Produto> listaProdutosSelecionados, String valorTotal) {
+        Pedidos pedidos = new Pedidos();
+        ProdutoPedido produtoPedido = new ProdutoPedido();
+        ArrayList<ProdutoPedido> listaProdudoPedido = new ArrayList<>();
+        String idClienteCodificado = Base64Custom.codificarStringBase64(clienteSelecionado);
+
+        pedidos.setClienteId(idClienteCodificado);
+        pedidos.setValorTotalPedido(valorTotal);
+
+        for (Produto produto : listaProdutosSelecionados) {
+            String idProduto = produto.getDescricao();
+            produtoPedido.setProdutoId(idProduto);
+            produtoPedido.setQuantidadeTotalProdutos(produto.getQuantidadeTotalProdutoPedido());
+            listaProdudoPedido.add(produtoPedido);
+        }
+
+        pedidos.setListaProdutosPedido(listaProdudoPedido);
+
+        cadastrarPedido(pedidos);
+    }
+
+    private void cadastrarPedido(Pedidos pedidos) {
+        ArrayList<Produto> listaTeste = dados.obtemListaProdutosSelecionados();
+
+        //Instancio uma referencia ao banco de dados
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).push()
+                .child(pedidos.getClienteId());
+
+                ProdutoPedido produtoPedido = new ProdutoPedido();
+                for (Produto produto : dados.obtemListaProdutosSelecionados()) {
+                    produtoPedido.setProdutoId(produto.getDescricao());
+                    produtoPedido.setQuantidadeTotalProdutos(produto.getQuantidadeTotalProdutoPedido());
+
+
+//        for (ProdutoPedido produtoPedido : pedidos.getListaProdutosPedido()) {
+            String idProduto = Base64Custom.codificarStringBase64(produto.getDescricao());
+
+            databaseReference.child(idProduto).setValue(produtoPedido);
+        }
+
+        Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_sucesso_cadastrar_pedido));
+                vaiParaTelaDashboard();
+    }
+
+    private void vaiParaTelaDashboard() {
+        finish();
+    }
+    
     private void abreListaProdutos() {
         Intent intent = new Intent(CadastroPedidoActivity.this, CadastroPedidoProdutoActivity.class);
         startActivity(intent);

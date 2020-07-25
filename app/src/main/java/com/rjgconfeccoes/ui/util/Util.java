@@ -48,7 +48,7 @@ public abstract class Util {
 
     public static String formataPreco(double dValor) {
         //Formata posição e valor parcela
-        String sValor = String.format("R$ %.2f", dValor);
+        String sValor = String.format("%.2f", dValor);
 
         return sValor;
     }

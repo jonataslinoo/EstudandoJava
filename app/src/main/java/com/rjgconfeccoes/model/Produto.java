@@ -14,6 +14,9 @@ public class Produto {
     private int quantidadeTotalProdutoPedido;
     private double preco;
 
+    public Produto() {
+    }
+
     public void salvar() {
         DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
         databaseReference.child(Util.PRODUTOS).child(getId()).setValue(this);
@@ -60,6 +63,7 @@ public class Produto {
         this.preco = preco;
     }
 
+    @Exclude
     public int getQuantidadeTotalProdutoPedido() {
         return quantidadeTotalProdutoPedido;
     }

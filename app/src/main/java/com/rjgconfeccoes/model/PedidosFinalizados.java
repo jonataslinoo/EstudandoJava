@@ -13,6 +13,9 @@ public class PedidosFinalizados {
     private int quantidadeTotal;
     private double valorTotal;
 
+    public PedidosFinalizados() {
+    }
+
     public void salva() {
         DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
         databaseReference.child(Util.PEDIDOS_FINALIZADOS).push().setValue(this);
