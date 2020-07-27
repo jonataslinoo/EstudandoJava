@@ -5,37 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/teste_1"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_pedido_pedido"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="50dp"
-        android:layout_marginTop="32dp"
-        android:text="teste"
-        android:textSize="18sp"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/teste_2"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:text="teste 2"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@id/teste_1"
-        app:layout_constraintStart_toStartOf="@id/teste_1"
-        app:layout_constraintTop_toBottomOf="@id/teste_1" />
 
-    <Button
-        android:id="@+id/btnDeslogar"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/tv_nao_existe_pedido_pedido"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:text="Deslogar"
-        app:layout_constraintEnd_toEndOf="@id/teste_2"
-        app:layout_constraintStart_toStartOf="@id/teste_2"
-        app:layout_constraintTop_toBottomOf="@id/teste_2" />
+        android:padding="5dp"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
