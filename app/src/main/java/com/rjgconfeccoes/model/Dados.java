@@ -7,10 +7,11 @@ public class Dados {
     private Usuario usuario;
     private Cliente cliente;
     private Pedidos pedidos;
-    private PedidosFinalizados pedidosFinalizados;
     private Produto produto;
+    private PedidosFinalizados pedidosFinalizados;
 
     private ArrayList<Cliente> listaClientes;
+    private ArrayList<Pedidos> listaPedidos;
     private ArrayList<Produto> listaProdutos;
     private ArrayList<Produto> listaProdutosSelecionados;
 
@@ -35,7 +36,17 @@ public class Dados {
     }
 
     /**
-     * retorna uma lista com os produtos cadastrados
+     * retorna uma lista com os pedidos cadastrados
+     */
+    public ArrayList<Pedidos> obtemListaPedidos() {
+        if (listaPedidos == null) {
+            listaPedidos = new ArrayList<>();
+        }
+        return listaPedidos;
+    }
+
+    /**
+     * retorna uma lista com os produtos selecionados para o pedido
      */
     public ArrayList<Produto> obtemListaProdutosSelecionados() {
         if (listaProdutosSelecionados == null) {

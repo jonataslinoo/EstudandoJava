@@ -25,8 +25,6 @@ import com.rjgconfeccoes.ui.adapters.AdapterProdutoPedidoProduto;
 import com.rjgconfeccoes.ui.util.Base64Custom;
 import com.rjgconfeccoes.ui.util.Util;
 
-import java.util.ArrayList;
-
 public class CadastroPedidoActivity extends AppCompatActivity {
 
     private static final String TITULO_APPBAR = "Novo Pedido";
@@ -123,65 +121,50 @@ public class CadastroPedidoActivity extends AppCompatActivity {
 
     private void validaCamposDigitados() {
         String clienteSelecionado = spinnerCliente.getSelectedItem().toString();
-        ArrayList<Produto> listaProdutosSelecionados = dados.obtemListaProdutosSelecionados();
+//        ArrayList<Produto> listaProdutosSelecionados = dados.obtemListaProdutosSelecionados();
         String valorTotal = valorTotalPedido.getText().toString();
         if (clienteSelecionado.isEmpty()) {
             Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_erro_selecione_cliente));
-        } else if (listaProdutosSelecionados.size() <= 0) {
+        } else if (dados.obtemListaProdutosSelecionados().size() <= 0) {
             Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_erro_pedido_sem_produto));
         } else {
-            salvaDadosPedido(clienteSelecionado, listaProdutosSelecionados, valorTotal);
+            salvaDadosPedido(clienteSelecionado, valorTotal);
         }
     }
 
-    private void salvaDadosPedido(String clienteSelecionado, ArrayList<Produto> listaProdutosSelecionados, String valorTotal) {
+    private void salvaDadosPedido(String clienteSelecionado, String valorTotal) {
         Pedidos pedidos = new Pedidos();
-        ProdutoPedido produtoPedido = new ProdutoPedido();
-        ArrayList<ProdutoPedido> listaProdudoPedido = new ArrayList<>();
         String idClienteCodificado = Base64Custom.codificarStringBase64(clienteSelecionado);
 
         pedidos.setClienteId(idClienteCodificado);
         pedidos.setValorTotalPedido(valorTotal);
 
-        for (Produto produto : listaProdutosSelecionados) {
-            String idProduto = produto.getDescricao();
-            produtoPedido.setProdutoId(idProduto);
-            produtoPedido.setQuantidadeTotalProdutos(produto.getQuantidadeTotalProdutoPedido());
-            listaProdudoPedido.add(produtoPedido);
-        }
-
-        pedidos.setListaProdutosPedido(listaProdudoPedido);
-
         cadastrarPedido(pedidos);
     }
 
     private void cadastrarPedido(Pedidos pedidos) {
-        ArrayList<Produto> listaTeste = dados.obtemListaProdutosSelecionados();
-
         //Instancio uma referencia ao banco de dados
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).push()
                 .child(pedidos.getClienteId());
 
-                ProdutoPedido produtoPedido = new ProdutoPedido();
-                for (Produto produto : dados.obtemListaProdutosSelecionados()) {
-                    produtoPedido.setProdutoId(produto.getDescricao());
-                    produtoPedido.setQuantidadeTotalProdutos(produto.getQuantidadeTotalProdutoPedido());
+        ProdutoPedido produtoPedido = new ProdutoPedido();
+        for (Produto produto : dados.obtemListaProdutosSelecionados()) {
+            produtoPedido.setProdutoId(produto.getDescricao());
+            produtoPedido.setQuantidadeTotalProdutos(produto.getQuantidadeTotalProdutoPedido());
 
-
-//        for (ProdutoPedido produtoPedido : pedidos.getListaProdutosPedido()) {
             String idProduto = Base64Custom.codificarStringBase64(produto.getDescricao());
 
             databaseReference.child(idProduto).setValue(produtoPedido);
         }
 
         Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_sucesso_cadastrar_pedido));
-                vaiParaTelaDashboard();
+        vaiParaTelaDashboard();
     }
 
     private void vaiParaTelaDashboard() {
         finish();
     }
-    
+
     private void abreListaProdutos() {
         Intent intent = new Intent(CadastroPedidoActivity.this, CadastroPedidoProdutoActivity.class);
         startActivity(intent);
@@ -191,5 +174,4 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         dados.obtemListaProdutosSelecionados().clear();
         finish();
     }
-
 }
