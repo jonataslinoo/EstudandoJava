@@ -11,7 +11,7 @@ public class Pedidos {
 
     private String id;
     private String clienteId;
-    private String valorTotalPedido;
+    private ArrayList<ProdutoPedido> listaProdutosPedido;
 
     public Pedidos() {
     }
@@ -40,11 +40,12 @@ public class Pedidos {
         this.clienteId = clienteId;
     }
 
-    public String getValorTotalPedido() {
-        return valorTotalPedido;
+    @Exclude
+    public ArrayList<ProdutoPedido> getListaProdutosPedido() {
+        return listaProdutosPedido;
     }
 
-    public void setValorTotalPedido(String valorTotalPedido) {
-        this.valorTotalPedido = valorTotalPedido;
+    public void setListaProdutosPedido(ArrayList<ProdutoPedido> listaProdutosPedido) {
+        this.listaProdutosPedido = listaProdutosPedido;
     }
 }

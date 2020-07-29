@@ -20,6 +20,7 @@ import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Dados;
 import com.rjgconfeccoes.model.Pedidos;
+import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.adapters.AdapterPedidos;
 import com.rjgconfeccoes.ui.util.Util;
 
@@ -34,6 +35,9 @@ public class PedidosFragment extends Fragment {
     private ValueEventListener valueEventListenerPedidos;
     private AlertDialog alertDialog;
     private TextView tvNaoExistePedido;
+    private ArrayList<ProdutoPedido> listaProdutosPedido;
+    private String idPedido;
+    private String idCliente;
 
     @Override
     public void onStart() {
@@ -68,8 +72,19 @@ public class PedidosFragment extends Fragment {
 
                 if (snapshot.getValue() != null) {
                     //listar clientes
-                    for (DataSnapshot pedidosBanco : snapshot.getChildren()) {
-                        Pedidos pedidos = pedidosBanco.getValue(Pedidos.class);
+                    for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
+                        String chaveGeral = idPedidoBanco.getKey();
+                        Pedidos pedidos = new Pedidos();
+                        separaStringIdentificador(idPedidoBanco.getKey());
+
+                        listaProdutosPedido = new ArrayList<>();
+                        for (DataSnapshot produtosPedidoBanco : snapshot.child(chaveGeral).getChildren()) {
+                            ProdutoPedido produtoPedido = produtosPedidoBanco.getValue(ProdutoPedido.class);
+                            listaProdutosPedido.add(produtoPedido);
+                        }
+                        pedidos.setId(idPedido);
+                        pedidos.setClienteId(idCliente);
+                        pedidos.setListaProdutosPedido(listaProdutosPedido);
                         listaPedidos.add(pedidos);
                     }
 
@@ -102,5 +117,11 @@ public class PedidosFragment extends Fragment {
         recyclerViewPedidos.setAdapter(adapter);
 
         return view;
+    }
+
+    private void separaStringIdentificador(String chaveIdentificacao) {
+        String[] identificadores = chaveIdentificacao.split(";");
+        idPedido = chaveIdentificacao;
+        idCliente = identificadores[0];
     }
 }

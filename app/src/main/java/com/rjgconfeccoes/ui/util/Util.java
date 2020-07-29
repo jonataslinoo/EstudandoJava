@@ -1,6 +1,7 @@
 package com.rjgconfeccoes.ui.util;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Dados;
 
+import java.lang.reflect.Method;
+
 public abstract class Util {
 
     //Variáveis do apoio
@@ -22,7 +25,7 @@ public abstract class Util {
     public static String PRODUTOS = "produtos";
     public static String PEDIDOS = "pedidos";
     public static String PEDIDOS_FINALIZADOS = "pedidos_finalizados";
-
+    public static String SELECIONE_CLIENTE = "Selecione um cliente";
 
     /**
      * Retorna a instancia da InfoControle a ativa no sistema

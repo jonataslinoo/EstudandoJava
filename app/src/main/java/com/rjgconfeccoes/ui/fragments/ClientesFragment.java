@@ -40,6 +40,7 @@ public class ClientesFragment extends Fragment {
     public void onStart() {
         super.onStart();
         databaseReference.addValueEventListener(valueEventListenerContatos);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -73,6 +74,7 @@ public class ClientesFragment extends Fragment {
 
                 //Recupero os dados do sistema e atualizo a lista de clientes e salvo nos dados
                 Dados dados = Util.recuperaDados();
+                dados.obtemListaClientes().clear();
                 dados.obtemListaClientes().addAll(listClientes);
                 Util.defineDados(dados);
 

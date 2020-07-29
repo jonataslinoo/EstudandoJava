@@ -49,7 +49,8 @@ public class DashboardActivity extends AppCompatActivity implements BottomNaviga
         toolbar.setTitle(TITULO_TOOLBAR_PEDIDOS);
         setSupportActionBar(toolbar);
 
-        carregaFragmento(new PedidosFragment());
+//        carregaFragmento(new PedidosFragment());
+        carregaFragmento(new OpcoesFragment());
 
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);

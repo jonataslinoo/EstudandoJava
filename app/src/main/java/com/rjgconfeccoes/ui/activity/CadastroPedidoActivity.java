@@ -25,6 +25,9 @@ import com.rjgconfeccoes.ui.adapters.AdapterProdutoPedidoProduto;
 import com.rjgconfeccoes.ui.util.Base64Custom;
 import com.rjgconfeccoes.ui.util.Util;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class CadastroPedidoActivity extends AppCompatActivity {
 
     private static final String TITULO_APPBAR = "Novo Pedido";
@@ -102,15 +105,27 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     }
 
     private void preencheListaClientes() {
-        Dados dados = Util.recuperaDados();
+        ArrayList<Cliente> listaCliente = dados.obtemListaClientes();
+
+        //valida para lançar um texto  de selecione um cliente
+        if (listaCliente.size() > 0) {
+            Cliente cliente;
+            cliente = listaCliente.get(0);
+            if (!cliente.getNome().equals(Util.SELECIONE_CLIENTE)) {
+                cliente = new Cliente();
+                cliente.setId("");
+                cliente.setNome(Util.SELECIONE_CLIENTE);
+                cliente.setTelefoneComArea("");
+
+                listaCliente.add(0, cliente);
+            }
+        } else {
+            DialogMensagem();
+        }
 
         //Cria o adapter
-        ArrayAdapter<Cliente> dadosAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dados.obtemListaClientes());
-
-        //Seta o adapter no dropdown
+        ArrayAdapter<Cliente> dadosAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listaCliente);
         dadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        //Atacha o adapter ao controle
         spinnerCliente.setAdapter(dadosAdapter);
     }
 
@@ -121,31 +136,27 @@ public class CadastroPedidoActivity extends AppCompatActivity {
 
     private void validaCamposDigitados() {
         String clienteSelecionado = spinnerCliente.getSelectedItem().toString();
-//        ArrayList<Produto> listaProdutosSelecionados = dados.obtemListaProdutosSelecionados();
-        String valorTotal = valorTotalPedido.getText().toString();
-        if (clienteSelecionado.isEmpty()) {
+        if (clienteSelecionado.isEmpty() || clienteSelecionado.equals(Util.SELECIONE_CLIENTE)) {
             Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_erro_selecione_cliente));
         } else if (dados.obtemListaProdutosSelecionados().size() <= 0) {
             Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_erro_pedido_sem_produto));
         } else {
-            salvaDadosPedido(clienteSelecionado, valorTotal);
+            salvaDadosPedido(clienteSelecionado);
         }
     }
 
-    private void salvaDadosPedido(String clienteSelecionado, String valorTotal) {
+    private void salvaDadosPedido(String clienteSelecionado) {
         Pedidos pedidos = new Pedidos();
         String idClienteCodificado = Base64Custom.codificarStringBase64(clienteSelecionado);
-
         pedidos.setClienteId(idClienteCodificado);
-        pedidos.setValorTotalPedido(valorTotal);
-
         cadastrarPedido(pedidos);
     }
 
     private void cadastrarPedido(Pedidos pedidos) {
+        String idPedido = retornaIdentifcadorPedido(pedidos);
+
         //Instancio uma referencia ao banco de dados
-        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).push()
-                .child(pedidos.getClienteId());
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(idPedido);
 
         ProdutoPedido produtoPedido = new ProdutoPedido();
         for (Produto produto : dados.obtemListaProdutosSelecionados()) {
@@ -159,6 +170,16 @@ public class CadastroPedidoActivity extends AppCompatActivity {
 
         Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_sucesso_cadastrar_pedido));
         vaiParaTelaDashboard();
+        limpaDadosEFinalizaTela();
+    }
+
+    private String retornaIdentifcadorPedido(Pedidos pedidos) {
+        Random randomico = new Random();
+        int numeroAleatorio = randomico.nextInt(99999 - 10000) + 10000;
+        String pedidoCodificado = Base64Custom.codificarStringBase64(Util.PEDIDOS);
+        String identificador = pedidos.getClienteId() + ";" + pedidoCodificado + ";" + numeroAleatorio;
+
+        return identificador;
     }
 
     private void vaiParaTelaDashboard() {
@@ -173,5 +194,15 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     private void limpaDadosEFinalizaTela() {
         dados.obtemListaProdutosSelecionados().clear();
         finish();
+    }
+
+    public void DialogMensagem() {
+        new android.app.AlertDialog
+                .Builder(this)
+                .setTitle("Atenção")
+                .setMessage("Não possuem cliente, carregue a lista novamente.")
+                .setCancelable(false)
+                .setPositiveButton("ok", null)
+                .show();
     }
 }

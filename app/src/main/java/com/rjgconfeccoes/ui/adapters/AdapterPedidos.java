@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Pedidos;
 import com.rjgconfeccoes.ui.util.Base64Custom;
-import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
 
@@ -37,10 +36,8 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
     @Override
     public void onBindViewHolder(@NonNull PedidosViewHolder holder, int position) {
         Pedidos pedidos = listaPedidos.get(position);
-        if(pedidos != null)
-        {
-            holder.vincula(pedidos);
-        }
+        holder.vincula(pedidos);
+
     }
 
     @Override
@@ -67,10 +64,11 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
 
         public void vincula(Pedidos pedidos) {
             String decodificaNomeCliente = Base64Custom.decodificarStringBase64(pedidos.getClienteId());
+            String[] identificadores = pedidos.getId().split(";");
 
-            descPedido.setText("Pedido: " + pedidos.getId());
+            descPedido.setText("Pedido: " + identificadores[2]);
             nomeCliente.setText("Cliente: " + decodificaNomeCliente);
-            precoTotalPedido.setText("R$: " + Util.formataPreco(Double.parseDouble(pedidos.getValorTotalPedido())));
+//            precoTotalPedido.setText("R$: " + Util.formataPreco(Double.parseDouble(pedidos.getValorTotalPedido())));
 
         }
     }
