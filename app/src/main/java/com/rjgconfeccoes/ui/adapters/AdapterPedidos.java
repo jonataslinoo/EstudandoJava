@@ -11,8 +11,12 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rjgconfeccoes.R;
+import com.rjgconfeccoes.model.Dados;
 import com.rjgconfeccoes.model.Pedidos;
+import com.rjgconfeccoes.model.Produto;
+import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.util.Base64Custom;
+import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
 
@@ -20,6 +24,8 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
 
     private final Context context;
     private final ArrayList<Pedidos> listaPedidos;
+    private double valorTotal;
+    private int quantidadeItens;
 
     public AdapterPedidos(Context context, ArrayList<Pedidos> listaPedidos) {
         this.context = context;
@@ -37,7 +43,6 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
     public void onBindViewHolder(@NonNull PedidosViewHolder holder, int position) {
         Pedidos pedidos = listaPedidos.get(position);
         holder.vincula(pedidos);
-
     }
 
     @Override
@@ -51,6 +56,10 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
         private final TextView descPedido;
         private final TextView nomeCliente;
         private final TextView precoTotalPedido;
+        private final TextView quantidadeItensPedido;
+        private final TextView dataPedido;
+        private final TextView dataPedidoFinalizado;
+        private final TextView pedidoFinalizado;
 
         public PedidosViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,17 +68,49 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
             descPedido = itemView.findViewById(R.id.tv_desc_pedido_pedidoFragment);
             nomeCliente = itemView.findViewById(R.id.tv_cliente_pedidoFragment);
             precoTotalPedido = itemView.findViewById(R.id.tv_preco_total_pedido_pedidoFragment);
+            quantidadeItensPedido = itemView.findViewById(R.id.tv_quantidade_itens_pedido_pedidoFragment);
+            dataPedido = itemView.findViewById(R.id.tv_data_pedido_pedidoFragment);
+            dataPedidoFinalizado = itemView.findViewById(R.id.tv_data_pedido_finalizado_pedidoFragment);
+            pedidoFinalizado = itemView.findViewById(R.id.tv_pedido_finalizado_pedidoFragment);
 
         }
 
         public void vincula(Pedidos pedidos) {
+            retornaValorPedido(pedidos);
             String decodificaNomeCliente = Base64Custom.decodificarStringBase64(pedidos.getClienteId());
             String[] identificadores = pedidos.getId().split(";");
 
-            descPedido.setText("Pedido: " + identificadores[2]);
+            descPedido.setText("Pedido: " + identificadores[1]);
             nomeCliente.setText("Cliente: " + decodificaNomeCliente);
-//            precoTotalPedido.setText("R$: " + Util.formataPreco(Double.parseDouble(pedidos.getValorTotalPedido())));
+            dataPedido.setText(Util.converteDataHorasSegundos(Long.parseLong(identificadores[1])));
+            quantidadeItensPedido.setText(quantidadeItens + " Itens");
+            precoTotalPedido.setText("R$: " + Util.formataPreco(valorTotal));
 
+            if (identificadores.length > 2) {
+                pedidoFinalizado.setVisibility(View.VISIBLE);
+                pedidoFinalizado.setText("Finalizado");
+                dataPedidoFinalizado.setVisibility(View.VISIBLE);
+                dataPedidoFinalizado.setText(Util.converteDataHorasSegundos(Long.parseLong(identificadores[2])));
+            } else {
+                dataPedidoFinalizado.setVisibility(View.GONE);
+                pedidoFinalizado.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void retornaValorPedido(Pedidos pedidos) {
+        Dados dados = Util.recuperaDados();
+
+        valorTotal = 0.0;
+        quantidadeItens = 0;
+
+        for (ProdutoPedido produtoPedido : pedidos.getListaProdutosPedido()) {
+            for (Produto produto : dados.obtemListaProdutos()) {
+                if (produtoPedido.getProdutoId().equals(produto.getDescricao())) {
+                    valorTotal += (produtoPedido.getQuantidadeTotalProdutos() * produto.getPreco());
+                }
+            }
+            quantidadeItens += 1;
         }
     }
 }

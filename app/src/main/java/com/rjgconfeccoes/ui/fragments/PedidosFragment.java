@@ -123,5 +123,6 @@ public class PedidosFragment extends Fragment {
         String[] identificadores = chaveIdentificacao.split(";");
         idPedido = chaveIdentificacao;
         idCliente = identificadores[0];
+
     }
 }

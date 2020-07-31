@@ -1,8 +1,8 @@
 package com.rjgconfeccoes.ui.util;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Dados;
 
-import java.lang.reflect.Method;
+import java.util.Calendar;
 
 public abstract class Util {
 
@@ -49,13 +49,32 @@ public abstract class Util {
                 .setBackgroundTint(context.getResources().getColor(R.color.corBranca)).show();
     }
 
+    /**
+     * Transforma data int para exibição
+     * Retorna a data do pedido no formato dd/mm/yyyy hh:mm:ss
+     */
+    public static String converteDataHorasSegundos(long lData) {
+        String sData = String.valueOf(lData);
+
+        if (sData.length() != 14) {
+            return "";
+        }
+
+        return String.format("%1$s/%2$s/%3$s %4$s:%5$s:%6$s", sData.substring(6, 8), sData.substring(4, 6), sData.substring(0, 4), sData.substring(8, 10), sData.substring(10, 12), sData.substring(12, 14));
+    }
+
     public static String formataPreco(double dValor) {
-        //Formata posição e valor parcela
         String sValor = String.format("%.2f", dValor);
 
         return sValor;
     }
 
+    /**
+     * Retorna a data do Sistema no formato yyyyMMddkkmmss
+     */
+    public static long obtemDataAtualComHoraSegundo() {
+        return Long.parseLong(DateFormat.format("yyyyMMddkkmmss", Calendar.getInstance()).toString());
+    }
 
     /**
      * Cria o progress bar

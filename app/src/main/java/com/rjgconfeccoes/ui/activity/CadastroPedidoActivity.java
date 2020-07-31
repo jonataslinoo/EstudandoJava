@@ -26,6 +26,7 @@ import com.rjgconfeccoes.ui.util.Base64Custom;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 public class CadastroPedidoActivity extends AppCompatActivity {
@@ -174,10 +175,9 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     }
 
     private String retornaIdentifcadorPedido(Pedidos pedidos) {
-        Random randomico = new Random();
-        int numeroAleatorio = randomico.nextInt(99999 - 10000) + 10000;
-        String pedidoCodificado = Base64Custom.codificarStringBase64(Util.PEDIDOS);
-        String identificador = pedidos.getClienteId() + ";" + pedidoCodificado + ";" + numeroAleatorio;
+        //uso a data como identificador unico aproveito para mostrar na tela a data do pedido
+        long dataPedidoIdentificador = Util.obtemDataAtualComHoraSegundo();
+        String identificador = pedidos.getClienteId() + ";"  + dataPedidoIdentificador;
 
         return identificador;
     }
