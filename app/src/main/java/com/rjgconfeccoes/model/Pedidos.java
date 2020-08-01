@@ -16,12 +16,12 @@ public class Pedidos {
     public Pedidos() {
     }
 
-    public void salvar() {
-        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
-        databaseReference.child(Util.PEDIDOS).child(getId());
-        databaseReference.child(Util.PEDIDOS).child(getId()).setValue("clienteId", getClienteId());
-
-    }
+//    public void salvar() {
+//        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
+//        databaseReference.child(Util.PEDIDOS).child(getId());
+//        databaseReference.child(Util.PEDIDOS).child(getId()).setValue("clienteId", getClienteId());
+//
+//    }
 
     @Exclude
     public String getId() {

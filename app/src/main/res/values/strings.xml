@@ -68,5 +68,9 @@
     <string name="kit_adulto">Kit Adulto</string>
     <string name="menu_produtos">Produtos</string>
     <string name="nao_existem_produtos">NÃO EXISTEM PRODUTOS</string>
+    <string name="remover">Remover</string>
+    <string name="finalizar">Finalizar</string>
+    <string name="nao_existem_pedidos_finalizados">Não existem pedidos finalizados!</string>
+    <string name="nao_existem_pedidos">Não existem pedidos!</string>
 
 </resources>

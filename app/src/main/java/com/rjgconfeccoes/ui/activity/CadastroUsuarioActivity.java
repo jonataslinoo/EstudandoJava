@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Usuario;
@@ -99,6 +100,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
 
                         //Recupero dados usuario cadastrado
                         String identificadorUsuario = Base64Custom.codificarStringBase64(usuario.getEmail());
+
                         usuario.setId(identificadorUsuario);
                         usuario.salvar();
 

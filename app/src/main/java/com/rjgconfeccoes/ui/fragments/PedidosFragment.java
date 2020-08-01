@@ -1,12 +1,17 @@
 package com.rjgconfeccoes.ui.fragments;
 
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,12 +27,15 @@ import com.rjgconfeccoes.model.Dados;
 import com.rjgconfeccoes.model.Pedidos;
 import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.adapters.AdapterPedidos;
+import com.rjgconfeccoes.ui.adapters.OnItemClickListener;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
 
 public class PedidosFragment extends Fragment {
 
+    private static final int REMOVER_PEDIDO = 0;
+    private static final int FINALIZAR_PEDIDO = 1;
     private AdapterPedidos adapter;
     private ArrayList<Pedidos> listaPedidos = new ArrayList<>();
     private RecyclerView recyclerViewPedidos;
@@ -38,6 +46,8 @@ public class PedidosFragment extends Fragment {
     private ArrayList<ProdutoPedido> listaProdutosPedido;
     private String idPedido;
     private String idCliente;
+    private int posicaoClicada;
+    private Pedidos pedidoClicado;
 
     @Override
     public void onStart() {
@@ -111,18 +121,108 @@ public class PedidosFragment extends Fragment {
             }
         };
 
+        configuraAdapter(view);
+
+        return view;
+    }
+
+    private void configuraAdapter(View view) {
         adapter = new AdapterPedidos(getActivity(), listaPedidos);
         recyclerViewPedidos = view.findViewById(R.id.recyclerview_pedido_pedido);
         recyclerViewPedidos.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewPedidos.setAdapter(adapter);
+        registerForContextMenu(recyclerViewPedidos);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemLongClickListener(int position, Pedidos pedido) {
+                posicaoClicada = position;
+                pedidoClicado = pedido;
+            }
 
-        return view;
+            @Override
+            public void onItemClickListener(int position, Pedidos pedido) {
+                posicaoClicada = position;
+                pedidoClicado = pedido;
+
+                Toast.makeText(getActivity(), "posicao " + posicaoClicada + pedido.getId(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_lista_pedidos, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menuRemover: {
+                DialogMensagem("Atenção", "Deseja remover este pedido?", REMOVER_PEDIDO);
+                break;
+            }
+            case R.id.menuFinalizar: {
+                DialogMensagem("Atenção", "Deseja remover este pedido?", FINALIZAR_PEDIDO);
+                break;
+            }
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    public void DialogMensagem(String titulo, String mensagem, int eventoClick) {
+        new android.app.AlertDialog
+                .Builder(getActivity())
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setCancelable(false)
+                .setPositiveButton("Confirmar", (dialogInterface, i) -> {
+                    switch (eventoClick) {
+                        case REMOVER_PEDIDO: {
+                            removerPedido();
+                            break;
+                        }
+                        case FINALIZAR_PEDIDO: {
+                            finalizarPedido();
+                            break;
+                        }
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    /**
+     * remove o pedido do banco de dados dos pedidos
+     * e lança na lista de pedidos finalizados
+     */
+    private void finalizarPedido() {
+        long id = Util.obtemDataAtualComHoraSegundo();
+        String idPedidoFinalizado = pedidoClicado.getId() + ";" + id;
+
+        //Instancio uma referencia ao banco de dados
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS_FINALIZADOS).child(idPedidoFinalizado);
+
+        for (ProdutoPedido produtoPedido : pedidoClicado.getListaProdutosPedido()) {
+            databaseReference.child(produtoPedido.getProdutoId()).setValue(produtoPedido);
+        }
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(pedidoClicado.getId());
+        databaseReference.removeValue();
+    }
+
+    /**
+     * remove o pedido do banco de dados
+     */
+    public void removerPedido() {
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(pedidoClicado.getId());
+        databaseReference.removeValue();
     }
 
     private void separaStringIdentificador(String chaveIdentificacao) {
         String[] identificadores = chaveIdentificacao.split(";");
         idPedido = chaveIdentificacao;
         idCliente = identificadores[0];
-
     }
 }

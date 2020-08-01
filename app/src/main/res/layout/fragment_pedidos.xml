@@ -15,7 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <TextView
         android:id="@+id/tv_nao_existe_pedido_pedido"
         android:layout_width="0dp"
@@ -23,6 +22,7 @@
         android:padding="5dp"
         android:textSize="18sp"
         android:visibility="gone"
+        android:text="@string/nao_existem_pedidos"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

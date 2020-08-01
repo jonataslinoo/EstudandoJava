@@ -24,12 +24,17 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
 
     private final Context context;
     private final ArrayList<Pedidos> listaPedidos;
+    private OnItemClickListener onItemClickListener;
     private double valorTotal;
     private int quantidadeItens;
 
     public AdapterPedidos(Context context, ArrayList<Pedidos> listaPedidos) {
         this.context = context;
         this.listaPedidos = listaPedidos;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -41,8 +46,16 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
 
     @Override
     public void onBindViewHolder(@NonNull PedidosViewHolder holder, int position) {
+
         Pedidos pedidos = listaPedidos.get(position);
         holder.vincula(pedidos);
+
+        holder.cardViewItem.setOnLongClickListener(view -> {
+            onItemClickListener.onItemLongClickListener(position, pedidos);
+            return false;
+        });
+
+        holder.cardViewItem.setOnClickListener(view -> onItemClickListener.onItemClickListener(position, pedidos));
     }
 
     @Override
@@ -73,6 +86,12 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
             dataPedidoFinalizado = itemView.findViewById(R.id.tv_data_pedido_finalizado_pedidoFragment);
             pedidoFinalizado = itemView.findViewById(R.id.tv_pedido_finalizado_pedidoFragment);
 
+//            itemView.setOnLongClickListener(view -> {
+//                onItemClickListener.onItemLongClickListener(getAdapterPosition(), pedidos);
+//                return false;
+//            });
+//
+//            itemView.setOnClickListener(view -> onItemClickListener.onItemClickListener(getAdapterPosition(), pedidos));
         }
 
         public void vincula(Pedidos pedidos) {
@@ -83,7 +102,13 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
             descPedido.setText("Pedido: " + identificadores[1]);
             nomeCliente.setText("Cliente: " + decodificaNomeCliente);
             dataPedido.setText(Util.converteDataHorasSegundos(Long.parseLong(identificadores[1])));
-            quantidadeItensPedido.setText(quantidadeItens + " Itens");
+
+            if (quantidadeItens > 1) {
+                quantidadeItensPedido.setText(quantidadeItens + " Itens");
+            } else {
+                quantidadeItensPedido.setText(quantidadeItens + " Item");
+            }
+
             precoTotalPedido.setText("R$: " + Util.formataPreco(valorTotal));
 
             if (identificadores.length > 2) {

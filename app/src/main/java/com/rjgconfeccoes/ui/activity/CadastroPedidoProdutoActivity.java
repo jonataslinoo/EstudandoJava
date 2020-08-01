@@ -25,6 +25,7 @@ public class CadastroPedidoProdutoActivity extends AppCompatActivity {
     private AdapterProdutoPedidoProduto adapterProdutos;
     private Button botaoGravar;
     private Button botaoVoltar;
+    private Dados dados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class CadastroPedidoProdutoActivity extends AppCompatActivity {
     }
 
     private void configuraAdapterProdutos() {
-        Dados dados = Util.recuperaDados();
+        dados = Util.recuperaDados();
 
         if (dados.obtemListaProdutos().size() == 0) {
             recyclerViewPedidoProdutos.setVisibility(View.GONE);
@@ -65,6 +66,12 @@ public class CadastroPedidoProdutoActivity extends AppCompatActivity {
     }
 
     private void configuraBotaoVoltar() {
-        botaoVoltar.setOnClickListener(view -> finish());
+        botaoVoltar.setOnClickListener(view -> limpaListaSelecionadosEFecha());
+    }
+
+    public void limpaListaSelecionadosEFecha() {
+//        dados.obtemListaProdutosSelecionados().clear();
+        adapterProdutos.notifyDataSetChanged();
+        finish();
     }
 }

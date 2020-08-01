@@ -26,8 +26,6 @@ import com.rjgconfeccoes.ui.util.Base64Custom;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Random;
 
 public class CadastroPedidoActivity extends AppCompatActivity {
 
@@ -170,20 +168,15 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         }
 
         Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_sucesso_cadastrar_pedido));
-        vaiParaTelaDashboard();
         limpaDadosEFinalizaTela();
     }
 
     private String retornaIdentifcadorPedido(Pedidos pedidos) {
         //uso a data como identificador unico aproveito para mostrar na tela a data do pedido
         long dataPedidoIdentificador = Util.obtemDataAtualComHoraSegundo();
-        String identificador = pedidos.getClienteId() + ";"  + dataPedidoIdentificador;
+        String identificador = pedidos.getClienteId() + ";" + dataPedidoIdentificador;
 
         return identificador;
-    }
-
-    private void vaiParaTelaDashboard() {
-        finish();
     }
 
     private void abreListaProdutos() {

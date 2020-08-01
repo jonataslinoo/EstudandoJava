@@ -71,4 +71,5 @@ public class Produto {
     public void setQuantidadeTotalProdutoPedido(int quantidadeTotalProdutoPedido) {
         this.quantidadeTotalProdutoPedido = quantidadeTotalProdutoPedido;
     }
+
 }

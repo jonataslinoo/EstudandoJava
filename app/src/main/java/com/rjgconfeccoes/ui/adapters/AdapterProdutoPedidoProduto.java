@@ -18,15 +18,15 @@ import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.ui.activity.CadastroPedidoActivity;
 import com.rjgconfeccoes.ui.util.Util;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterProdutoPedidoProduto.ViewHolderProdutoPedidoProduto> {
 
     private final Context context;
-    private final List<Produto> listaProdutos;
+    private final ArrayList<Produto> listaProdutos;
     private Dados dados = Util.recuperaDados();
 
-    public AdapterProdutoPedidoProduto(Context context, List<Produto> listaProdutos) {
+    public AdapterProdutoPedidoProduto(Context context, ArrayList<Produto> listaProdutos) {
         this.context = context;
         this.listaProdutos = listaProdutos;
     }
@@ -88,7 +88,7 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
         }
 
         holder.quantidadeProduto.setText("Quantidade: " + quantidadeProduto);
-        holder.precoTotal.setText("Total R$" + Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
+        holder.precoTotal.setText("Total R$ " + Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
     }
 
     @Override
