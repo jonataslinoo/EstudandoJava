@@ -59,16 +59,16 @@ public class ProdutosFragment extends Fragment {
         alertDialog = Util.criaProgressBar(getContext(), "Carregando Produtos");
         alertDialog.show();
 
-        //recupero os clientes salvos no banco
+        //recupero os produtos salvos no banco
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PRODUTOS);
         valueEventListenerProdutos = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //limpo minha lista de clientes
+                //limpo minha lista de produtos
                 listProdutos.clear();
 
                 if (snapshot.getValue() != null) {
-                    //listar clientes
+                    //listar produtos
                     for (DataSnapshot produtosBanco : snapshot.getChildren()) {
                         Produto produto = produtosBanco.getValue(Produto.class);
                         listProdutos.add(produto);
@@ -81,7 +81,7 @@ public class ProdutosFragment extends Fragment {
                     recyclerViewProdutos.setVisibility(View.GONE);
                 }
 
-                //Recupero os dados do sistema e atualizo a lista de clientes e salvo nos dados
+                //Recupero os dados do sistema e atualizo a lista de produtos e salvo nos dados
                 Dados dados = Util.recuperaDados();
                 dados.obtemListaProdutos().clear();
                 dados.obtemListaProdutos().addAll(listProdutos);

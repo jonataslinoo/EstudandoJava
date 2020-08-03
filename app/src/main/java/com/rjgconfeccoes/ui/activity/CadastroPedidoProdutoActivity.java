@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Dados;
+import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.ui.adapters.AdapterProdutoPedidoProduto;
 import com.rjgconfeccoes.ui.util.Util;
 
@@ -50,19 +51,25 @@ public class CadastroPedidoProdutoActivity extends AppCompatActivity {
     private void configuraAdapterProdutos() {
         dados = Util.recuperaDados();
 
-        if (dados.obtemListaProdutos().size() == 0) {
+        if (dados.obtemListaProdutosPedido().size() == 0) {
             recyclerViewPedidoProdutos.setVisibility(View.GONE);
             mensagem.setVisibility(View.VISIBLE);
             mensagem.setText(getString(R.string.nao_existem_produtos));
         }
 
-        adapterProdutos = new AdapterProdutoPedidoProduto(this, dados.obtemListaProdutos());
+        if (dados.obtemListaProdutosSelecionados().size() == 0) {
+            for (Produto produto : dados.obtemListaProdutosPedido()) {
+                produto.setQuantidadeTotalProdutoPedido(0);
+            }
+        }
+
+        adapterProdutos = new AdapterProdutoPedidoProduto(this, dados.obtemListaProdutosPedido());
         recyclerViewPedidoProdutos.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewPedidoProdutos.setAdapter(adapterProdutos);
     }
 
     private void configuraBotaoGravar() {
-        botaoGravar.setOnClickListener(view -> finish());
+        botaoGravar.setOnClickListener(view -> gravaItensEFecha());
     }
 
     private void configuraBotaoVoltar() {
@@ -72,6 +79,25 @@ public class CadastroPedidoProdutoActivity extends AppCompatActivity {
     public void limpaListaSelecionadosEFecha() {
 //        dados.obtemListaProdutosSelecionados().clear();
         adapterProdutos.notifyDataSetChanged();
+        finish();
+    }
+
+    /**
+     * Se o produto tiver quantidade maior que zero adiciona na lista de produtos selecioandos
+     * senão remove da lista caso esteja lançado na mesma.
+     */
+    private void gravaItensEFecha() {
+        for (Produto produto : dados.obtemListaProdutosPedido()) {
+            if (produto.getQuantidadeTotalProdutoPedido() > 0) {
+                if (!dados.obtemListaProdutosSelecionados().contains(produto)) {
+                    dados.obtemListaProdutosSelecionados().add(produto);
+                }
+            } else {
+                if (dados.obtemListaProdutosSelecionados().contains(produto)) {
+                    dados.obtemListaProdutosSelecionados().remove(produto);
+                }
+            }
+        }
         finish();
     }
 }

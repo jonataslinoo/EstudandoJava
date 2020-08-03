@@ -13,6 +13,7 @@ public class Dados {
     private ArrayList<Cliente> listaClientes;
     private ArrayList<Pedidos> listaPedidos;
     private ArrayList<Produto> listaProdutos;
+    private ArrayList<Produto> listaProdutosPedido;
     private ArrayList<Produto> listaProdutosSelecionados;
 
     /**
@@ -43,6 +44,16 @@ public class Dados {
             listaPedidos = new ArrayList<>();
         }
         return listaPedidos;
+    }
+
+    /**
+     * retorna uma lista com os produtos para pedidos
+     */
+    public ArrayList<Produto> obtemListaProdutosPedido() {
+        if (listaProdutosPedido == null) {
+            listaProdutosPedido = new ArrayList<>();
+        }
+        return listaProdutosPedido;
     }
 
     /**

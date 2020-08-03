@@ -11,12 +11,22 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.rjgconfeccoes.R;
+import com.rjgconfeccoes.config.ConfiguracaoFirebase;
+import com.rjgconfeccoes.model.Dados;
+import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.ui.fragments.ClientesFragment;
 import com.rjgconfeccoes.ui.fragments.OpcoesFragment;
 import com.rjgconfeccoes.ui.fragments.PedidosFinalizadosFragment;
 import com.rjgconfeccoes.ui.fragments.PedidosFragment;
 import com.rjgconfeccoes.ui.fragments.ProdutosFragment;
+import com.rjgconfeccoes.ui.util.Util;
+
+import java.util.ArrayList;
 
 public class DashboardActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -69,8 +79,7 @@ public class DashboardActivity extends AppCompatActivity implements BottomNaviga
         Intent intent;
         switch (item.getItemId()) {
             case R.id.menu_novo_pedido: {
-                intent = new Intent(DashboardActivity.this, CadastroPedidoActivity.class);
-                startActivity(intent);
+                chamaTelaCadastroPedidos();
                 break;
             }
             case R.id.menu_novo_cliente: {
@@ -85,6 +94,40 @@ public class DashboardActivity extends AppCompatActivity implements BottomNaviga
             }
         }
         return true;
+    }
+
+    private void chamaTelaCadastroPedidos() {
+        ArrayList<Produto> listaProdutosPedido = new ArrayList<>();
+
+        //recupero os produtos salvos no banco
+        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PRODUTOS);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    //listar produtos do pedido
+                    for (DataSnapshot produtosBanco : snapshot.getChildren()) {
+                        Produto produto = produtosBanco.getValue(Produto.class);
+                        listaProdutosPedido.add(produto);
+                    }
+
+                    //Recupero os dados do sistema e atualizo a lista de clientes e salvo nos dados
+                    Dados dados = Util.recuperaDados();
+                    dados.obtemListaProdutosPedido().clear();
+                    dados.obtemListaProdutosPedido().addAll(listaProdutosPedido);
+                    Util.defineDados(dados);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        Intent intent;
+        intent = new Intent(DashboardActivity.this, CadastroPedidoActivity.class);
+        startActivity(intent);
     }
 
     @Override
