@@ -19,6 +19,7 @@ import com.rjgconfeccoes.ui.util.Base64Custom;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosViewHolder> {
 
@@ -46,7 +47,7 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
 
     @Override
     public void onBindViewHolder(@NonNull PedidosViewHolder holder, int position) {
-
+        ordenaLista(position);
         Pedidos pedidos = listaPedidos.get(position);
         holder.vincula(pedidos);
 
@@ -56,6 +57,28 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
         });
 
         holder.cardViewItem.setOnClickListener(view -> onItemClickListener.onItemClickListener(position, pedidos));
+    }
+
+    private void ordenaLista(int position) {
+        String[] identificadores = listaPedidos.get(position).getId().split(";");
+
+        //se os pedidos forem finalizados ordena por aqui
+        if (identificadores.length > 2) {
+            Collections.sort(listaPedidos, (primeiroPedido, segundoPedido) -> {
+
+                String[] primeiroIdentificador = primeiroPedido.getId().split(";");
+                String[] segundoIdentificador = segundoPedido.getId().split(";");
+                String idPrimeiroPedido = primeiroIdentificador[2];
+                String idSegundoPedido = segundoIdentificador[2];
+
+                return idPrimeiroPedido.compareTo(idSegundoPedido);
+            });
+            Collections.reverse(listaPedidos);
+        }
+        //se forem pedidos normais ordena por aqui
+        else {
+            Collections.sort(listaPedidos, (pedido1, pedido2) -> pedido1.getId().compareTo(pedido2.getId()));
+        }
     }
 
     @Override
@@ -86,22 +109,13 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
             dataPedidoFinalizado = itemView.findViewById(R.id.tv_data_pedido_finalizado_pedidoFragment);
             pedidoFinalizado = itemView.findViewById(R.id.tv_pedido_finalizado_pedidoFragment);
 
-//            itemView.setOnLongClickListener(view -> {
-//                onItemClickListener.onItemLongClickListener(getAdapterPosition(), pedidos);
-//                return false;
-//            });
-//
-//            itemView.setOnClickListener(view -> onItemClickListener.onItemClickListener(getAdapterPosition(), pedidos));
         }
 
         public void vincula(Pedidos pedidos) {
             retornaValorPedido(pedidos);
             String decodificaNomeCliente = Base64Custom.decodificarStringBase64(pedidos.getClienteId());
-            String[] identificadores = pedidos.getId().split(";");
 
-            descPedido.setText("Pedido: " + identificadores[1]);
             nomeCliente.setText("Cliente: " + decodificaNomeCliente);
-            dataPedido.setText(Util.converteDataHorasSegundos(Long.parseLong(identificadores[1])));
 
             if (quantidadeItens > 1) {
                 quantidadeItensPedido.setText(quantidadeItens + " Itens");
@@ -110,13 +124,22 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
             }
 
             precoTotalPedido.setText("R$: " + Util.formataPreco(valorTotal));
+            configudaDadosIdentificadores(pedidos);
+        }
+
+        private void configudaDadosIdentificadores(Pedidos pedidos) {
+            String[] identificadores = pedidos.getId().split(";");
 
             if (identificadores.length > 2) {
                 pedidoFinalizado.setVisibility(View.VISIBLE);
                 pedidoFinalizado.setText("Finalizado");
                 dataPedidoFinalizado.setVisibility(View.VISIBLE);
+                descPedido.setText("Pedido: " + identificadores[1]);
+                dataPedido.setText(Util.converteDataHorasSegundos(Long.parseLong(identificadores[1])));
                 dataPedidoFinalizado.setText(Util.converteDataHorasSegundos(Long.parseLong(identificadores[2])));
             } else {
+                descPedido.setText("Pedido: " + pedidos.getId());
+                dataPedido.setText(Util.converteDataHorasSegundos(Long.parseLong(pedidos.getId())));
                 dataPedidoFinalizado.setVisibility(View.GONE);
                 pedidoFinalizado.setVisibility(View.GONE);
             }

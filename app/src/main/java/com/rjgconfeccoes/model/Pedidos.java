@@ -1,9 +1,6 @@
 package com.rjgconfeccoes.model;
 
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
-import com.rjgconfeccoes.config.ConfiguracaoFirebase;
-import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
 
@@ -15,13 +12,6 @@ public class Pedidos {
 
     public Pedidos() {
     }
-
-//    public void salvar() {
-//        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
-//        databaseReference.child(Util.PEDIDOS).child(getId());
-//        databaseReference.child(Util.PEDIDOS).child(getId()).setValue("clienteId", getClienteId());
-//
-//    }
 
     @Exclude
     public String getId() {

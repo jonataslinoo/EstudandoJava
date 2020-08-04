@@ -77,7 +77,6 @@ public class CadastroPedidoProdutoActivity extends AppCompatActivity {
     }
 
     public void limpaListaSelecionadosEFecha() {
-//        dados.obtemListaProdutosSelecionados().clear();
         adapterProdutos.notifyDataSetChanged();
         finish();
     }

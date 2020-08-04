@@ -122,7 +122,6 @@ public class PedidosFragment extends Fragment {
         };
 
         configuraAdapter(view);
-
         return view;
     }
 
@@ -131,6 +130,7 @@ public class PedidosFragment extends Fragment {
         recyclerViewPedidos = view.findViewById(R.id.recyclerview_pedido_pedido);
         recyclerViewPedidos.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewPedidos.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         registerForContextMenu(recyclerViewPedidos);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -200,7 +200,8 @@ public class PedidosFragment extends Fragment {
      */
     private void finalizarPedido() {
         long id = Util.obtemDataAtualComHoraSegundo();
-        String idPedidoFinalizado = pedidoClicado.getId() + ";" + id;
+        String idPedido = pedidoClicado.getClienteId() + ";" + pedidoClicado.getId();
+        String idPedidoFinalizado = pedidoClicado.getClienteId() + ";" + pedidoClicado.getId() + ";" + id;
 
         //Instancio uma referencia ao banco de dados
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS_FINALIZADOS).child(idPedidoFinalizado);
@@ -208,7 +209,7 @@ public class PedidosFragment extends Fragment {
         for (ProdutoPedido produtoPedido : pedidoClicado.getListaProdutosPedido()) {
             databaseReference.child(produtoPedido.getProdutoId()).setValue(produtoPedido);
         }
-        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(pedidoClicado.getId());
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(idPedido);
         databaseReference.removeValue();
     }
 
@@ -216,13 +217,14 @@ public class PedidosFragment extends Fragment {
      * remove o pedido do banco de dados
      */
     public void removerPedido() {
-        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(pedidoClicado.getId());
+        String idPedido = pedidoClicado.getClienteId() + ";" + pedidoClicado.getId();
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(idPedido);
         databaseReference.removeValue();
     }
 
     private void separaStringIdentificador(String chaveIdentificacao) {
         String[] identificadores = chaveIdentificacao.split(";");
-        idPedido = chaveIdentificacao;
         idCliente = identificadores[0];
+        idPedido = identificadores[1];
     }
 }
