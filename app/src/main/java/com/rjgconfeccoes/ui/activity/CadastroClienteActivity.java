@@ -134,8 +134,6 @@ public class CadastroClienteActivity extends AppCompatActivity {
     }
 
     private void vaiParaTelaDashboard() {
-//        Intent intent = new Intent(CadastroClienteActivity.this, DashboardActivity.class);
-//        startActivity(intent);
         finish();
     }
 

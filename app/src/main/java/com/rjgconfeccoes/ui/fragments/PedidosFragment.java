@@ -161,11 +161,11 @@ public class PedidosFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.menuRemover: {
-                DialogMensagem("Atenção", "Deseja remover este pedido?", REMOVER_PEDIDO);
+                DialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.corpo_msg_remover_pedido), REMOVER_PEDIDO);
                 break;
             }
             case R.id.menuFinalizar: {
-                DialogMensagem("Atenção", "Deseja remover este pedido?", FINALIZAR_PEDIDO);
+                DialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.corpo_msg_finalizar_pedido), FINALIZAR_PEDIDO);
                 break;
             }
         }
@@ -178,7 +178,7 @@ public class PedidosFragment extends Fragment {
                 .setTitle(titulo)
                 .setMessage(mensagem)
                 .setCancelable(false)
-                .setPositiveButton("Confirmar", (dialogInterface, i) -> {
+                .setPositiveButton(R.string.botao_msg_confirmar, (dialogInterface, i) -> {
                     switch (eventoClick) {
                         case REMOVER_PEDIDO: {
                             removerPedido();
@@ -190,7 +190,7 @@ public class PedidosFragment extends Fragment {
                         }
                     }
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.botao_msg_cancelar, null)
                 .show();
     }
 

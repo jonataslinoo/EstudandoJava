@@ -126,42 +126,48 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         String nomeDigitado = nome.getText().toString();
         int quantidadeMasculina = Integer.parseInt(qtdeMasculina.getText().toString());
         int quantidadeFeminina = Integer.parseInt(qtdeFeminina.getText().toString());
-        double precoDigitado = Double.parseDouble(preco.getText().toString());
+        double precoDigitado = 0;
         boolean kitAdultoMarcado = kitAdulto.isChecked();
         boolean kitInfantilMarcado = kitInfantil.isChecked();
         int quantidadeTotal = 0;
 
         quantidadeTotal = quantidadeMasculina + quantidadeFeminina;
 
+        if (nomeDigitado.isEmpty()) {
+            Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_nome_produto_branco));
+            return;
+        } else if (quantidadeTotal == 0) {
+            Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_nao_pode_zero));
+            return;
+        } else if (!preco.getText().toString().isEmpty()) {
+            precoDigitado = Double.parseDouble(preco.getText().toString());
+
+            if (precoDigitado == 0) {
+                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_valor_produto_maior_que_zero));
+                return;
+            }
+        } else {
+            Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_valor_produto_branco));
+            return;
+        }
+
         if (kitAdultoMarcado) {
-            if (nomeDigitado.isEmpty() || quantidadeTotal == 0 || precoDigitado == 0) {
-                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
-            } else {
-                if (quantidadeTotal != 3) {
-                    Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_adulto));
-                    return;
-                }
-                preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
+            if (quantidadeTotal != 3) {
+                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_adulto));
+                return;
             }
         } else if (kitInfantilMarcado) {
-            if (nomeDigitado.isEmpty() || quantidadeTotal == 0 || precoDigitado == 0) {
-                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
-            } else {
-                if (quantidadeTotal != 4) {
-                    Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_infantil));
-                    return;
-                }
-                preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
+            if (quantidadeTotal != 4) {
+                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_infantil));
+                return;
             }
-        } else if (nomeDigitado.isEmpty() || quantidadeTotal == 0 || precoDigitado == 0) {
-            Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
         } else {
             if (quantidadeTotal != 1) {
                 Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_tipo));
                 return;
             }
-            preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
         }
+        preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
     }
 
     private void preencheCampos(String nome, int quantidadeMasculina, int quantidadeFeminina, double preco) {
@@ -185,7 +191,6 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 //se existir cliente com o mesmo id
                 if (snapshot.getValue() != null) {
                     //retorno com mensagem ja possui cadastro
@@ -218,8 +223,6 @@ public class CadastroProdutoActivity extends AppCompatActivity {
     }
 
     private void vaiParaTelaDashboard() {
-//        Intent intent = new Intent(CadastroClienteActivity.this, DashboardActivity.class);
-//        startActivity(intent);
         finish();
     }
 }

@@ -1,13 +1,17 @@
 package com.rjgconfeccoes.ui.fragments;
 
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,6 +45,8 @@ public class PedidosFinalizadosFragment extends Fragment {
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListenerPedidos;
     private AlertDialog alertDialog;
+    private Pedidos pedidoClicado;
+    private int posicaoClicada;
 
     @Override
     public void onStart() {
@@ -65,16 +71,16 @@ public class PedidosFinalizadosFragment extends Fragment {
         alertDialog = Util.criaProgressBar(getContext(), "Carregando Pedidos Finzalizados");
         alertDialog.show();
 
-        //recupero os clientes salvos no banco
+        //recupero os pedidos finalizados salvos no banco
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS_FINALIZADOS);
         valueEventListenerPedidos = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //limpo minha lista de clientes
+                //limpo minha lista de pedidos finalizados
                 listaPedidosFinalizados.clear();
 
                 if (snapshot.getValue() != null) {
-                    //listar clientes
+                    //listar pedidos finalizados
                     for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
                         String chaveGeral = idPedidoBanco.getKey();
                         Pedidos pedidos = new Pedidos();
@@ -98,7 +104,7 @@ public class PedidosFinalizadosFragment extends Fragment {
                     recyclerViewPedidosFinalizados.setVisibility(View.GONE);
                 }
 
-                //Recupero os dados do sistema e atualizo a lista de clientes e salvo nos dados
+                //Recupero os dados do sistema e atualizo a lista de pedidos finalizados e salvo nos dados
                 Dados dados = Util.recuperaDados();
                 dados.obtemListaPedidos().clear();
                 dados.obtemListaPedidos().addAll(listaPedidosFinalizados);
@@ -124,15 +130,61 @@ public class PedidosFinalizadosFragment extends Fragment {
         recyclerViewPedidosFinalizados = view.findViewById(R.id.recyclerview_pedidosFinalizados);
         recyclerViewPedidosFinalizados.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewPedidosFinalizados.setAdapter(adapter);
+        registerForContextMenu(recyclerViewPedidosFinalizados);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemLongClickListener(int position, Pedidos pedido) {
+                pedidoClicado = pedido;
+                posicaoClicada = position;
             }
 
             @Override
             public void onItemClickListener(int position, Pedidos pedido) {
+                posicaoClicada = position;
+                pedidoClicado = pedido;
+
+                Toast.makeText(getActivity(), "posicao " + posicaoClicada + pedido.getId(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_remover, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menuRemove: {
+                DialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.corpo_msg_remover_pedido_finalizado));
+                break;
+            }
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    public void DialogMensagem(String titulo, String mensagem) {
+        new android.app.AlertDialog
+                .Builder(getActivity())
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.botao_msg_confirmar), (dialogInterface, i) -> removerPedido())
+                .setNegativeButton(getString(R.string.botao_msg_cancelar), null)
+                .show();
+    }
+
+    /**
+     * remove o pedido do banco de dados
+     */
+    public void removerPedido() {
+//        String idPedido = pedidoClicado.getClienteId() + ";" + pedidoClicado.getId();
+        databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS_FINALIZADOS).child(pedidoClicado.getId());
+        databaseReference.removeValue();
     }
 
     private void separaStringIdentificador(String chaveIdentificacao) {

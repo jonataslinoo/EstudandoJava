@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -7,16 +8,35 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="90">
+        android:layout_weight="90"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_nao_existe_pedido_produto"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:gravity="center"
-            android:text="@string/nao_existem_produtos"
-            android:visibility="gone" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_desc_pedido_pedidoFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textColor="@color/corPreto"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Pedido: 20200730182115" />
+
+            <TextView
+                android:id="@+id/tv_cliente_pedidoFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textColor="@color/corPreto"
+                android:textStyle="bold"
+                tools:text="Cliente: xxxx xxxx" />
+
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_pedido_produto"
