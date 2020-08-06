@@ -19,8 +19,6 @@ import com.rjgconfeccoes.ui.util.Util;
 
 public class CadastroPedidoProdutoActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private ConstraintLayout constraintLayout;
     private TextView mensagem;
     private RecyclerView recyclerViewPedidoProdutos;
     private AdapterProdutoPedidoProduto adapterProdutos;
@@ -40,8 +38,6 @@ public class CadastroPedidoProdutoActivity extends AppCompatActivity {
     }
 
     private void inicializaCampos() {
-        toolbar = findViewById(R.id.toolbar);
-        constraintLayout = findViewById(R.id.constraint_layout_cadastrar_produto);
         recyclerViewPedidoProdutos = findViewById(R.id.recyclerview_pedido_produto);
         botaoGravar = findViewById(R.id.botao_gravar_pedido_produto);
         botaoVoltar = findViewById(R.id.botao_voltar_pedido_produto);

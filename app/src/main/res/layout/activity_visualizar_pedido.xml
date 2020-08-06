@@ -5,73 +5,137 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <!-- Container Cabeçalho -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="90"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
 
+        <!-- Pedido id e Finalizado -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tv_desc_pedido_pedidoFragment"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_desc_pedido_visualizarPedido"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:layout_weight="75"
                 android:textColor="@color/corPreto"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="Pedido: 20200730182115" />
 
             <TextView
-                android:id="@+id/tv_cliente_pedidoFragment"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_pedido_finalizado_visualizarPedido"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:layout_weight="25"
+                android:textAlignment="textEnd"
                 android:textColor="@color/corPreto"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="Cliente: xxxx xxxx" />
+                android:visibility="gone"
+                tools:text="Finalizado" />
 
         </LinearLayout>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_pedido_produto"
+        <!-- Nome cliente -->
+        <TextView
+            android:id="@+id/tv_nome_cliente_visualizarPedido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp" />
+            android:textColor="@color/corPreto"
+            tools:text="Cliente: xxxx xxxx" />
+
+        <!-- Valor e quantidade itens -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_preco_total_pedido_visualizarPedido"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:textColor="@color/corPreto"
+                tools:text="Valor total: R$ 5000,00" />
+
+            <TextView
+                android:id="@+id/tv_quantidade_itens_pedido_visualizarPedido"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:textColor="@color/corPreto"
+                tools:text="Quantidade: 3000 Itens" />
+
+        </LinearLayout>
+
+        <!-- Data Criada -->
+        <LinearLayout
+            android:id="@+id/lnl_data_pedido_visualizarPedido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_data_pedido_visualizarPedido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/corPreto"
+                tools:text="23/04/2020 15:11:02" />
+
+        </LinearLayout>
+
+        <!-- Data Criada/Finalizada -->
+        <LinearLayout
+            android:id="@+id/lnl_data_criada_finalizada_visualizarPedido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_data_pedido_criado_visualizarPedido"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="48"
+                android:gravity="right"
+                android:textColor="@color/corPreto"
+                tools:text="23/04/2020 15:11:02" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:textColor="@color/corPreto"
+                tools:text="-" />
+
+            <TextView
+                android:id="@+id/tv_data_pedido_finalizado_visualizarPedido"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="48"
+                android:textColor="@color/corPreto"
+                tools:text="10/04/2020 12:13:50" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_visualizarPedido"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:padding="10dp">
-
-        <Button
-            android:id="@+id/botao_voltar_pedido_produto"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_weight="50"
-            android:background="@drawable/botao_redondo_gradiente_roxo"
-            android:text="Voltar"
-            android:textColor="@color/corBranca" />
-
-        <Button
-            android:id="@+id/botao_gravar_pedido_produto"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="50"
-            android:background="@drawable/botao_redondo_gradiente_roxo"
-            android:text="Gravar"
-            android:textColor="@color/corBranca" />
-
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        tools:listitem="@layout/lst_produtos_fragment" />
 
 </LinearLayout>
