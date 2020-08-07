@@ -11,15 +11,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.CadastroPedidoProdutoActivity" />
-        <activity android:name=".ui.activity.CadastroProdutoActivity" />
-        <activity android:name=".ui.activity.CadastroClienteActivity" />
-        <activity android:name=".ui.activity.CadastroPedidoActivity" />
-        <activity android:name=".ui.activity.CadastroUsuarioActivity" />
-        <activity android:name=".ui.activity.DashboardActivity" />
-        <activity android:name=".ui.activity.LoginActivity" />
+        <activity
+            android:name=".ui.activity.VisualizarPedidoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CadastroPedidoProdutoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CadastroProdutoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CadastroClienteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CadastroPedidoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CadastroUsuarioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.DashboardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SplashScreenActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppCompat.TelaCheia">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

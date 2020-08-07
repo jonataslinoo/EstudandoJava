@@ -1,5 +1,6 @@
 package com.rjgconfeccoes.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -8,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +26,7 @@ import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Dados;
 import com.rjgconfeccoes.model.Pedidos;
 import com.rjgconfeccoes.model.ProdutoPedido;
+import com.rjgconfeccoes.ui.activity.VisualizarPedidoActivity;
 import com.rjgconfeccoes.ui.adapters.AdapterPedidos;
 import com.rjgconfeccoes.ui.adapters.OnItemClickListener;
 import com.rjgconfeccoes.ui.util.Util;
@@ -84,7 +85,7 @@ public class PedidosFinalizadosFragment extends Fragment {
                     for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
                         String chaveGeral = idPedidoBanco.getKey();
                         Pedidos pedidos = new Pedidos();
-                        separaStringIdentificador(idPedidoBanco.getKey());
+                        separaStringIdentificador(chaveGeral);
 
                         listaProdutosPedido = new ArrayList<>();
                         for (DataSnapshot produtosPedidoBanco : snapshot.child(chaveGeral).getChildren()) {
@@ -143,7 +144,7 @@ public class PedidosFinalizadosFragment extends Fragment {
                 posicaoClicada = position;
                 pedidoClicado = pedido;
 
-                Toast.makeText(getActivity(), "posicao " + posicaoClicada + pedido.getId(), Toast.LENGTH_SHORT).show();
+                chamaTelaVisualizarPedido();
             }
         });
     }
@@ -182,7 +183,6 @@ public class PedidosFinalizadosFragment extends Fragment {
      * remove o pedido do banco de dados
      */
     public void removerPedido() {
-//        String idPedido = pedidoClicado.getClienteId() + ";" + pedidoClicado.getId();
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS_FINALIZADOS).child(pedidoClicado.getId());
         databaseReference.removeValue();
     }
@@ -191,5 +191,12 @@ public class PedidosFinalizadosFragment extends Fragment {
         String[] identificadores = chaveIdentificacao.split(";");
         idPedidoFinalizado = chaveIdentificacao;
         idCliente = identificadores[0];
+    }
+
+    private void chamaTelaVisualizarPedido() {
+        Dados dados = Util.recuperaDados();
+        dados.setVisualizarPedido(pedidoClicado);
+        Intent intent = new Intent(getActivity(), VisualizarPedidoActivity.class);
+        startActivity(intent);
     }
 }

@@ -106,7 +106,7 @@
                 android:id="@+id/tv_data_pedido_criado_visualizarPedido"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="48"
+                android:layout_weight="47"
                 android:gravity="right"
                 android:textColor="@color/corPreto"
                 tools:text="23/04/2020 15:11:02" />
@@ -114,16 +114,16 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="6"
                 android:gravity="center"
                 android:textColor="@color/corPreto"
-                tools:text="-" />
+                android:text="-" />
 
             <TextView
                 android:id="@+id/tv_data_pedido_finalizado_visualizarPedido"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="48"
+                android:layout_weight="47"
                 android:textColor="@color/corPreto"
                 tools:text="10/04/2020 12:13:50" />
 

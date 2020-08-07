@@ -108,7 +108,6 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
             dataPedido = itemView.findViewById(R.id.tv_data_pedido_pedidoFragment);
             dataPedidoFinalizado = itemView.findViewById(R.id.tv_data_pedido_finalizado_pedidoFragment);
             pedidoFinalizado = itemView.findViewById(R.id.tv_pedido_finalizado_pedidoFragment);
-
         }
 
         public void vincula(Pedidos pedidos) {

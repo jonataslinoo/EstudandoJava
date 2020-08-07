@@ -19,10 +19,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
+import com.rjgconfeccoes.model.Dados;
+import com.rjgconfeccoes.model.Pedidos;
+import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.model.Usuario;
 import com.rjgconfeccoes.ui.util.Base64Custom;
 import com.rjgconfeccoes.ui.util.Preferencias;
 import com.rjgconfeccoes.ui.util.Util;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,6 +36,10 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth autenticacao;
     private DatabaseReference databaseReference;
     private ConstraintLayout constraintLayout;
+    private ArrayList<Pedidos> listaPedidos;
+    private ArrayList<ProdutoPedido> listaProdutosPedido;
+    private ArrayList<Pedidos> listaPedidosFinalizados;
+    private ArrayList<ProdutoPedido> listaProdutosPedidoFinalizado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
     private void validaUsuarioLogado() {
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         if (autenticacao.getCurrentUser() != null) {
-            vaiParaTelaDePedidos();
+            vaiParaTelaDeDashboard();
         }
     }
 
@@ -115,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
                 Util.mensagemDeAlerta(LoginActivity.this, constraintLayout, getString(R.string.msg_sucesso_login));
-                vaiParaTelaDePedidos();
+                vaiParaTelaDeDashboard();
 
             } else {
                 String erroExcecao = "";
@@ -140,9 +149,108 @@ public class LoginActivity extends AppCompatActivity {
         preferencias.salvarDadosUsuario(usuario.getEmail(), usuario.getSenha(), usuario.isPodeCadastrar());
     }
 
-    private void vaiParaTelaDePedidos() {
+    private void vaiParaTelaDeDashboard() {
+        recuperaDadosPedidos();
+        recuperaDadosPedidosFinalizados();
+
         Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void recuperaDadosPedidos() {
+        DatabaseReference databaseReferencePedidos = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS);
+
+        databaseReferencePedidos.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                listaPedidos = new ArrayList<>();
+
+                if (snapshot.getValue() != null) {
+
+                    //listar clientes
+                    for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
+                        String chaveGeral = idPedidoBanco.getKey();
+                        Pedidos pedidos = new Pedidos();
+
+                        listaProdutosPedido = new ArrayList<>();
+
+                        for (DataSnapshot produtosPedidoBanco : snapshot.child(chaveGeral).getChildren()) {
+                            ProdutoPedido produtoPedido = produtosPedidoBanco.getValue(ProdutoPedido.class);
+                            listaProdutosPedido.add(produtoPedido);
+                        }
+
+                        String[] identificadores = idPedidoBanco.getKey().split(";");
+                        String idCliente = identificadores[0];
+                        String idPedido = identificadores[1];
+
+                        pedidos.setId(idPedido);
+                        pedidos.setClienteId(idCliente);
+                        pedidos.setListaProdutosPedido(listaProdutosPedido);
+                        listaPedidos.add(pedidos);
+                    }
+
+                    Dados dados = Util.recuperaDados();
+                    dados.obtemListaPedidos().clear();
+                    dados.obtemListaPedidos().addAll(listaPedidos);
+                    Util.defineDados(dados);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+    }
+
+    private void recuperaDadosPedidosFinalizados() {
+        DatabaseReference databaseReferencePedidosFinalizados = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS_FINALIZADOS);
+
+        databaseReferencePedidosFinalizados.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                listaPedidosFinalizados = new ArrayList<>();
+
+                if (snapshot.getValue() != null) {
+
+                    //listar clientes
+                    for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
+                        String chaveGeral = idPedidoBanco.getKey();
+                        Pedidos pedidos = new Pedidos();
+
+                        listaProdutosPedidoFinalizado = new ArrayList<>();
+
+                        for (DataSnapshot produtosPedidoBanco : snapshot.child(chaveGeral).getChildren()) {
+                            ProdutoPedido produtoPedido = produtosPedidoBanco.getValue(ProdutoPedido.class);
+                            listaProdutosPedidoFinalizado.add(produtoPedido);
+                        }
+
+                        String[] identificadores = idPedidoBanco.getKey().split(";");
+                        String idCliente = identificadores[0];
+                        String idPedido = idPedidoBanco.getKey();
+
+                        pedidos.setId(idPedido);
+                        pedidos.setClienteId(idCliente);
+                        pedidos.setListaProdutosPedido(listaProdutosPedidoFinalizado);
+                        listaPedidosFinalizados.add(pedidos);
+                    }
+
+                    Dados dados = Util.recuperaDados();
+                    dados.obtemListaPedidosFinalizados().clear();
+                    dados.obtemListaPedidosFinalizados().addAll(listaPedidosFinalizados);
+                    Util.defineDados(dados);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
     }
 }

@@ -1,5 +1,6 @@
 package com.rjgconfeccoes.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -8,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +26,7 @@ import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Dados;
 import com.rjgconfeccoes.model.Pedidos;
 import com.rjgconfeccoes.model.ProdutoPedido;
+import com.rjgconfeccoes.ui.activity.VisualizarPedidoActivity;
 import com.rjgconfeccoes.ui.adapters.AdapterPedidos;
 import com.rjgconfeccoes.ui.adapters.OnItemClickListener;
 import com.rjgconfeccoes.ui.util.Util;
@@ -144,7 +145,7 @@ public class PedidosFragment extends Fragment {
                 posicaoClicada = position;
                 pedidoClicado = pedido;
 
-                Toast.makeText(getActivity(), "posicao " + posicaoClicada + pedido.getId(), Toast.LENGTH_SHORT).show();
+                chamaTelaVisualizarPedido();
             }
         });
     }
@@ -220,6 +221,13 @@ public class PedidosFragment extends Fragment {
         String idPedido = pedidoClicado.getClienteId() + ";" + pedidoClicado.getId();
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(idPedido);
         databaseReference.removeValue();
+    }
+
+    private void chamaTelaVisualizarPedido() {
+        Dados dados = Util.recuperaDados();
+        dados.setVisualizarPedido(pedidoClicado);
+        Intent intent = new Intent(getActivity(), VisualizarPedidoActivity.class);
+        startActivity(intent);
     }
 
     private void separaStringIdentificador(String chaveIdentificacao) {
