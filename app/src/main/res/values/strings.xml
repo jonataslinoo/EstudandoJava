@@ -86,5 +86,9 @@
     <string name="corpo_msg_remover_pedido">Deseja remover este pedido?</string>
     <string name="corpo_msg_finalizar_pedido">Deseja Finalizar este pedido?</string>
     <string name="corpo_msg_remover_pedido_finalizado">Deseja remover este pedido finalizado?</string>
+    <string name="botao_msg_ok">Ok</string>
+    <string name="nao_possui_clientes_carregue_lista">Não possuem cliente, carregue a lista novamente.</string>
+    <string name="conta_teste_nao_grava_dados">Não é possivel gravar dados em uma conta de teste.</string>
+    <string name="conta_teste_nao_remove_dados">Não é possivel remover dados em uma conta de teste.</string>
 
 </resources>

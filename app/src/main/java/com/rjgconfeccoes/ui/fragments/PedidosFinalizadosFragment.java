@@ -29,13 +29,19 @@ import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.activity.VisualizarPedidoActivity;
 import com.rjgconfeccoes.ui.adapters.AdapterPedidos;
 import com.rjgconfeccoes.ui.adapters.OnItemClickListener;
+import com.rjgconfeccoes.ui.util.Preferencias;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
 
+import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_TESTE;
+
 
 public class PedidosFinalizadosFragment extends Fragment {
 
+    private static final int REMOVER_PEDIDO = 0;
+    private static final int FINALIZAR_PEDIDO = 1;
+    public static final int CANCELA_EVENTO = -1;
     private AdapterPedidos adapter;
     private ArrayList<Pedidos> listaPedidosFinalizados = new ArrayList<>();
     private RecyclerView recyclerViewPedidosFinalizados;
@@ -158,23 +164,36 @@ public class PedidosFinalizadosFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        Preferencias preferencias = new Preferencias(getActivity());
+        String usuarioLogado = preferencias.getNomeUsuarioLogado();
 
         switch (item.getItemId()) {
             case R.id.menuRemove: {
-                DialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.corpo_msg_remover_pedido_finalizado));
+                if (usuarioLogado.toLowerCase().equals(CHAVE_TESTE)) {
+                    dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.conta_teste_nao_remove_dados), CANCELA_EVENTO);
+                } else {
+                    dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.corpo_msg_remover_pedido_finalizado), REMOVER_PEDIDO);
+                }
                 break;
             }
         }
         return super.onContextItemSelected(item);
     }
 
-    public void DialogMensagem(String titulo, String mensagem) {
+    public void dialogMensagem(String titulo, String mensagem, int eventoClick) {
         new android.app.AlertDialog
                 .Builder(getActivity())
                 .setTitle(titulo)
                 .setMessage(mensagem)
                 .setCancelable(false)
-                .setPositiveButton(getString(R.string.botao_msg_confirmar), (dialogInterface, i) -> removerPedido())
+                .setPositiveButton(getString(R.string.botao_msg_confirmar), (dialogInterface, i) -> {
+                    switch (eventoClick) {
+                        case REMOVER_PEDIDO: {
+                            removerPedido();
+                            break;
+                        }
+                    }
+                })
                 .setNegativeButton(getString(R.string.botao_msg_cancelar), null)
                 .show();
     }

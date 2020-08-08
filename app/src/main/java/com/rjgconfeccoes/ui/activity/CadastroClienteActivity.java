@@ -1,6 +1,6 @@
 package com.rjgconfeccoes.ui.activity;
 
-import android.content.Intent;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +20,10 @@ import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Cliente;
 import com.rjgconfeccoes.ui.util.Base64Custom;
+import com.rjgconfeccoes.ui.util.Preferencias;
 import com.rjgconfeccoes.ui.util.Util;
+
+import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_TESTE;
 
 public class CadastroClienteActivity extends AppCompatActivity {
 
@@ -64,13 +67,19 @@ public class CadastroClienteActivity extends AppCompatActivity {
     }
 
     private void validaCamposDigitados() {
-        String nomeDigitado = nome.getText().toString();
-        String areaDigitada = area.getText().toString();
-        String telefoneDigitado = telefone.getText().toString();
-        if (nomeDigitado.isEmpty() || areaDigitada.isEmpty() || telefoneDigitado.isEmpty()) {
-            Util.mensagemDeAlerta(CadastroClienteActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
+        Preferencias preferencias = new Preferencias(this);
+        String usuarioLogado = preferencias.getNomeUsuarioLogado();
+        if (usuarioLogado.toLowerCase().equals(CHAVE_TESTE)) {
+            dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.conta_teste_nao_grava_dados));
         } else {
-            preencheCampos(nomeDigitado, areaDigitada, telefoneDigitado);
+            String nomeDigitado = nome.getText().toString();
+            String areaDigitada = area.getText().toString();
+            String telefoneDigitado = telefone.getText().toString();
+            if (nomeDigitado.isEmpty() || areaDigitada.isEmpty() || telefoneDigitado.isEmpty()) {
+                Util.mensagemDeAlerta(CadastroClienteActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
+            } else {
+                preencheCampos(nomeDigitado, areaDigitada, telefoneDigitado);
+            }
         }
     }
 
@@ -144,5 +153,15 @@ public class CadastroClienteActivity extends AppCompatActivity {
         MaskTextWatcher maskTexTelefone = new MaskTextWatcher(telefone, simpleMaskTelefone);
         area.addTextChangedListener(maskTextArea);
         telefone.addTextChangedListener(maskTexTelefone);
+    }
+
+    public void dialogMensagem(String titulo, String mensagem) {
+        new AlertDialog
+                .Builder(this)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.botao_msg_ok), null)
+                .show();
     }
 }

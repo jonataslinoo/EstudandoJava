@@ -29,14 +29,18 @@ import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.activity.VisualizarPedidoActivity;
 import com.rjgconfeccoes.ui.adapters.AdapterPedidos;
 import com.rjgconfeccoes.ui.adapters.OnItemClickListener;
+import com.rjgconfeccoes.ui.util.Preferencias;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
+
+import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_TESTE;
 
 public class PedidosFragment extends Fragment {
 
     private static final int REMOVER_PEDIDO = 0;
     private static final int FINALIZAR_PEDIDO = 1;
+    public static final int CANCELA_EVENTO = -1;
     private AdapterPedidos adapter;
     private ArrayList<Pedidos> listaPedidos = new ArrayList<>();
     private RecyclerView recyclerViewPedidos;
@@ -159,21 +163,34 @@ public class PedidosFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        Preferencias preferencias = new Preferencias(getActivity());
+        String usuarioLogado = preferencias.getNomeUsuarioLogado();
 
         switch (item.getItemId()) {
             case R.id.menuRemover: {
-                DialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.corpo_msg_remover_pedido), REMOVER_PEDIDO);
+                if (usuarioLogado.toLowerCase().equals(CHAVE_TESTE)) {
+                    dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.conta_teste_nao_remove_dados), CANCELA_EVENTO);
+                } else {
+                    dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.corpo_msg_remover_pedido), REMOVER_PEDIDO);
+                }
                 break;
             }
             case R.id.menuFinalizar: {
-                DialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.corpo_msg_finalizar_pedido), FINALIZAR_PEDIDO);
+                if (usuarioLogado.toLowerCase().equals(CHAVE_TESTE)) {
+                    dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.conta_teste_nao_remove_dados), CANCELA_EVENTO);
+                } else {
+                    dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.corpo_msg_finalizar_pedido), FINALIZAR_PEDIDO);
+                }
                 break;
             }
         }
-        return super.onContextItemSelected(item);
+        return super.
+
+                onContextItemSelected(item);
+
     }
 
-    public void DialogMensagem(String titulo, String mensagem, int eventoClick) {
+    public void dialogMensagem(String titulo, String mensagem, int eventoClick) {
         new android.app.AlertDialog
                 .Builder(getActivity())
                 .setTitle(titulo)

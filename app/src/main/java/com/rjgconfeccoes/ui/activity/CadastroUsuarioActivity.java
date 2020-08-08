@@ -1,5 +1,6 @@
 package com.rjgconfeccoes.ui.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -15,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Usuario;
@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_EMAIL_PREFERENCIAS;
 import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_SENHA_PREFERENCIAS;
+import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_TESTE;
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
 
@@ -71,13 +72,20 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     }
 
     private void validaCamposDigitados() {
-        String nomeDigitado = nome.getText().toString();
-        String emailDigitado = email.getText().toString();
-        String senhaDigitada = senha.getText().toString();
-        if (nomeDigitado.isEmpty() || emailDigitado.isEmpty() || senhaDigitada.isEmpty()) {
-            Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
+        Preferencias preferencias = new Preferencias(this);
+        String usuarioLogado = preferencias.getNomeUsuarioLogado();
+        if (usuarioLogado.toLowerCase().equals(CHAVE_TESTE)) {
+            dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.conta_teste_nao_grava_dados));
+            limpaCampos();
         } else {
-            preencheCampos(nomeDigitado, emailDigitado, senhaDigitada);
+            String nomeDigitado = nome.getText().toString();
+            String emailDigitado = email.getText().toString();
+            String senhaDigitada = senha.getText().toString();
+            if (nomeDigitado.isEmpty() || emailDigitado.isEmpty() || senhaDigitada.isEmpty()) {
+                Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
+            } else {
+                preencheCampos(nomeDigitado, emailDigitado, senhaDigitada);
+            }
         }
     }
 
@@ -165,5 +173,15 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         email.setText("");
         senha.setText("");
         checkBoxPodeCadastrar.setChecked(false);
+    }
+
+    public void dialogMensagem(String titulo, String mensagem) {
+        new AlertDialog
+                .Builder(this)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.botao_msg_ok), null)
+                .show();
     }
 }

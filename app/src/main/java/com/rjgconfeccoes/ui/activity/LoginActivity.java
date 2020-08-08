@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
     private void salvaUsuarioNasPreferencias(Usuario usuario) {
         Preferencias preferencias = new Preferencias(LoginActivity.this);
 //        String emailCodificadoUsuarioLogado = Base64Custom.codificarStringBase64(usuario.getEmail());
-        preferencias.salvarDadosUsuario(usuario.getEmail(), usuario.getSenha(), usuario.isPodeCadastrar());
+        preferencias.salvarDadosUsuario(usuario.getNome(), usuario.getEmail(), usuario.getSenha(), usuario.isPodeCadastrar());
     }
 
     private void vaiParaTelaDeDashboard() {

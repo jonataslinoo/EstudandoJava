@@ -24,6 +24,7 @@ import com.rjgconfeccoes.ui.fragments.OpcoesFragment;
 import com.rjgconfeccoes.ui.fragments.PedidosFinalizadosFragment;
 import com.rjgconfeccoes.ui.fragments.PedidosFragment;
 import com.rjgconfeccoes.ui.fragments.ProdutosFragment;
+import com.rjgconfeccoes.ui.util.Preferencias;
 import com.rjgconfeccoes.ui.util.UmClick;
 import com.rjgconfeccoes.ui.util.Util;
 
@@ -49,7 +50,6 @@ public class DashboardActivity extends AppCompatActivity implements BottomNaviga
     private Menu menuDaTela = null;
 
 //    private FirebaseAuth autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,6 +184,8 @@ public class DashboardActivity extends AppCompatActivity implements BottomNaviga
     }
 
     private void setVisibilidadeMenu(int position) {
+        Preferencias preferencias = new Preferencias(this);
+        boolean ehAdm = preferencias.getUsuarioLogadoPodeCadastrar();
 
         switch (position) {
             case MENU_NOVO_PEDIDO: {
@@ -200,15 +202,27 @@ public class DashboardActivity extends AppCompatActivity implements BottomNaviga
                 break;
             }
             case MENU_NOVO_PRODUTO: {
-                menuDaTela.findItem(R.id.menu_novo_pedido).setVisible(false);
-                menuDaTela.findItem(R.id.menu_novo_produto).setVisible(true);
-                menuDaTela.findItem(R.id.menu_novo_cliente).setVisible(false);
+                if (ehAdm) {
+                    menuDaTela.findItem(R.id.menu_novo_pedido).setVisible(false);
+                    menuDaTela.findItem(R.id.menu_novo_produto).setVisible(true);
+                    menuDaTela.findItem(R.id.menu_novo_cliente).setVisible(false);
+                } else {
+                    menuDaTela.findItem(R.id.menu_novo_pedido).setVisible(false);
+                    menuDaTela.findItem(R.id.menu_novo_produto).setVisible(true);
+                    menuDaTela.findItem(R.id.menu_novo_cliente).setVisible(false);
+                }
                 break;
             }
             case MENU_NOVO_CLIENTE: {
-                menuDaTela.findItem(R.id.menu_novo_pedido).setVisible(false);
-                menuDaTela.findItem(R.id.menu_novo_produto).setVisible(false);
-                menuDaTela.findItem(R.id.menu_novo_cliente).setVisible(true);
+                if (ehAdm) {
+                    menuDaTela.findItem(R.id.menu_novo_pedido).setVisible(false);
+                    menuDaTela.findItem(R.id.menu_novo_produto).setVisible(false);
+                    menuDaTela.findItem(R.id.menu_novo_cliente).setVisible(true);
+                } else {
+                    menuDaTela.findItem(R.id.menu_novo_pedido).setVisible(false);
+                    menuDaTela.findItem(R.id.menu_novo_produto).setVisible(false);
+                    menuDaTela.findItem(R.id.menu_novo_cliente).setVisible(true);
+                }
                 break;
             }
         }

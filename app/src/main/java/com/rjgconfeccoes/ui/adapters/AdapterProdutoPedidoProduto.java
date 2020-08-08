@@ -54,45 +54,26 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
 
         if (view == holder.botaoAdicionar) {
             if (produto.getQuantidadeTotalProdutoPedido() == 0) {
-                quantidadeProduto++;
-
-                produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
-//                dados.obtemListaProdutosSelecionados().add(produto);
-
                 holder.checkBoxAdicionarProduto.setChecked(true);
-            } else {
-                quantidadeProduto++;
-
-                produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
             }
+            quantidadeProduto++;
+            produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
 
         } else if (view == holder.botaoRemover) {
             if (produto.getQuantidadeTotalProdutoPedido() > 0) {
                 if (produto.getQuantidadeTotalProdutoPedido() == 1) {
-                    quantidadeProduto--;
-
-                    produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
-//                    dados.obtemListaProdutosSelecionados().remove(produto);
-
                     holder.checkBoxAdicionarProduto.setChecked(false);
-                } else {
-                    quantidadeProduto--;
-
-                    produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
                 }
+                quantidadeProduto--;
+                produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
             }
         } else if (view == holder.checkBoxAdicionarProduto) {
-            if (dados.obtemListaProdutosSelecionados().contains(produto)) {
+            if (produto.getQuantidadeTotalProdutoPedido() > 0) {
                 quantidadeProduto = 0;
-
-                produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
-//                dados.obtemListaProdutosSelecionados().remove(produto);
             } else {
                 quantidadeProduto = 1;
-
-                produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
-//                dados.obtemListaProdutosSelecionados().add(produto);
             }
+            produto.setQuantidadeTotalProdutoPedido(quantidadeProduto);
         }
 
         holder.quantidadeProduto.setText("Quantidade: " + quantidadeProduto);

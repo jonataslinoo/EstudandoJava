@@ -1,5 +1,6 @@
 package com.rjgconfeccoes.ui.activity;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +22,10 @@ import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.ui.util.Base64Custom;
+import com.rjgconfeccoes.ui.util.Preferencias;
 import com.rjgconfeccoes.ui.util.Util;
+
+import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_TESTE;
 
 public class CadastroProdutoActivity extends AppCompatActivity {
 
@@ -123,51 +127,58 @@ public class CadastroProdutoActivity extends AppCompatActivity {
     }
 
     private void validaCamposDigitados() {
-        String nomeDigitado = nome.getText().toString();
-        int quantidadeMasculina = Integer.parseInt(qtdeMasculina.getText().toString());
-        int quantidadeFeminina = Integer.parseInt(qtdeFeminina.getText().toString());
-        double precoDigitado = 0;
-        boolean kitAdultoMarcado = kitAdulto.isChecked();
-        boolean kitInfantilMarcado = kitInfantil.isChecked();
-        int quantidadeTotal = 0;
-
-        quantidadeTotal = quantidadeMasculina + quantidadeFeminina;
-
-        if (nomeDigitado.isEmpty()) {
-            Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_nome_produto_branco));
-            return;
-        } else if (quantidadeTotal == 0) {
-            Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_nao_pode_zero));
-            return;
-        } else if (!preco.getText().toString().isEmpty()) {
-            precoDigitado = Double.parseDouble(preco.getText().toString());
-
-            if (precoDigitado == 0) {
-                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_valor_produto_maior_que_zero));
-                return;
-            }
+        Preferencias preferencias = new Preferencias(this);
+        String usuarioLogado = preferencias.getNomeUsuarioLogado();
+        if (usuarioLogado.toLowerCase().equals(CHAVE_TESTE)) {
+            dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.conta_teste_nao_grava_dados));
+            limpaCampos();
         } else {
-            Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_valor_produto_branco));
-            return;
-        }
+            String nomeDigitado = nome.getText().toString();
+            int quantidadeMasculina = Integer.parseInt(qtdeMasculina.getText().toString());
+            int quantidadeFeminina = Integer.parseInt(qtdeFeminina.getText().toString());
+            double precoDigitado = 0;
+            boolean kitAdultoMarcado = kitAdulto.isChecked();
+            boolean kitInfantilMarcado = kitInfantil.isChecked();
+            int quantidadeTotal = 0;
 
-        if (kitAdultoMarcado) {
-            if (quantidadeTotal != 3) {
-                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_adulto));
+            quantidadeTotal = quantidadeMasculina + quantidadeFeminina;
+
+            if (nomeDigitado.isEmpty()) {
+                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_nome_produto_branco));
+                return;
+            } else if (quantidadeTotal == 0) {
+                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_nao_pode_zero));
+                return;
+            } else if (!preco.getText().toString().isEmpty()) {
+                precoDigitado = Double.parseDouble(preco.getText().toString());
+
+                if (precoDigitado == 0) {
+                    Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_valor_produto_maior_que_zero));
+                    return;
+                }
+            } else {
+                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_valor_produto_branco));
                 return;
             }
-        } else if (kitInfantilMarcado) {
-            if (quantidadeTotal != 4) {
-                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_infantil));
-                return;
+
+            if (kitAdultoMarcado) {
+                if (quantidadeTotal != 3) {
+                    Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_adulto));
+                    return;
+                }
+            } else if (kitInfantilMarcado) {
+                if (quantidadeTotal != 4) {
+                    Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_kit_infantil));
+                    return;
+                }
+            } else {
+                if (quantidadeTotal != 1) {
+                    Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_tipo));
+                    return;
+                }
             }
-        } else {
-            if (quantidadeTotal != 1) {
-                Util.mensagemDeAlerta(CadastroProdutoActivity.this, constraintLayout, getString(R.string.msg_erro_quantidade_produtos_tipo));
-                return;
-            }
+            preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
         }
-        preencheCampos(nomeDigitado, quantidadeMasculina, quantidadeFeminina, precoDigitado);
     }
 
     private void preencheCampos(String nome, int quantidadeMasculina, int quantidadeFeminina, double preco) {
@@ -224,5 +235,15 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
     private void vaiParaTelaDashboard() {
         finish();
+    }
+
+    public void dialogMensagem(String titulo, String mensagem) {
+        new AlertDialog
+                .Builder(this)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.botao_msg_ok), null)
+                .show();
     }
 }

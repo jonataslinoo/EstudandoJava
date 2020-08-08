@@ -1,5 +1,6 @@
 package com.rjgconfeccoes.ui.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -23,9 +24,12 @@ import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.adapters.AdapterProdutoPedidoProduto;
 import com.rjgconfeccoes.ui.util.Base64Custom;
+import com.rjgconfeccoes.ui.util.Preferencias;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
+
+import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_TESTE;
 
 public class CadastroPedidoActivity extends AppCompatActivity {
 
@@ -68,7 +72,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         setTitle(TITULO_APPBAR);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_action_voltar);
-        toolbar.setNavigationOnClickListener(view -> limpaDadosEFinalizaTela());
+        toolbar.setNavigationOnClickListener(view -> vaiParaTelaDashborad());
     }
 
     private void configuraAdapterProdutos() {
@@ -82,7 +86,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        limpaDadosEFinalizaTela();
+        vaiParaTelaDashborad();
     }
 
     @Override
@@ -100,7 +104,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         for (Produto produto : dados.obtemListaProdutosSelecionados()) {
             valorTotal += (produto.getPreco() * produto.getQuantidadeTotalProdutoPedido());
         }
-        valorTotalPedido.setText(Util.formataPreco(valorTotal));
+        valorTotalPedido.setText("R$ " + Util.formataPreco(valorTotal));
     }
 
     private void preencheListaClientes() {
@@ -119,7 +123,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
                 listaCliente.add(0, cliente);
             }
         } else {
-            DialogMensagem();
+            dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.nao_possui_clientes_carregue_lista));
         }
 
         //Cria o adapter
@@ -134,13 +138,20 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     }
 
     private void validaCamposDigitados() {
-        String clienteSelecionado = spinnerCliente.getSelectedItem().toString();
-        if (clienteSelecionado.isEmpty() || clienteSelecionado.equals(Util.SELECIONE_CLIENTE)) {
-            Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_erro_selecione_cliente));
-        } else if (dados.obtemListaProdutosSelecionados().size() <= 0) {
-            Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_erro_pedido_sem_produto));
+        Preferencias preferencias = new Preferencias(this);
+        String usuarioLogado = preferencias.getNomeUsuarioLogado();
+        if (usuarioLogado.toLowerCase().equals(CHAVE_TESTE)) {
+            dialogMensagem(getString(R.string.titulo_msg_atencao), getString(R.string.conta_teste_nao_grava_dados));
+            limpaCampos();
         } else {
-            salvaDadosPedido(clienteSelecionado);
+            String clienteSelecionado = spinnerCliente.getSelectedItem().toString();
+            if (clienteSelecionado.isEmpty() || clienteSelecionado.equals(Util.SELECIONE_CLIENTE)) {
+                Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_erro_selecione_cliente));
+            } else if (dados.obtemListaProdutosSelecionados().size() <= 0) {
+                Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_erro_pedido_sem_produto));
+            } else {
+                salvaDadosPedido(clienteSelecionado);
+            }
         }
     }
 
@@ -168,7 +179,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         }
 
         Util.mensagemDeAlerta(CadastroPedidoActivity.this, constraintLayout, getString(R.string.msg_sucesso_cadastrar_pedido));
-        limpaDadosEFinalizaTela();
+        vaiParaTelaDashborad();
     }
 
     private String retornaIdentifcadorPedido(Pedidos pedidos) {
@@ -184,18 +195,25 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void limpaDadosEFinalizaTela() {
+    private void limpaCampos() {
+        spinnerCliente.setSelection(0);
+        valorTotalPedido.setText("R$ " + Util.formataPreco(0.0));
         dados.obtemListaProdutosSelecionados().clear();
+        adapterProdutoPedidoProduto.notifyDataSetChanged();
+    }
+
+    private void vaiParaTelaDashborad() {
+        limpaCampos();
         finish();
     }
 
-    public void DialogMensagem() {
-        new android.app.AlertDialog
+    public void dialogMensagem(String titulo, String mensagem) {
+        new AlertDialog
                 .Builder(this)
-                .setTitle("Atenção")
-                .setMessage("Não possuem cliente, carregue a lista novamente.")
+                .setTitle(titulo)
+                .setMessage(mensagem)
                 .setCancelable(false)
-                .setPositiveButton("ok", null)
+                .setPositiveButton(getString(R.string.botao_msg_ok), null)
                 .show();
     }
 }
