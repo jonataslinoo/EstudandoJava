@@ -24,6 +24,7 @@ import com.rjgconfeccoes.ui.fragments.OpcoesFragment;
 import com.rjgconfeccoes.ui.fragments.PedidosFinalizadosFragment;
 import com.rjgconfeccoes.ui.fragments.PedidosFragment;
 import com.rjgconfeccoes.ui.fragments.ProdutosFragment;
+import com.rjgconfeccoes.ui.util.UmClick;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
@@ -59,11 +60,12 @@ public class DashboardActivity extends AppCompatActivity implements BottomNaviga
         toolbar.setTitle(TITULO_TOOLBAR_PEDIDOS);
         setSupportActionBar(toolbar);
 
-//        carregaFragmento(new PedidosFragment());
-        carregaFragmento(new OpcoesFragment());
+        carregaFragmento(new PedidosFragment());
+
+        UmClick umClick = new UmClick(this);
 
         bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setOnNavigationItemSelectedListener(umClick);
     }
 
     @Override

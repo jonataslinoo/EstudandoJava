@@ -104,7 +104,7 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     }
 
     private void preencheListaClientes() {
-        ArrayList<Cliente> listaCliente = dados.obtemListaClientes();
+        ArrayList<Cliente> listaCliente = new ArrayList<>(dados.obtemListaClientes());
 
         //valida para lançar um texto  de selecione um cliente
         if (listaCliente.size() > 0) {

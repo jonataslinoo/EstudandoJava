@@ -19,8 +19,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
+import com.rjgconfeccoes.model.Cliente;
 import com.rjgconfeccoes.model.Dados;
 import com.rjgconfeccoes.model.Pedidos;
+import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.model.Usuario;
 import com.rjgconfeccoes.ui.util.Base64Custom;
@@ -40,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
     private ArrayList<ProdutoPedido> listaProdutosPedido;
     private ArrayList<Pedidos> listaPedidosFinalizados;
     private ArrayList<ProdutoPedido> listaProdutosPedidoFinalizado;
+    private ArrayList<Cliente> listaClientes;
+    private ArrayList<Produto> listaProdutos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +156,8 @@ public class LoginActivity extends AppCompatActivity {
     private void vaiParaTelaDeDashboard() {
         recuperaDadosPedidos();
         recuperaDadosPedidosFinalizados();
+        recuperaDadosClientes();
+        recuperaDadosProdutos();
 
         Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
         startActivity(intent);
@@ -169,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (snapshot.getValue() != null) {
 
-                    //listar clientes
+                    //listar Pedidos
                     for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
                         String chaveGeral = idPedidoBanco.getKey();
                         Pedidos pedidos = new Pedidos();
@@ -202,7 +208,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-
         });
     }
 
@@ -217,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (snapshot.getValue() != null) {
 
-                    //listar clientes
+                    //listar Pedidos Finalizados
                     for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
                         String chaveGeral = idPedidoBanco.getKey();
                         Pedidos pedidos = new Pedidos();
@@ -250,7 +255,70 @@ public class LoginActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+    }
 
+    private void recuperaDadosClientes() {
+        DatabaseReference databaseReferenceClientes = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.CLIENTES);
+
+        databaseReferenceClientes.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                listaClientes = new ArrayList<>();
+
+                if (snapshot.getValue() != null) {
+
+                    //listar clientes
+                    for (DataSnapshot clientesBanco : snapshot.getChildren()) {
+                        Cliente cliente = clientesBanco.getValue(Cliente.class);
+                        listaClientes.add(cliente);
+                    }
+
+                    //Recupero os dados do sistema e atualizo a lista de clientes e salvo nos dados
+                    Dados dados = Util.recuperaDados();
+                    dados.obtemListaClientes().clear();
+                    dados.obtemListaClientes().addAll(listaClientes);
+                    Util.defineDados(dados);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void recuperaDadosProdutos() {
+        DatabaseReference databaseReferenceProdutos = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PRODUTOS);
+
+        databaseReferenceProdutos.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                listaProdutos = new ArrayList<>();
+
+                if (snapshot.getValue() != null) {
+
+                    //listar Produtos
+                    for (DataSnapshot produtosBanco : snapshot.getChildren()) {
+                        Produto produto = produtosBanco.getValue(Produto.class);
+                        listaProdutos.add(produto);
+                    }
+
+                    //Recupero os dados do sistema e atualizo a lista de Produtos e salvo nos dados
+                    Dados dados = Util.recuperaDados();
+                    dados.obtemListaProdutos().clear();
+                    dados.obtemListaProdutos().addAll(listaProdutos);
+                    Util.defineDados(dados);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
     }
 }

@@ -97,11 +97,14 @@ public class ProdutosFragment extends Fragment {
             }
         };
 
+        configuraAdapter(view);
+        return view;
+    }
+
+    private void configuraAdapter(View view) {
         adapter = new AdapterProdutos(getActivity(), listProdutos);
         recyclerViewProdutos = view.findViewById(R.id.recyclerview_produtos);
         recyclerViewProdutos.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewProdutos.setAdapter(adapter);
-
-        return view;
     }
 }

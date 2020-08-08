@@ -35,7 +35,6 @@ public class ClientesFragment extends Fragment {
     private ValueEventListener valueEventListenerContatos;
     private AlertDialog alertDialog;
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -56,7 +55,6 @@ public class ClientesFragment extends Fragment {
 
         alertDialog = Util.criaProgressBar(getContext(), "Carregando Clientes");
         alertDialog.show();
-
 
         //recupero os clientes salvos no banco
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.CLIENTES);
@@ -87,11 +85,14 @@ public class ClientesFragment extends Fragment {
             }
         };
 
+        configuraAdapter(view);
+        return view;
+    }
+
+    private void configuraAdapter(View view) {
         adapter = new AdapterClientesFragment(getActivity(), listClientes);
         recyclerViewClientes = view.findViewById(R.id.recyclerview_clientes);
         recyclerViewClientes.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewClientes.setAdapter(adapter);
-
-        return view;
     }
 }
