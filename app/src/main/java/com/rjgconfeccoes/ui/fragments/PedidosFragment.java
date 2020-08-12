@@ -42,7 +42,7 @@ public class PedidosFragment extends Fragment {
     private static final int FINALIZAR_PEDIDO = 1;
     public static final int CANCELA_EVENTO = -1;
     private AdapterPedidos adapter;
-    private ArrayList<Pedidos> listaPedidos = new ArrayList<>();
+    private ArrayList<Pedidos> listaPedidos;
     private RecyclerView recyclerViewPedidos;
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListenerPedidos;
@@ -60,7 +60,7 @@ public class PedidosFragment extends Fragment {
         databaseReference.addValueEventListener(valueEventListenerPedidos);
         adapter.notifyDataSetChanged();
     }
-
+    
     @Override
     public void onStop() {
         super.onStop();
@@ -77,16 +77,20 @@ public class PedidosFragment extends Fragment {
         alertDialog = Util.criaProgressBar(getContext(), "Carregando Pedidos");
         alertDialog.show();
 
-        //recupero os clientes salvos no banco
+        //inicio minha lista
+        listaPedidos = new ArrayList<>();
+
+        //recupero os pedidos salvos no banco
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS);
         valueEventListenerPedidos = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //limpo minha lista de clientes
-                listaPedidos.clear();
 
                 if (snapshot.getValue() != null) {
-                    //listar clientes
+                    //limpo minnha lista
+                    listaPedidos.clear();
+
+                    //listar pedidos
                     for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
                         String chaveGeral = idPedidoBanco.getKey();
                         Pedidos pedidos = new Pedidos();
@@ -106,11 +110,13 @@ public class PedidosFragment extends Fragment {
                     tvNaoExistePedido.setVisibility(View.GONE);
                     recyclerViewPedidos.setVisibility(View.VISIBLE);
                 } else {
-                    tvNaoExistePedido.setVisibility(View.VISIBLE);
-                    recyclerViewPedidos.setVisibility(View.GONE);
+                    if (listaPedidos.size() == 0) {
+                        tvNaoExistePedido.setVisibility(View.VISIBLE);
+                        recyclerViewPedidos.setVisibility(View.GONE);
+                    }
                 }
 
-                //Recupero os dados do sistema e atualizo a lista de clientes e salvo nos dados
+                //Recupero os dados do sistema e atualizo a lista de pedidos e salvo nos dados
                 Dados dados = Util.recuperaDados();
                 dados.obtemListaPedidos().clear();
                 dados.obtemListaPedidos().addAll(listaPedidos);
@@ -229,6 +235,8 @@ public class PedidosFragment extends Fragment {
         }
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(idPedido);
         databaseReference.removeValue();
+
+        listaPedidos.remove(posicaoClicada);
     }
 
     /**
@@ -238,6 +246,8 @@ public class PedidosFragment extends Fragment {
         String idPedido = pedidoClicado.getClienteId() + ";" + pedidoClicado.getId();
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(idPedido);
         databaseReference.removeValue();
+
+        listaPedidos.remove(posicaoClicada);
     }
 
     private void chamaTelaVisualizarPedido() {

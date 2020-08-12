@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Produto;
+import com.rjgconfeccoes.ui.util.Util;
 
+import java.util.Collections;
 import java.util.List;
 
 public class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ViewHolderProdutos> {
@@ -33,6 +35,7 @@ public class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderProdutos holder, int position) {
+        Collections.sort(listProdutos, (produto, produto2) -> produto.getDescricao().compareTo(produto2.getDescricao()));
         Produto produto = listProdutos.get(position);
         holder.vincula(produto);
     }
@@ -62,7 +65,7 @@ public class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ViewHo
             nomePoduto.setText(produto.getDescricao());
             quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
             quantidadeFemina.setText("Feminina: " + produto.getQuantidadeFeminina());
-            precoProduto.setText("R$ " + produto.getPreco());
+            precoProduto.setText("R$ " + Util.formataPreco(produto.getPreco()));
         }
     }
 }

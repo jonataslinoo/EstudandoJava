@@ -208,7 +208,7 @@ public class DashboardActivity extends AppCompatActivity implements BottomNaviga
                     menuDaTela.findItem(R.id.menu_novo_cliente).setVisible(false);
                 } else {
                     menuDaTela.findItem(R.id.menu_novo_pedido).setVisible(false);
-                    menuDaTela.findItem(R.id.menu_novo_produto).setVisible(true);
+                    menuDaTela.findItem(R.id.menu_novo_produto).setVisible(false);
                     menuDaTela.findItem(R.id.menu_novo_cliente).setVisible(false);
                 }
                 break;
@@ -221,7 +221,7 @@ public class DashboardActivity extends AppCompatActivity implements BottomNaviga
                 } else {
                     menuDaTela.findItem(R.id.menu_novo_pedido).setVisible(false);
                     menuDaTela.findItem(R.id.menu_novo_produto).setVisible(false);
-                    menuDaTela.findItem(R.id.menu_novo_cliente).setVisible(true);
+                    menuDaTela.findItem(R.id.menu_novo_cliente).setVisible(false);
                 }
                 break;
             }

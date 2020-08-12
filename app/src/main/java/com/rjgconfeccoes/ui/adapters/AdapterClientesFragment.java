@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Cliente;
 
+import java.text.Collator;
+import java.util.Collections;
 import java.util.List;
 
 public class AdapterClientesFragment extends RecyclerView.Adapter<AdapterClientesFragment.ViewHolderClientes> {
@@ -33,6 +35,7 @@ public class AdapterClientesFragment extends RecyclerView.Adapter<AdapterCliente
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderClientes holder, int position) {
+        Collections.sort(listClientes, (cliente, cliente2) -> cliente.getNome().compareTo(cliente2.getNome()));
         Cliente cliente = listClientes.get(position);
         holder.vincula(cliente);
     }

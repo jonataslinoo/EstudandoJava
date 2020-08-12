@@ -31,7 +31,7 @@ import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_TESTE;
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
 
-    public static final String TITULO_APPBAR = "Cadastrar Usuario";
+    public static final String TITULO_APPBAR = "Novo Usuario";
     private ConstraintLayout constraintLayout;
     private Toolbar toolbar;
     private EditText nome;
