@@ -60,7 +60,7 @@ public class PedidosFragment extends Fragment {
         databaseReference.addValueEventListener(valueEventListenerPedidos);
         adapter.notifyDataSetChanged();
     }
-    
+
     @Override
     public void onStop() {
         super.onStop();

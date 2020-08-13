@@ -48,23 +48,33 @@ public class AdapterProdutos extends RecyclerView.Adapter<AdapterProdutos.ViewHo
     public class ViewHolderProdutos extends RecyclerView.ViewHolder {
 
         private final TextView nomePoduto;
-        private final TextView quantidadeMasculina;
-        private final TextView quantidadeFemina;
+        private final TextView tvPrimeiraQuantidade;
+        private final TextView tvSegundaQuantidade;
         private final TextView precoProduto;
 
         public ViewHolderProdutos(@NonNull View itemView) {
             super(itemView);
 
             nomePoduto = itemView.findViewById(R.id.tv_nome_produto_fragment);
-            quantidadeMasculina = itemView.findViewById(R.id.tv_quantidade_masculina_produto_fragment);
-            quantidadeFemina = itemView.findViewById(R.id.tv_quantidade_feminina_produto_fragment);
+            tvPrimeiraQuantidade = itemView.findViewById(R.id.tv_quantidade_masculina_produto_fragment);
+            tvSegundaQuantidade = itemView.findViewById(R.id.tv_quantidade_feminina_produto_fragment);
             precoProduto = itemView.findViewById(R.id.tv_preco_produto_fragment);
         }
 
         public void vincula(Produto produto) {
             nomePoduto.setText(produto.getDescricao());
-            quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
-            quantidadeFemina.setText("Feminina: " + produto.getQuantidadeFeminina());
+
+            if (produto.getQuantidadeMasculina() == 0) {
+                tvPrimeiraQuantidade.setText("Feminina: " + produto.getQuantidadeFeminina());
+                tvSegundaQuantidade.setVisibility(View.INVISIBLE);
+            } else if (produto.getQuantidadeFeminina() == 0) {
+                tvPrimeiraQuantidade.setText("Masculina: " + produto.getQuantidadeMasculina());
+                tvSegundaQuantidade.setVisibility(View.INVISIBLE);
+            } else {
+                tvPrimeiraQuantidade.setText("Masculina: " + produto.getQuantidadeMasculina());
+                tvSegundaQuantidade.setText("Feminina: " + produto.getQuantidadeFeminina());
+            }
+
             precoProduto.setText("R$ " + Util.formataPreco(produto.getPreco()));
         }
     }

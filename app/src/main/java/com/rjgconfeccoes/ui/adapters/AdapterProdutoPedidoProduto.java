@@ -89,8 +89,8 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
 
         public final LinearLayout itemPedido;
         public final TextView descricaoProduto;
-        public final TextView quantidadeMasculina;
-        public final TextView quantidadeFeminina;
+        public final TextView tvPrimeiraQuantidade;
+        public final TextView tvSegundaQuantidade;
         public final TextView quantidadeProduto;
         public final TextView precoProduto;
         public final TextView precoTotal;
@@ -104,8 +104,8 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
 
             itemPedido = itemView.findViewById(R.id.lnl_item_pedidoProduto);
             descricaoProduto = itemView.findViewById(R.id.tv_descricao_produto_pedidoProduto);
-            quantidadeMasculina = itemView.findViewById(R.id.tv_quantidade_masculina_pedidoProduto);
-            quantidadeFeminina = itemView.findViewById(R.id.tv_quantidade_feminina_pedidoProduto);
+            tvPrimeiraQuantidade = itemView.findViewById(R.id.tv_quantidade_masculina_pedidoProduto);
+            tvSegundaQuantidade = itemView.findViewById(R.id.tv_quantidade_feminina_pedidoProduto);
             quantidadeProduto = itemView.findViewById(R.id.tv_quantidade_produto_pedidoProduto);
             precoProduto = itemView.findViewById(R.id.tv_preco_produto_pedidoProduto);
             precoTotal = itemView.findViewById(R.id.tv_preco_total_produto_pedidoProduto);
@@ -117,11 +117,20 @@ public class AdapterProdutoPedidoProduto extends RecyclerView.Adapter<AdapterPro
 
         public void vincula(Produto produto) {
             descricaoProduto.setText(produto.getDescricao());
-            quantidadeMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
-            quantidadeFeminina.setText("Feminina: " + produto.getQuantidadeFeminina());
             precoProduto.setText("R$ " + Util.formataPreco(produto.getPreco()));
             quantidadeProduto.setText("Quantidade: " + produto.getQuantidadeTotalProdutoPedido());
             precoTotal.setText("Total R$ " + Util.formataPreco((produto.getPreco() * produto.getQuantidadeTotalProdutoPedido())));
+
+            if (produto.getQuantidadeMasculina() == 0) {
+                tvPrimeiraQuantidade.setText("Feminina: " + produto.getQuantidadeFeminina());
+                tvSegundaQuantidade.setVisibility(View.INVISIBLE);
+            } else if (produto.getQuantidadeFeminina() == 0) {
+                tvPrimeiraQuantidade.setText("Masculina: " + produto.getQuantidadeMasculina());
+                tvSegundaQuantidade.setVisibility(View.INVISIBLE);
+            } else {
+                tvPrimeiraQuantidade.setText("Masculina: " + produto.getQuantidadeMasculina());
+                tvSegundaQuantidade.setText("Feminina: " + produto.getQuantidadeFeminina());
+            }
 
             if (context instanceof CadastroPedidoActivity) {
                 checkBoxAdicionarProduto.setVisibility(View.GONE);

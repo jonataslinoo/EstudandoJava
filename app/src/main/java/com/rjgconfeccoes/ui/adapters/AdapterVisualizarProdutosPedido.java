@@ -54,8 +54,8 @@ public class AdapterVisualizarProdutosPedido extends RecyclerView.Adapter<Adapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvNomeProduto;
-        private final TextView tvMasculina;
-        private final TextView tvFeminina;
+        private final TextView tvPrimeiroItem;
+        private final TextView tvSegundoItem;
         private final TextView tvPreco;
         private final TextView tvQuantidade;
 
@@ -63,16 +63,26 @@ public class AdapterVisualizarProdutosPedido extends RecyclerView.Adapter<Adapte
             super(itemView);
 
             tvNomeProduto = itemView.findViewById(R.id.tv_nome_produto_visualizarPedido);
-            tvMasculina = itemView.findViewById(R.id.tv_quantidade_masculina_produto_visualizarPedido);
-            tvFeminina = itemView.findViewById(R.id.tv_quantidade_feminina_produto_visualizarPedido);
+            tvPrimeiroItem = itemView.findViewById(R.id.tv_quantidade_masculina_produto_visualizarPedido);
+            tvSegundoItem = itemView.findViewById(R.id.tv_quantidade_feminina_produto_visualizarPedido);
             tvPreco = itemView.findViewById(R.id.tv_preco_produto_visualizarPedido);
             tvQuantidade = itemView.findViewById(R.id.tv_quantidade_produto_visualizarPedido);
         }
 
         public void vincula(Produto produto, ProdutoPedido produtoPedido) {
             tvNomeProduto.setText(produto.getDescricao());
-            tvMasculina.setText("Masculina: " + produto.getQuantidadeMasculina());
-            tvFeminina.setText("Feminina: " + produto.getQuantidadeFeminina());
+
+            if (produto.getQuantidadeMasculina() == 0) {
+                tvPrimeiroItem.setText("Feminina: " + produto.getQuantidadeFeminina());
+                tvSegundoItem.setVisibility(View.INVISIBLE);
+            } else if (produto.getQuantidadeFeminina() == 0) {
+                tvPrimeiroItem.setText("Masculina: " + produto.getQuantidadeMasculina());
+                tvSegundoItem.setVisibility(View.INVISIBLE);
+            } else {
+                tvPrimeiroItem.setText("Masculina: " + produto.getQuantidadeMasculina());
+                tvSegundoItem.setText("Feminina: " + produto.getQuantidadeFeminina());
+            }
+
             tvPreco.setText("R$ " + Util.formataPreco(produto.getPreco()));
             tvQuantidade.setText("Quantidade: " + produtoPedido.getQuantidadeTotalProdutos());
         }
