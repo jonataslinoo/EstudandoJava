@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_novo_pedido"
+        android:icon="@drawable/ic_action_novo_pedido"
+        android:title="@string/menu_novo_pedido"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_novo_produto"
+        android:icon="@drawable/ic_action_novo_produto"
+        android:title="@string/menu_novo_produto"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_novo_cliente"
+        android:icon="@drawable/ic_action_cadastrar_pessoa"
+        android:title="@string/menu_cadastrar_usuario"
+        app:showAsAction="always" />
+</menu>

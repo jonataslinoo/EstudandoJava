@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardViewItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="5dp"
+    app:cardCornerRadius="15dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_desc_pedido_pedidoFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/corPreto"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Pedido: 20200730182115" />
+
+        <TextView
+            android:id="@+id/tv_pedido_finalizado_pedidoFragment"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:paddingEnd="05dp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/corPreto"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Finalizado" />
+
+        <TextView
+            android:id="@+id/tv_cliente_pedidoFragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/corPreto"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tv_data_pedido_pedidoFragment"
+            app:layout_constraintStart_toStartOf="@+id/tv_desc_pedido_pedidoFragment"
+            app:layout_constraintTop_toBottomOf="@+id/tv_desc_pedido_pedidoFragment"
+            tools:text="Cliente: xxxx xxxx" />
+
+        <TextView
+            android:id="@+id/tv_preco_total_pedido_pedidoFragment"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/corPreto"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tv_quantidade_itens_pedido_pedidoFragment"
+            app:layout_constraintStart_toStartOf="@+id/tv_cliente_pedidoFragment"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cliente_pedidoFragment"
+            tools:text="R$ 5000,00" />
+
+        <TextView
+            android:id="@+id/tv_quantidade_itens_pedido_pedidoFragment"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="05dp"
+            android:textColor="@color/corPreto"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/tv_preco_total_pedido_pedidoFragment"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cliente_pedidoFragment"
+            tools:text="3000 Itens" />
+
+        <TextView
+            android:id="@+id/tv_data_pedido_pedidoFragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingEnd="05dp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/corPreto"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_cliente_pedidoFragment"
+            app:layout_constraintTop_toBottomOf="@+id/tv_desc_pedido_pedidoFragment"
+            tools:text="dd/mm//yyyy xx:xx:xxxx" />
+
+        <TextView
+            android:id="@+id/tv_data_pedido_finalizado_pedidoFragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingEnd="05dp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/corPreto"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/tv_data_pedido_pedidoFragment"
+            app:layout_constraintStart_toEndOf="@+id/tv_quantidade_itens_pedido_pedidoFragment"
+            app:layout_constraintTop_toBottomOf="@+id/tv_data_pedido_pedidoFragment"
+            tools:text="dd/mm//yyyy xx:xx:xxxx" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

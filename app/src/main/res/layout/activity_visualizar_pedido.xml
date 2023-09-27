@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <!-- Container Cabeçalho -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Pedido id e Finalizado -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_desc_pedido_visualizarPedido"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="75"
+                android:textColor="@color/corPreto"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Pedido: 20200730182115" />
+
+            <TextView
+                android:id="@+id/tv_pedido_finalizado_visualizarPedido"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="25"
+                android:textAlignment="textEnd"
+                android:textColor="@color/corPreto"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="Finalizado" />
+
+        </LinearLayout>
+
+        <!-- Nome cliente -->
+        <TextView
+            android:id="@+id/tv_nome_cliente_visualizarPedido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/corPreto"
+            tools:text="Cliente: xxxx xxxx" />
+
+        <!-- Valor e quantidade itens -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_preco_total_pedido_visualizarPedido"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:textColor="@color/corPreto"
+                tools:text="Valor total: R$ 5000,00" />
+
+            <TextView
+                android:id="@+id/tv_quantidade_itens_pedido_visualizarPedido"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:textColor="@color/corPreto"
+                tools:text="Quantidade: 3000 Itens" />
+
+        </LinearLayout>
+
+        <!-- Data Criada -->
+        <LinearLayout
+            android:id="@+id/lnl_data_pedido_visualizarPedido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_data_pedido_visualizarPedido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/corPreto"
+                tools:text="23/04/2020 15:11:02" />
+
+        </LinearLayout>
+
+        <!-- Data Criada/Finalizada -->
+        <LinearLayout
+            android:id="@+id/lnl_data_criada_finalizada_visualizarPedido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_data_pedido_criado_visualizarPedido"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="47"
+                android:gravity="right"
+                android:textColor="@color/corPreto"
+                tools:text="23/04/2020 15:11:02" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:gravity="center"
+                android:textColor="@color/corPreto"
+                android:text="-" />
+
+            <TextView
+                android:id="@+id/tv_data_pedido_finalizado_visualizarPedido"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="47"
+                android:textColor="@color/corPreto"
+                tools:text="10/04/2020 12:13:50" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_visualizarPedido"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        tools:listitem="@layout/lst_produtos_fragment" />
+
+</LinearLayout>

@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">R J G</string>
+    <string name="email">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="login">Login</string>
+    <string name="titulo_principal_splash_screen">R J G</string>
+    <string name="titulo_secundario_splash_screen">CONFECÇÕES</string>
+    <string name="sobrenome">Sobrenome</string>
+    <string name="nome_produto">Nome produto</string>
+    <string name="confirmar_senha">Confirmar senha</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="permitir_cadastro">Permitir cadastro</string>
+    <string name="sair">Sair</string>
+    <string name="novo_usuario">Novo Usuário</string>
+    <string name="gravar_pedido">Gravar Pedido</string>
+    <string name="cod_telefone">Telefone</string>
+    <string name="cod_area">DDD</string>
+    <string name="zero">0</string>
+    <string name="quantidade_feminina">Quantidade Feminina</string>
+    <string name="quantidade_masculina">Quantidade Masculina</string>
+    <string name="preco_rs">Preço R$</string>
+    <string name="kit_infantil">Kit Infantil</string>
+    <string name="kit_adulto">Kit Adulto</string>
+    <string name="menu_produtos">Produtos</string>
+    <string name="nao_existem_produtos">NÃO EXISTEM PRODUTOS</string>
+    <string name="remover">Remover</string>
+    <string name="finalizar">Finalizar</string>
+    <string name="nao_existem_pedidos_finalizados">Não existem pedidos finalizados!</string>
+    <string name="nao_existem_pedidos">Não existem pedidos!</string>
+    <string name="nome_cliente">Nome cliente</string>
+    <string name="nome_usuario">Nome usuário</string>
+
+    <!-- Mensagens de sucesso -->
+    <string name="msg_sucesso_login">Sucesso ao efetuar login.</string>
+    <string name="msg_sucesso_cadastrar_usuario">Sucesso ao cadastrar usuario!</string>
+    <string name="msg_sucesso_cadastrar_cliente">Sucesso ao cadastrar cliente!</string>
+    <string name="msg_sucesso_cadastrar_produto">Sucesso ao cadastrar produto!</string>
+    <string name="msg_sucesso_cadastrar_pedido">Sucesso ao cadastrar pedido!</string>
+
+    <!-- Mensagens de erro -->
+    <string name="msg_erro_senha_branco">O campo de senha não pode estar em branco!</string>
+    <string name="msg_erro_senha_minimo_6">A senha deve ter o mínimo de 6 caracteres!</string>
+    <string name="msg_erro_senhas_nao_correspondem">As senhas não correspondem.</string>
+    <string name="msg_erro_campos_cadastro_branco">Os campos de cadastro não podem estar em branco!</string>
+    <string name="msg_erro_campos_login_branco">Os campos de email e senha não podem estar em branco!</string>
+    <string name="msg_erro_email_invalido">O e-mail digita é invalido. Digite outro e-mail.</string>
+    <string name="msg_erro_email_em_uso">Esse e-mail já está em uso. Utilize outro email.</string>
+    <string name="msg_erro">Erro: </string>
+    <string name="msg_erro_dados_usuario_nao_encontrados">Dados do usuário não encontrados.</string>
+    <string name="msg_erro_email_nao_existe_desabilitado">Este e-mail não existe ou foi desabilitado.</string>
+    <string name="msg_erro_senha_incorreta">Senha incorreta.</string>
+    <string name="msg_erro_conexao_efetue_login_novamente">Falha na conexão, efetue o login novamente.</string>
+    <string name="msg_erro_nenhum_usuario_logado">Nenhum usuario logado!</string>
+    <string name="msg_erro_cadastrar_usuario">Erro ao cadastrar usuario!</string>
+    <string name="msg_erro_cliente_ja_cadastrado">Esse cliente já possui cadastro!</string>
+    <string name="msg_erro_selecione_cliente">O cliente não pode estar em branco, selecione algum cliente!</string>
+    <string name="msg_erro_pedido_sem_produto">O pedido deve ter ao menos um produto!</string>
+
+    <!-- Mensagens erro produto -->
+    <string name="msg_erro_produto_ja_cadastrado">Esse produto já possui cadastro!</string>
+    <string name="msg_erro_quantidade_produtos_tipo">Para produto avulso, cadastrar uma quantidade de item!</string>
+    <string name="msg_erro_quantidade_produtos_kit_adulto">Para o kit adulto, cadastrar três quantidades de itens!</string>
+    <string name="msg_erro_quantidade_produtos_kit_infantil">Para o kit infantil, cadastrar quatro quantidades de itens!</string>
+    <string name="msg_erro_nome_produto_branco">O nome do produto não pode estar em branco</string>
+    <string name="msg_erro_quantidade_nao_pode_zero">A quantidade não pode ser zero</string>
+    <string name="msg_erro_valor_produto_maior_que_zero">O valor do produto tem que ser maior que zero</string>
+    <string name="msg_erro_valor_produto_branco">O valor do produto não pode estar em branco</string>
+
+    <!-- Menus -->
+    <string name="menu_cadastrar_usuario">Cadastrar Usuario</string>
+    <string name="menu_pedidos">Pedidos</string>
+    <string name="menu_clientes">Clientes</string>
+    <string name="menu_pedidos_finalizados">Pedidos Finalizados</string>
+    <string name="menu_opcoes">Opções</string>
+    <string name="menu_novo_pedido">Novo Pedido</string>
+    <string name="menu_novo_produto">Novo Produto</string>
+
+    <!-- Toolbars -->
+    <string name="toolbar_titulo_pedidos">Pedidos</string>
+    <string name="toolbar_titulo_opcoes">Opções</string>
+
+    <!-- Mensagens de dialogo -->
+    <string name="titulo_msg_atencao">Atenção</string>
+    <string name="botao_msg_confirmar">Confirmar</string>
+    <string name="botao_msg_cancelar">Cancelar</string>
+    <string name="corpo_msg_remover_pedido">Deseja remover este pedido?</string>
+    <string name="corpo_msg_finalizar_pedido">Deseja Finalizar este pedido?</string>
+    <string name="corpo_msg_remover_pedido_finalizado">Deseja remover este pedido finalizado?</string>
+    <string name="botao_msg_ok">Ok</string>
+    <string name="nao_possui_clientes_carregue_lista">Não possuem cliente, carregue a lista novamente.</string>
+    <string name="conta_teste_nao_grava_dados">Não é possivel gravar dados em uma conta de teste.</string>
+    <string name="conta_teste_nao_remove_dados">Não é possivel remover dados em uma conta de teste.</string>
+
+</resources>

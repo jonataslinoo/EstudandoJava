@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="5dp"
+    app:cardCornerRadius="15dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_nome_produto_visualizarPedido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/corPreto"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Mascara bico de pato adulto" />
+
+        <TextView
+            android:id="@+id/tv_quantidade_masculina_produto_visualizarPedido"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/corPreto"
+            app:layout_constraintEnd_toStartOf="@+id/tv_quantidade_feminina_produto_visualizarPedido"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_nome_produto_visualizarPedido"
+            tools:text="Masculina" />
+
+        <TextView
+            android:id="@+id/tv_quantidade_feminina_produto_visualizarPedido"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/corPreto"
+            app:layout_constraintStart_toEndOf="@+id/tv_quantidade_masculina_produto_visualizarPedido"
+            app:layout_constraintTop_toTopOf="@+id/tv_quantidade_masculina_produto_visualizarPedido"
+            tools:text="Feminina" />
+
+        <TextView
+            android:id="@+id/tv_preco_produto_visualizarPedido"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/corPreto"
+            app:layout_constraintEnd_toEndOf="@+id/tv_quantidade_masculina_produto_visualizarPedido"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_quantidade_masculina_produto_visualizarPedido"
+            tools:text="R$ 4,50" />
+
+        <TextView
+            android:id="@+id/tv_quantidade_produto_visualizarPedido"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/corPreto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_preco_produto_visualizarPedido"
+            app:layout_constraintTop_toBottomOf="@+id/tv_quantidade_feminina_produto_visualizarPedido"
+            tools:text="Quantidade: 1000" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="5dp"
+    app:cardCornerRadius="15dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/lnl_item_pedidoProduto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="80"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_descricao_produto_pedidoProduto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/corPreto"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Mascara bico de pato adulto" />
+
+            <!--Label Quantidade por tipo e quantidade Total-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_quantidade_masculina_pedidoProduto"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/corPreto"
+                    android:textStyle="bold"
+                    tools:text="Masculina: 0" />
+
+                <TextView
+                    android:id="@+id/tv_quantidade_feminina_pedidoProduto"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/corPreto"
+                    android:textStyle="bold"
+                    tools:text="Feminina: 1" />
+
+                <TextView
+                    android:id="@+id/tv_quantidade_produto_pedidoProduto"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/corPreto"
+                    android:textStyle="bold"
+                    tools:text="Qauntidade: 100" />
+
+            </LinearLayout>
+
+            <!--Label Preço e preço total-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_preco_produto_pedidoProduto"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/corPreto"
+                    android:textStyle="bold"
+                    tools:text="R$ 4,50" />
+
+                <TextView
+                    android:id="@+id/tv_preco_total_produto_pedidoProduto"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/corPreto"
+                    android:textStyle="bold"
+                    tools:text="Total R$ 4,50" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnl_botoes_pedidoProduto"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/botao_adicionar_quantidade_total_pedidoProduto"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="50"
+                android:src="@drawable/ic_action_adicionar" />
+
+            <ImageView
+                android:id="@+id/botao_remover_quantidade_total_pedidoProduto"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="50"
+                android:src="@drawable/ic_action_remover" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:gravity="center">
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkbox_adicionar_produto_pedidoProduto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

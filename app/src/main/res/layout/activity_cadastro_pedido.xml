@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout_cadastrar_pedido"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <TextView
+        android:id="@+id/tv_cliente_cadastrar_pedido"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:text="Cliente: "
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/spinner_cliente_cadastrar_pedido"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <Spinner
+        android:id="@+id/spinner_cliente_cadastrar_pedido"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/nome_produto"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_cliente_cadastrar_pedido"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_cliente_cadastrar_pedido"
+        app:layout_constraintTop_toTopOf="@+id/tv_cliente_cadastrar_pedido" />
+
+    <TextView
+        android:id="@+id/tv_nao_existe_produto_cadastrar_pedido"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/nao_existem_produtos"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_produtos_cadastrar_pedido"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_valor_total_pedido"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_cliente_cadastrar_pedido" />
+
+    <TextView
+        android:id="@+id/tv_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@id/bt_gravar_cadastrar_pedido"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView_produtos_cadastrar_pedido"
+        tools:text="Valor Total R$ " />
+
+    <TextView
+        android:id="@+id/tv_valor_total_pedido"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_1"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView_produtos_cadastrar_pedido"
+        app:layout_constraintStart_toEndOf="@id/tv_1"
+        tools:text="0.0 " />
+
+    <Button
+        android:id="@+id/bt_gravar_cadastrar_pedido"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/botao_redondo_gradiente_roxo"
+        android:text="@string/gravar_pedido"
+        android:textColor="@color/corBranca"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/bt_produtos_cadastrar_pedido"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/bt_produtos_cadastrar_pedido"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:background="@drawable/botao_redondo_gradiente_roxo"
+        android:drawableStart="@drawable/ic_action_produtos"
+        android:padding="13dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_gravar_cadastrar_pedido"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView_produtos_cadastrar_pedido"
+        app:layout_constraintStart_toEndOf="@+id/bt_gravar_cadastrar_pedido"
+        app:layout_constraintTop_toTopOf="@+id/bt_gravar_cadastrar_pedido" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
