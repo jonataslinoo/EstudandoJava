@@ -37,7 +37,8 @@
         <activity
             android:name=".ui.activity.SplashScreenActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppCompat.TelaCheia">
+            android:theme="@style/AppCompat.TelaCheia"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
