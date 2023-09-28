@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Dados;
-import com.rjgconfeccoes.model.Pedidos;
+import com.rjgconfeccoes.model.Pedido;
 import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.activity.VisualizarPedidoActivity;
 import com.rjgconfeccoes.ui.adapters.AdapterPedidos;
@@ -42,7 +42,7 @@ public class PedidosFragment extends Fragment {
     private static final int FINALIZAR_PEDIDO = 1;
     public static final int CANCELA_EVENTO = -1;
     private AdapterPedidos adapter;
-    private ArrayList<Pedidos> listaPedidos;
+    private ArrayList<Pedido> listaPedidos;
     private RecyclerView recyclerViewPedidos;
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListenerPedidos;
@@ -52,7 +52,7 @@ public class PedidosFragment extends Fragment {
     private String idPedido;
     private String idCliente;
     private int posicaoClicada;
-    private Pedidos pedidoClicado;
+    private Pedido pedidoClicado;
 
     @Override
     public void onStart() {
@@ -93,7 +93,7 @@ public class PedidosFragment extends Fragment {
                     //listar pedidos
                     for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
                         String chaveGeral = idPedidoBanco.getKey();
-                        Pedidos pedidos = new Pedidos();
+                        Pedido pedido = new Pedido();
                         separaStringIdentificador(idPedidoBanco.getKey());
 
                         listaProdutosPedido = new ArrayList<>();
@@ -101,10 +101,10 @@ public class PedidosFragment extends Fragment {
                             ProdutoPedido produtoPedido = produtosPedidoBanco.getValue(ProdutoPedido.class);
                             listaProdutosPedido.add(produtoPedido);
                         }
-                        pedidos.setId(idPedido);
-                        pedidos.setClienteId(idCliente);
-                        pedidos.setListaProdutosPedido(listaProdutosPedido);
-                        listaPedidos.add(pedidos);
+                        pedido.setId(idPedido);
+                        pedido.setClienteId(idCliente);
+                        pedido.setListaProdutosPedido(listaProdutosPedido);
+                        listaPedidos.add(pedido);
                     }
 
                     tvNaoExistePedido.setVisibility(View.GONE);
@@ -145,13 +145,13 @@ public class PedidosFragment extends Fragment {
         registerForContextMenu(recyclerViewPedidos);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemLongClickListener(int position, Pedidos pedido) {
+            public void onItemLongClickListener(int position, Pedido pedido) {
                 posicaoClicada = position;
                 pedidoClicado = pedido;
             }
 
             @Override
-            public void onItemClickListener(int position, Pedidos pedido) {
+            public void onItemClickListener(int position, Pedido pedido) {
                 posicaoClicada = position;
                 pedidoClicado = pedido;
 

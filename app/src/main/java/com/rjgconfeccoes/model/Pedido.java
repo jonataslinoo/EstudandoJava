@@ -4,13 +4,13 @@ import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 
-public class Pedidos {
+public class Pedido {
 
     private String id;
     private String clienteId;
     private ArrayList<ProdutoPedido> listaProdutosPedido;
 
-    public Pedidos() {
+    public Pedido() {
     }
 
     @Exclude

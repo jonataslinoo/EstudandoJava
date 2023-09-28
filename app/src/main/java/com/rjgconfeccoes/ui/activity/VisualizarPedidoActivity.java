@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Dados;
-import com.rjgconfeccoes.model.Pedidos;
+import com.rjgconfeccoes.model.Pedido;
 import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.adapters.AdapterVisualizarProdutosPedido;
@@ -76,7 +76,7 @@ public class VisualizarPedidoActivity extends AppCompatActivity {
     }
 
     private void carregaDados() {
-        Pedidos pedido = dados.getVisualizarPedido();
+        Pedido pedido = dados.getVisualizarPedido();
         retornaValorPedido(pedido);
         String[] identificadores = pedido.getId().split(";");
 
@@ -109,7 +109,7 @@ public class VisualizarPedidoActivity extends AppCompatActivity {
         recyclerViewProdutosVisualizar.setAdapter(adapterProdutos);
     }
 
-    private void retornaValorPedido(Pedidos pedido) {
+    private void retornaValorPedido(Pedido pedido) {
         Dados dados = Util.recuperaDados();
 
         valorTotal = 0.0;

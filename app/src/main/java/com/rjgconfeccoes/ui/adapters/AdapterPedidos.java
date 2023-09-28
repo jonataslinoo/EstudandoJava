@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.model.Dados;
-import com.rjgconfeccoes.model.Pedidos;
+import com.rjgconfeccoes.model.Pedido;
 import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.util.Base64Custom;
@@ -24,12 +24,12 @@ import java.util.Collections;
 public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosViewHolder> {
 
     private final Context context;
-    private final ArrayList<Pedidos> listaPedidos;
+    private final ArrayList<Pedido> listaPedidos;
     private OnItemClickListener onItemClickListener;
     private double valorTotal;
     private int quantidadeItens;
 
-    public AdapterPedidos(Context context, ArrayList<Pedidos> listaPedidos) {
+    public AdapterPedidos(Context context, ArrayList<Pedido> listaPedidos) {
         this.context = context;
         this.listaPedidos = listaPedidos;
     }
@@ -48,15 +48,15 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
     @Override
     public void onBindViewHolder(@NonNull PedidosViewHolder holder, int position) {
         ordenaLista(position);
-        Pedidos pedidos = listaPedidos.get(position);
-        holder.vincula(pedidos);
+        Pedido pedido = listaPedidos.get(position);
+        holder.vincula(pedido);
 
         holder.cardViewItem.setOnLongClickListener(view -> {
-            onItemClickListener.onItemLongClickListener(position, pedidos);
+            onItemClickListener.onItemLongClickListener(position, pedido);
             return false;
         });
 
-        holder.cardViewItem.setOnClickListener(view -> onItemClickListener.onItemClickListener(position, pedidos));
+        holder.cardViewItem.setOnClickListener(view -> onItemClickListener.onItemClickListener(position, pedido));
     }
 
     private void ordenaLista(int position) {
@@ -110,9 +110,9 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
             pedidoFinalizado = itemView.findViewById(R.id.tv_pedido_finalizado_pedidoFragment);
         }
 
-        public void vincula(Pedidos pedidos) {
-            retornaValorPedido(pedidos);
-            String decodificaNomeCliente = Base64Custom.decodificarStringBase64(pedidos.getClienteId());
+        public void vincula(Pedido pedido) {
+            retornaValorPedido(pedido);
+            String decodificaNomeCliente = Base64Custom.decodificarStringBase64(pedido.getClienteId());
 
             nomeCliente.setText("Cliente: " + decodificaNomeCliente);
 
@@ -123,11 +123,11 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
             }
 
             precoTotalPedido.setText("R$: " + Util.formataPreco(valorTotal));
-            configudaDadosIdentificadores(pedidos);
+            configudaDadosIdentificadores(pedido);
         }
 
-        private void configudaDadosIdentificadores(Pedidos pedidos) {
-            String[] identificadores = pedidos.getId().split(";");
+        private void configudaDadosIdentificadores(Pedido pedido) {
+            String[] identificadores = pedido.getId().split(";");
 
             if (identificadores.length > 2) {
                 pedidoFinalizado.setVisibility(View.VISIBLE);
@@ -137,21 +137,21 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
                 dataPedido.setText(Util.converteDataHorasSegundos(Long.parseLong(identificadores[1])));
                 dataPedidoFinalizado.setText(Util.converteDataHorasSegundos(Long.parseLong(identificadores[2])));
             } else {
-                descPedido.setText("Pedido: " + pedidos.getId());
-                dataPedido.setText(Util.converteDataHorasSegundos(Long.parseLong(pedidos.getId())));
+                descPedido.setText("Pedido: " + pedido.getId());
+                dataPedido.setText(Util.converteDataHorasSegundos(Long.parseLong(pedido.getId())));
                 dataPedidoFinalizado.setVisibility(View.GONE);
                 pedidoFinalizado.setVisibility(View.GONE);
             }
         }
     }
 
-    private void retornaValorPedido(Pedidos pedidos) {
+    private void retornaValorPedido(Pedido pedido) {
         Dados dados = Util.recuperaDados();
 
         valorTotal = 0.0;
         quantidadeItens = 0;
 
-        for (ProdutoPedido produtoPedido : pedidos.getListaProdutosPedido()) {
+        for (ProdutoPedido produtoPedido : pedido.getListaProdutosPedido()) {
             for (Produto produto : dados.obtemListaProdutos()) {
                 if (produtoPedido.getProdutoId().equals(produto.getDescricao())) {
                     valorTotal += (produtoPedido.getQuantidadeTotalProdutos() * produto.getPreco());

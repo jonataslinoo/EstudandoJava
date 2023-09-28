@@ -6,21 +6,21 @@ public class Dados {
 
     private Usuario usuario;
     private Cliente cliente;
-    private Pedidos pedido;
+    private Pedido pedido;
     private Produto produto;
 
     private ArrayList<Cliente> listaClientes;
-    private ArrayList<Pedidos> listaPedidos;
-    private ArrayList<Pedidos> listaPedidosFinalizados;
+    private ArrayList<Pedido> listaPedidos;
+    private ArrayList<Pedido> listaPedidoFinalizados;
     private ArrayList<Produto> listaProdutos;
     private ArrayList<Produto> listaProdutosPedido;
     private ArrayList<Produto> listaProdutosSelecionados;
 
-    public Pedidos getVisualizarPedido() {
+    public Pedido getVisualizarPedido() {
         return pedido;
     }
 
-    public void setVisualizarPedido(Pedidos pedido) {
+    public void setVisualizarPedido(Pedido pedido) {
         this.pedido = pedido;
     }
 
@@ -47,7 +47,7 @@ public class Dados {
     /**
      * retorna uma lista com os pedidos cadastrados
      */
-    public ArrayList<Pedidos> obtemListaPedidos() {
+    public ArrayList<Pedido> obtemListaPedidos() {
         if (listaPedidos == null) {
             listaPedidos = new ArrayList<>();
         }
@@ -77,10 +77,10 @@ public class Dados {
     /**
      * retorna uma lista com os pedidos Finalizados no banco
      */
-    public ArrayList<Pedidos> obtemListaPedidosFinalizados() {
-        if (listaPedidosFinalizados == null) {
-            listaPedidosFinalizados = new ArrayList<>();
+    public ArrayList<Pedido> obtemListaPedidosFinalizados() {
+        if (listaPedidoFinalizados == null) {
+            listaPedidoFinalizados = new ArrayList<>();
         }
-        return listaPedidosFinalizados;
+        return listaPedidoFinalizados;
     }
 }

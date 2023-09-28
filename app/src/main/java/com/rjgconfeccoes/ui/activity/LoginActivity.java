@@ -21,7 +21,7 @@ import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Cliente;
 import com.rjgconfeccoes.model.Dados;
-import com.rjgconfeccoes.model.Pedidos;
+import com.rjgconfeccoes.model.Pedido;
 import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.model.Usuario;
@@ -38,9 +38,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth autenticacao;
     private DatabaseReference databaseReference;
     private ConstraintLayout constraintLayout;
-    private ArrayList<Pedidos> listaPedidos;
+    private ArrayList<Pedido> listaPedidos;
     private ArrayList<ProdutoPedido> listaProdutosPedido;
-    private ArrayList<Pedidos> listaPedidosFinalizados;
+    private ArrayList<Pedido> listaPedidoFinalizados;
     private ArrayList<ProdutoPedido> listaProdutosPedidoFinalizado;
     private ArrayList<Cliente> listaClientes;
     private ArrayList<Produto> listaProdutos;
@@ -178,7 +178,7 @@ public class LoginActivity extends AppCompatActivity {
                     //listar Pedidos
                     for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
                         String chaveGeral = idPedidoBanco.getKey();
-                        Pedidos pedidos = new Pedidos();
+                        Pedido pedido = new Pedido();
 
                         listaProdutosPedido = new ArrayList<>();
 
@@ -191,10 +191,10 @@ public class LoginActivity extends AppCompatActivity {
                         String idCliente = identificadores[0];
                         String idPedido = identificadores[1];
 
-                        pedidos.setId(idPedido);
-                        pedidos.setClienteId(idCliente);
-                        pedidos.setListaProdutosPedido(listaProdutosPedido);
-                        listaPedidos.add(pedidos);
+                        pedido.setId(idPedido);
+                        pedido.setClienteId(idCliente);
+                        pedido.setListaProdutosPedido(listaProdutosPedido);
+                        listaPedidos.add(pedido);
                     }
 
                     Dados dados = Util.recuperaDados();
@@ -218,14 +218,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                listaPedidosFinalizados = new ArrayList<>();
+                listaPedidoFinalizados = new ArrayList<>();
 
                 if (snapshot.getValue() != null) {
 
                     //listar Pedidos Finalizados
                     for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
                         String chaveGeral = idPedidoBanco.getKey();
-                        Pedidos pedidos = new Pedidos();
+                        Pedido pedido = new Pedido();
 
                         listaProdutosPedidoFinalizado = new ArrayList<>();
 
@@ -238,15 +238,15 @@ public class LoginActivity extends AppCompatActivity {
                         String idCliente = identificadores[0];
                         String idPedido = idPedidoBanco.getKey();
 
-                        pedidos.setId(idPedido);
-                        pedidos.setClienteId(idCliente);
-                        pedidos.setListaProdutosPedido(listaProdutosPedidoFinalizado);
-                        listaPedidosFinalizados.add(pedidos);
+                        pedido.setId(idPedido);
+                        pedido.setClienteId(idCliente);
+                        pedido.setListaProdutosPedido(listaProdutosPedidoFinalizado);
+                        listaPedidoFinalizados.add(pedido);
                     }
 
                     Dados dados = Util.recuperaDados();
                     dados.obtemListaPedidosFinalizados().clear();
-                    dados.obtemListaPedidosFinalizados().addAll(listaPedidosFinalizados);
+                    dados.obtemListaPedidosFinalizados().addAll(listaPedidoFinalizados);
                     Util.defineDados(dados);
                 }
             }

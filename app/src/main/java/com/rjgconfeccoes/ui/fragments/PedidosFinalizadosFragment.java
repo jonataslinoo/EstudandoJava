@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Dados;
-import com.rjgconfeccoes.model.Pedidos;
+import com.rjgconfeccoes.model.Pedido;
 import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.activity.VisualizarPedidoActivity;
 import com.rjgconfeccoes.ui.adapters.AdapterPedidos;
@@ -43,7 +43,7 @@ public class PedidosFinalizadosFragment extends Fragment {
     private static final int FINALIZAR_PEDIDO = 1;
     public static final int CANCELA_EVENTO = -1;
     private AdapterPedidos adapter;
-    private ArrayList<Pedidos> listaPedidosFinalizados = new ArrayList<>();
+    private ArrayList<Pedido> listaPedidoFinalizados = new ArrayList<>();
     private RecyclerView recyclerViewPedidosFinalizados;
     private TextView tvNaoExistePedidosFinalizados;
     private ArrayList<ProdutoPedido> listaProdutosPedido;
@@ -52,7 +52,7 @@ public class PedidosFinalizadosFragment extends Fragment {
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListenerPedidos;
     private AlertDialog alertDialog;
-    private Pedidos pedidoClicado;
+    private Pedido pedidoClicado;
     private int posicaoClicada;
 
     @Override
@@ -84,13 +84,13 @@ public class PedidosFinalizadosFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //limpo minha lista de pedidos finalizados
-                listaPedidosFinalizados.clear();
+                listaPedidoFinalizados.clear();
 
                 if (snapshot.getValue() != null) {
                     //listar pedidos finalizados
                     for (DataSnapshot idPedidoBanco : snapshot.getChildren()) {
                         String chaveGeral = idPedidoBanco.getKey();
-                        Pedidos pedidos = new Pedidos();
+                        Pedido pedido = new Pedido();
                         separaStringIdentificador(chaveGeral);
 
                         listaProdutosPedido = new ArrayList<>();
@@ -98,10 +98,10 @@ public class PedidosFinalizadosFragment extends Fragment {
                             ProdutoPedido produtoPedido = produtosPedidoBanco.getValue(ProdutoPedido.class);
                             listaProdutosPedido.add(produtoPedido);
                         }
-                        pedidos.setId(idPedidoFinalizado);
-                        pedidos.setClienteId(idCliente);
-                        pedidos.setListaProdutosPedido(listaProdutosPedido);
-                        listaPedidosFinalizados.add(pedidos);
+                        pedido.setId(idPedidoFinalizado);
+                        pedido.setClienteId(idCliente);
+                        pedido.setListaProdutosPedido(listaProdutosPedido);
+                        listaPedidoFinalizados.add(pedido);
                     }
 
                     tvNaoExistePedidosFinalizados.setVisibility(View.GONE);
@@ -114,7 +114,7 @@ public class PedidosFinalizadosFragment extends Fragment {
                 //Recupero os dados do sistema e atualizo a lista de pedidos finalizados e salvo nos dados
                 Dados dados = Util.recuperaDados();
                 dados.obtemListaPedidos().clear();
-                dados.obtemListaPedidos().addAll(listaPedidosFinalizados);
+                dados.obtemListaPedidos().addAll(listaPedidoFinalizados);
                 Util.defineDados(dados);
 
                 //Atualiza lista e finaliza o progresso de busca dos pedidos
@@ -133,20 +133,20 @@ public class PedidosFinalizadosFragment extends Fragment {
     }
 
     private void configuraAdapter(View view) {
-        adapter = new AdapterPedidos(getActivity(), listaPedidosFinalizados);
+        adapter = new AdapterPedidos(getActivity(), listaPedidoFinalizados);
         recyclerViewPedidosFinalizados = view.findViewById(R.id.recyclerview_pedidosFinalizados);
         recyclerViewPedidosFinalizados.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewPedidosFinalizados.setAdapter(adapter);
         registerForContextMenu(recyclerViewPedidosFinalizados);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemLongClickListener(int position, Pedidos pedido) {
+            public void onItemLongClickListener(int position, Pedido pedido) {
                 pedidoClicado = pedido;
                 posicaoClicada = position;
             }
 
             @Override
-            public void onItemClickListener(int position, Pedidos pedido) {
+            public void onItemClickListener(int position, Pedido pedido) {
                 posicaoClicada = position;
                 pedidoClicado = pedido;
 

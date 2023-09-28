@@ -19,7 +19,7 @@ import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Cliente;
 import com.rjgconfeccoes.model.Dados;
-import com.rjgconfeccoes.model.Pedidos;
+import com.rjgconfeccoes.model.Pedido;
 import com.rjgconfeccoes.model.Produto;
 import com.rjgconfeccoes.model.ProdutoPedido;
 import com.rjgconfeccoes.ui.adapters.AdapterProdutoPedidoProduto;
@@ -156,14 +156,14 @@ public class CadastroPedidoActivity extends AppCompatActivity {
     }
 
     private void salvaDadosPedido(String clienteSelecionado) {
-        Pedidos pedidos = new Pedidos();
+        Pedido pedido = new Pedido();
         String idClienteCodificado = Base64Custom.codificarStringBase64(clienteSelecionado);
-        pedidos.setClienteId(idClienteCodificado);
-        cadastrarPedido(pedidos);
+        pedido.setClienteId(idClienteCodificado);
+        cadastrarPedido(pedido);
     }
 
-    private void cadastrarPedido(Pedidos pedidos) {
-        String idPedido = retornaIdentifcadorPedido(pedidos);
+    private void cadastrarPedido(Pedido pedido) {
+        String idPedido = retornaIdentifcadorPedido(pedido);
 
         //Instancio uma referencia ao banco de dados
         databaseReference = ConfiguracaoFirebase.getFirebaseDatabase().child(Util.PEDIDOS).child(idPedido);
@@ -182,10 +182,10 @@ public class CadastroPedidoActivity extends AppCompatActivity {
         vaiParaTelaDashborad();
     }
 
-    private String retornaIdentifcadorPedido(Pedidos pedidos) {
+    private String retornaIdentifcadorPedido(Pedido pedido) {
         //uso a data como identificador unico aproveito para mostrar na tela a data do pedido
         long dataPedidoIdentificador = Util.obtemDataAtualComHoraSegundo();
-        String identificador = pedidos.getClienteId() + ";" + dataPedidoIdentificador;
+        String identificador = pedido.getClienteId() + ";" + dataPedidoIdentificador;
 
         return identificador;
     }
