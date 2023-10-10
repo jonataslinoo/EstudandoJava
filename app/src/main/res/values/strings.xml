@@ -9,7 +9,6 @@
     <string name="nome_produto">Nome produto</string>
     <string name="confirmar_senha">Confirmar senha</string>
     <string name="cadastrar">Cadastrar</string>
-    <string name="permitir_cadastro">Permitir cadastro</string>
     <string name="sair">Sair</string>
     <string name="novo_usuario">Novo Usuário</string>
     <string name="gravar_pedido">Gravar Pedido</string>
@@ -29,6 +28,7 @@
     <string name="nao_existem_pedidos">Não existem pedidos!</string>
     <string name="nome_cliente">Nome cliente</string>
     <string name="nome_usuario">Nome usuário</string>
+    <string name="cpf_usuario">CPF usuário</string>
 
     <!-- Mensagens de sucesso -->
     <string name="msg_sucesso_login">Sucesso ao efetuar login.</string>

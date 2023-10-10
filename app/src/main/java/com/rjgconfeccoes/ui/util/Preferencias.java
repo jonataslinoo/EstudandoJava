@@ -5,10 +5,10 @@ import android.content.SharedPreferences;
 
 import java.util.HashMap;
 
-import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_EMAIL_PREFERENCIAS;
-import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_NOME_PREFERENCIAS;
-import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_PODE_CADASTRAR_PREFERENCIAS;
-import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_SENHA_PREFERENCIAS;
+import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_EMAIL_PREFERENCIAS;
+import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_NOME_PREFERENCIAS;
+import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_PODE_CADASTRAR_PREFERENCIAS;
+import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_SENHA_PREFERENCIAS;
 
 public class Preferencias {
 

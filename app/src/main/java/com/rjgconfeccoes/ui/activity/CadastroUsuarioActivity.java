@@ -1,11 +1,21 @@
 package com.rjgconfeccoes.ui.activity;
 
+import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_EMAIL_PREFERENCIAS;
+import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_SENHA_PREFERENCIAS;
+import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_TESTE;
+
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,21 +23,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.rjgconfeccoes.R;
 import com.rjgconfeccoes.config.ConfiguracaoFirebase;
 import com.rjgconfeccoes.model.Usuario;
-import com.rjgconfeccoes.ui.util.Base64Custom;
+import com.rjgconfeccoes.ui.custons.CustomSpinner;
 import com.rjgconfeccoes.ui.util.Preferencias;
 import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.HashMap;
-
-import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_EMAIL_PREFERENCIAS;
-import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_SENHA_PREFERENCIAS;
-import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_TESTE;
+import java.util.List;
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
 
@@ -35,9 +39,10 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     private Toolbar toolbar;
     private EditText nome;
+    private EditText cpf;
     private EditText email;
     private EditText senha;
-    private CheckBox checkBoxPodeCadastrar;
+    private CustomSpinner spinnerCargos;
     private FirebaseAuth autenticacao;
 
     @Override
@@ -59,11 +64,17 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
 
     private void inicializaCampos() {
         constraintLayout = findViewById(R.id.constraint_layout_cadastrar_usuario);
-        nome = findViewById(R.id.et_nome_cadastrar_usuario);
-        email = findViewById(R.id.et_email_cadastrar_usuario);
-        senha = findViewById(R.id.et_senha_cadastrar_usuario);
-        checkBoxPodeCadastrar = findViewById(R.id.checkBox_permitir_cadastro_cadastrar_usuario);
+        nome = findViewById(R.id.form_usuario_nome);
+        cpf = findViewById(R.id.form_usuario_cpf);
+        email = findViewById(R.id.form_usuario_email);
+        senha = findViewById(R.id.form_usuario_senha);
+        spinnerCargos = findViewById(R.id.form_usuario_cargo);
+
         toolbar = findViewById(R.id.toolbar);
+
+        List<String> listCargos = List.of("Selecione uma opção!", "Gerente", "Vendedor");
+
+        configuraSpinnerCargos(listCargos, spinnerCargos);
     }
 
     private void configuraBotaoCadastrar() {
@@ -79,65 +90,78 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
             limpaCampos();
         } else {
             String nomeDigitado = nome.getText().toString();
+            String cpfDigitado = cpf.getText().toString();
+            String cargoSelecionado = spinnerCargos.getSelectedItemPosition() == 0 ? "" : (String) spinnerCargos.getSelectedItem();
             String emailDigitado = email.getText().toString();
             String senhaDigitada = senha.getText().toString();
-            if (nomeDigitado.isEmpty() || emailDigitado.isEmpty() || senhaDigitada.isEmpty()) {
+
+//            if (nomeDigitado.isEmpty() || cpfDigitado.isEmpty() || cargoSelecionado.isEmpty() || emailDigitado.isEmpty() || senhaDigitada.isEmpty()) {
+//            }
+            if (validaCampoVazio(nomeDigitado, cpfDigitado, cargoSelecionado, emailDigitado, senhaDigitada)) {
                 Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
             } else {
-                preencheCampos(nomeDigitado, emailDigitado, senhaDigitada);
+                preencheCampos(nomeDigitado, cpfDigitado, cargoSelecionado, emailDigitado, senhaDigitada);
             }
         }
     }
 
-    private void preencheCampos(String nome, String email, String senha) {
-        Usuario usuario = new Usuario();
-        usuario.setNome(nome);
-        usuario.setEmail(email);
-        usuario.setSenha(senha);
-        usuario.setPodeCadastrar(validaPermitirCadastro());
+    private boolean validaCampoVazio(String... campo) {
 
-        cadastrarUsuario(usuario);
+        for (String s : campo) {
+            if (s.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void preencheCampos(String nome, String cpf, String cargo, String email, String senha) {
+        try {
+
+            Usuario usuario = new Usuario(nome, cpf, cargo, email, senha);
+            cadastrarUsuario(usuario);
+
+        } catch (Exception err) {
+            Util.mensagemDeAlerta(this, constraintLayout, err.getMessage());
+        }
     }
 
     private void cadastrarUsuario(@Nullable final Usuario usuario) {
-        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
-        autenticacao.createUserWithEmailAndPassword(usuario.getEmail(), usuario.getSenha())
-                .addOnCompleteListener(CadastroUsuarioActivity.this, task -> {
-                    if (task.isSuccessful()) {
-                        Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, getString(R.string.msg_sucesso_cadastrar_usuario));
+        Util.mensagemDeAlerta(this, constraintLayout, "sucesso");
 
-                        //Recupero dados usuario cadastrado
-                        String identificadorUsuario = Base64Custom.codificarStringBase64(usuario.getEmail());
-
-                        usuario.setId(identificadorUsuario);
-                        usuario.salvar();
-
-                        limpaCampos();
-                        deslogaUsuarioEEfetuaLogin();
-
-                    } else {
-                        String erroExcecao = "";
-
-                        try {
-                            throw task.getException();
-                        } catch (FirebaseAuthWeakPasswordException e) {
-                            erroExcecao = getString(R.string.msg_erro_senha_minimo_6);
-                        } catch (FirebaseAuthInvalidCredentialsException e) {
-                            erroExcecao = getString(R.string.msg_erro_email_invalido);
-                        } catch (FirebaseAuthUserCollisionException e) {
-                            erroExcecao = getString(R.string.msg_erro_email_em_uso);
-                        } catch (Exception e) {
-                            erroExcecao = getString(R.string.msg_erro_cadastrar_usuario);
-                            e.printStackTrace();
-                        }
-                        Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, getString(R.string.msg_erro) + erroExcecao);
-                    }
-                });
-    }
-
-
-    private boolean validaPermitirCadastro() {
-        return checkBoxPodeCadastrar.isChecked();
+//        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+//        autenticacao.createUserWithEmailAndPassword(usuario.getEmail(), usuario.getSenha())
+//                .addOnCompleteListener(CadastroUsuarioActivity.this, task -> {
+//                    if (task.isSuccessful()) {
+//                        Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, getString(R.string.msg_sucesso_cadastrar_usuario));
+//
+//                        //Recupero dados usuario cadastrado
+//                        String identificadorUsuario = Base64Custom.codificarStringBase64(usuario.getEmail());
+//
+//                        usuario.setId(identificadorUsuario);
+//                        usuario.salvar();
+//
+//                        limpaCampos();
+//                        deslogaUsuarioEEfetuaLogin();
+//
+//                    } else {
+//                        String erroExcecao = "";
+//
+//                        try {
+//                            throw task.getException();
+//                        } catch (FirebaseAuthWeakPasswordException e) {
+//                            erroExcecao = getString(R.string.msg_erro_senha_minimo_6);
+//                        } catch (FirebaseAuthInvalidCredentialsException e) {
+//                            erroExcecao = getString(R.string.msg_erro_email_invalido);
+//                        } catch (FirebaseAuthUserCollisionException e) {
+//                            erroExcecao = getString(R.string.msg_erro_email_em_uso);
+//                        } catch (Exception e) {
+//                            erroExcecao = getString(R.string.msg_erro_cadastrar_usuario);
+//                            e.printStackTrace();
+//                        }
+//                        Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, getString(R.string.msg_erro) + erroExcecao);
+//                    }
+//                });
     }
 
     /**
@@ -172,7 +196,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         nome.setText("");
         email.setText("");
         senha.setText("");
-        checkBoxPodeCadastrar.setChecked(false);
+//        checkBoxPodeCadastrar.setChecked(false);
     }
 
     public void dialogMensagem(String titulo, String mensagem) {
@@ -183,5 +207,39 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.botao_msg_ok), null)
                 .show();
+    }
+
+    private void configuraSpinnerCargos(List<String> listCargos,
+                                        CustomSpinner spinnerCargos) {
+        SpinnerAdapter adapter = new ArrayAdapter<>(
+                this,
+                R.layout.spinner_item,
+                listCargos);
+
+        spinnerCargos.setAdapter(adapter);
+
+        spinnerCargos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) view).setTextColor(position == 0 ? Color.GRAY : Color.BLACK);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerCargos.setSpinnerEventsListener(new CustomSpinner.OnSpinnerEventsListener() {
+            @Override
+            public void onPopupWindowOpened(Spinner spinner) {
+                spinner.setBackground(getResources().getDrawable(R.drawable.bg_spinner_opened));
+            }
+
+            @Override
+            public void onPopupWindowClosed(Spinner spinner) {
+                spinner.setBackground(getResources().getDrawable(R.drawable.bg_spinner_closed));
+            }
+        });
     }
 }

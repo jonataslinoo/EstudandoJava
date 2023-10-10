@@ -23,7 +23,7 @@ import com.rjgconfeccoes.ui.util.Base64Custom;
 import com.rjgconfeccoes.ui.util.Preferencias;
 import com.rjgconfeccoes.ui.util.Util;
 
-import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_TESTE;
+import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_TESTE;
 
 public class CadastroClienteActivity extends AppCompatActivity {
 

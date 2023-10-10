@@ -91,11 +91,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void preencheCampos(String emailDigitado, String senhaDigitada) {
-        Usuario usuario = new Usuario();
-        usuario.setEmail(emailDigitado);
-        usuario.setSenha(senhaDigitada);
+//        Usuario usuario = new Usuario();
+//        usuario.setEmail(emailDigitado);
+//        usuario.setSenha(senhaDigitada);
 
-        validarLogin(usuario);
+//        validarLogin(usuario);
     }
 
     private void validarLogin(final Usuario usuario) {
@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
     private void salvaUsuarioNasPreferencias(Usuario usuario) {
         Preferencias preferencias = new Preferencias(LoginActivity.this);
 //        String emailCodificadoUsuarioLogado = Base64Custom.codificarStringBase64(usuario.getEmail());
-        preferencias.salvarDadosUsuario(usuario.getNome(), usuario.getEmail(), usuario.getSenha(), usuario.isPodeCadastrar());
+//        preferencias.salvarDadosUsuario(usuario.getNome(), usuario.getEmail(), usuario.getSenha(), usuario.isPodeCadastrar());
     }
 
     private void vaiParaTelaDeDashboard() {

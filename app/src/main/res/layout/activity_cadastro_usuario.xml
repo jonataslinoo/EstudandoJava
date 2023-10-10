@@ -3,19 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/constraint_layout_cadastrar_usuario"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/corFundoTela">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
     <EditText
-        android:id="@+id/et_nome_cadastrar_usuario"
+        android:id="@+id/form_usuario_nome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="@dimen/form_usuario_margin_lateral"
         android:layout_marginTop="180dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="@dimen/form_usuario_margin_lateral"
         android:hint="@string/nome_usuario"
         android:importantForAutofill="no"
         android:inputType="text"
@@ -24,52 +25,64 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/et_email_cadastrar_usuario"
+        android:id="@+id/form_usuario_cpf"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/form_usuario_espacamento_views"
+        android:hint="@string/cpf_usuario"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@id/form_usuario_nome"
+        app:layout_constraintStart_toStartOf="@id/form_usuario_nome"
+        app:layout_constraintTop_toBottomOf="@id/form_usuario_nome" />
+
+    <com.rjgconfeccoes.ui.custons.CustomSpinner
+        android:id="@+id/form_usuario_cargo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_usuario_espacamento_views"
+        android:background="@drawable/bg_spinner_closed"
+        android:dropDownVerticalOffset="40dp"
+        app:layout_constraintEnd_toEndOf="@id/form_usuario_cpf"
+        app:layout_constraintStart_toStartOf="@id/form_usuario_cpf"
+        app:layout_constraintTop_toBottomOf="@id/form_usuario_cpf" />
+
+    <EditText
+        android:id="@+id/form_usuario_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_usuario_espacamento_views"
         android:hint="@string/email"
         android:importantForAutofill="no"
         android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="@+id/et_nome_cadastrar_usuario"
-        app:layout_constraintStart_toStartOf="@+id/et_nome_cadastrar_usuario"
-        app:layout_constraintTop_toBottomOf="@+id/et_nome_cadastrar_usuario" />
+        app:layout_constraintEnd_toEndOf="@+id/form_usuario_cargo"
+        app:layout_constraintStart_toStartOf="@+id/form_usuario_cargo"
+        app:layout_constraintTop_toBottomOf="@+id/form_usuario_cargo" />
 
     <EditText
-        android:id="@+id/et_senha_cadastrar_usuario"
+        android:id="@+id/form_usuario_senha"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/form_usuario_espacamento_views"
         android:hint="@string/senha"
         android:importantForAutofill="no"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/et_email_cadastrar_usuario"
-        app:layout_constraintStart_toStartOf="@+id/et_email_cadastrar_usuario"
-        app:layout_constraintTop_toBottomOf="@+id/et_email_cadastrar_usuario" />
-
-    <CheckBox
-        android:id="@+id/checkBox_permitir_cadastro_cadastrar_usuario"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/permitir_cadastro"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/et_senha_cadastrar_usuario"
-        app:layout_constraintStart_toStartOf="@+id/et_senha_cadastrar_usuario"
-        app:layout_constraintTop_toBottomOf="@+id/et_senha_cadastrar_usuario" />
+        app:layout_constraintEnd_toEndOf="@+id/form_usuario_email"
+        app:layout_constraintStart_toStartOf="@+id/form_usuario_email"
+        app:layout_constraintTop_toBottomOf="@+id/form_usuario_email" />
 
     <Button
         android:id="@+id/bt_gravar_cadastrar_pedido"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/botao_redondo_gradiente_roxo"
         android:text="@string/cadastrar"
         android:textColor="@color/corBranca"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox_permitir_cadastro_cadastrar_usuario"
-        app:layout_constraintStart_toStartOf="@+id/checkBox_permitir_cadastro_cadastrar_usuario"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox_permitir_cadastro_cadastrar_usuario" />
+        app:layout_constraintEnd_toEndOf="@+id/form_usuario_senha"
+        app:layout_constraintStart_toStartOf="@+id/form_usuario_senha"
+        app:layout_constraintTop_toBottomOf="@+id/form_usuario_senha" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

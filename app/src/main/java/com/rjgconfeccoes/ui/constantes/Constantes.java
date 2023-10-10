@@ -1,4 +1,4 @@
-package com.rjgconfeccoes.ui.Const;
+package com.rjgconfeccoes.ui.constantes;
 
 public interface Constantes {
 

@@ -34,7 +34,7 @@ import com.rjgconfeccoes.ui.util.Util;
 
 import java.util.ArrayList;
 
-import static com.rjgconfeccoes.ui.Const.Constantes.CHAVE_TESTE;
+import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_TESTE;
 
 
 public class PedidosFinalizadosFragment extends Fragment {

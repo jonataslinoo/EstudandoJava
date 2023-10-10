@@ -13,4 +13,5 @@
     <color name="corCinza">#808080</color>
     <color name="corCinzaClaro">#CCCCCC</color>
     <color name="corTransparente">#00000000</color>
+    <color name="corFundoTela">#f9f9f9</color>
 </resources>

@@ -1,64 +1,104 @@
 package com.rjgconfeccoes.model;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Exclude;
-import com.rjgconfeccoes.config.ConfiguracaoFirebase;
-import com.rjgconfeccoes.ui.util.Util;
+import android.util.Patterns;
 
 public class Usuario {
 
-    private String id;
     private String nome;
+    private String cpf;
+    private String cargo;
     private String email;
     private String senha;
-    private boolean podeCadastrar;
 
-    public Usuario() {
+    public Usuario(String nome, String cpf, String cargo, String email, String senha) throws Exception {
+
+        if (!validarCPF(cpf)) {
+            throw new RuntimeException("O CPF é inválido!");
+        }
+
+        if (!validarEmail(email)) {
+            throw new RuntimeException("O Email é inválido");
+        }
+
+        if (!validarSenha(senha)) {
+            throw new RuntimeException("A senha não pode ser menor que 6 digitos");
+        }
+
+        this.nome = nome;
+        this.cpf = cpf;
+        this.cargo = cargo;
+        this.email = email;
+        this.senha = senha;
     }
 
-    public void salvar() {
-        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
-        databaseReference.child(Util.USUARIOS).child(getId()).setValue(this);
-    }
-
-    @Exclude
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+//    public void salvar() {
+////        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebaseDatabase();
+////        databaseReference.child(Util.USUARIOS).child(getId()).setValue(this);
+//    }
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public String getCpf() {
+        return cpf;
+    }
+
+    public String getCargo() {
+        return cargo;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getSenha() {
         return senha;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    private boolean validarEmail(String email) {
+        return email.matches(String.valueOf(Patterns.EMAIL_ADDRESS));
     }
 
-    public boolean isPodeCadastrar() {
-        return podeCadastrar;
+    private boolean validarSenha(String senha) {
+        return senha.length() >= 6;
     }
 
-    public void setPodeCadastrar(boolean podeCadastrar) {
-        this.podeCadastrar = podeCadastrar;
+    public static boolean validarCPF(String cpf) {
+        cpf = cpf.replaceAll("[^0-9]", "");
+
+        if (cpf.length() != 11) {
+            return false;
+        }
+
+        if (cpf.matches("(\\d)\\1{10}")) {
+            return false;
+        }
+
+        int soma = 0;
+        for (int i = 0; i < 9; i++) {
+            soma += (cpf.charAt(i) - '0') * (10 - i);
+        }
+        int primeiroDigitoVerificador = 11 - (soma % 11);
+
+        if (primeiroDigitoVerificador == 10 || primeiroDigitoVerificador == 11) {
+            primeiroDigitoVerificador = 0;
+        }
+
+        if (primeiroDigitoVerificador != (cpf.charAt(9) - '0')) {
+            return false;
+        }
+
+        soma = 0;
+        for (int i = 0; i < 10; i++) {
+            soma += (cpf.charAt(i) - '0') * (11 - i);
+        }
+        int segundoDigitoVerificador = 11 - (soma % 11);
+
+        if (segundoDigitoVerificador == 10 || segundoDigitoVerificador == 11) {
+            segundoDigitoVerificador = 0;
+        }
+
+        return segundoDigitoVerificador == (cpf.charAt(10) - '0');
     }
 }
