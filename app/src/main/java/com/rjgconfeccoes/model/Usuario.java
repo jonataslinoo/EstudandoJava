@@ -6,11 +6,11 @@ public class Usuario {
 
     private String nome;
     private String cpf;
-    private String cargo;
+    private Cargo cargo;
     private String email;
     private String senha;
 
-    public Usuario(String nome, String cpf, String cargo, String email, String senha) throws Exception {
+    public Usuario(String nome, String cpf, Cargo cargo, String email, String senha) throws Exception {
 
         if (!validarCPF(cpf)) {
             throw new RuntimeException("O CPF é inválido!");
@@ -44,7 +44,7 @@ public class Usuario {
         return cpf;
     }
 
-    public String getCargo() {
+    public Cargo getCargo() {
         return cargo;
     }
 
