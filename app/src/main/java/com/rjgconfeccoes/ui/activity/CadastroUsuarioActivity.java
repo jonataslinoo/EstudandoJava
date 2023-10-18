@@ -1,7 +1,6 @@
 package com.rjgconfeccoes.ui.activity;
 
-import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_EMAIL_PREFERENCIAS;
-import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_SENHA_PREFERENCIAS;
+import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_CARGOS;
 import static com.rjgconfeccoes.ui.constantes.Constantes.CHAVE_TESTE;
 
 import android.app.AlertDialog;
@@ -22,15 +21,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.rjgconfeccoes.R;
-import com.rjgconfeccoes.config.ConfiguracaoFirebase;
+import com.rjgconfeccoes.api.client.FirebaseDataHelper;
+import com.rjgconfeccoes.api.client.OnDataFetchedListener;
+import com.rjgconfeccoes.model.Cargo;
 import com.rjgconfeccoes.model.Usuario;
 import com.rjgconfeccoes.ui.custons.CustomSpinner;
 import com.rjgconfeccoes.ui.util.Preferencias;
 import com.rjgconfeccoes.ui.util.Util;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
@@ -43,7 +42,6 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     private EditText email;
     private EditText senha;
     private CustomSpinner spinnerCargos;
-    private FirebaseAuth autenticacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +49,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cadastro_usuario);
 
         inicializaCampos();
+        carregaDados();
         configuraToolbar();
         configuraBotaoCadastrar();
     }
@@ -69,12 +68,11 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         email = findViewById(R.id.form_usuario_email);
         senha = findViewById(R.id.form_usuario_senha);
         spinnerCargos = findViewById(R.id.form_usuario_cargo);
-
         toolbar = findViewById(R.id.toolbar);
+    }
 
-        List<String> listCargos = List.of("Selecione uma opção!", "Gerente", "Vendedor");
-
-        configuraSpinnerCargos(listCargos, spinnerCargos);
+    private void carregaDados() {
+        obtemDadosSpinnerCargos();
     }
 
     private void configuraBotaoCadastrar() {
@@ -91,13 +89,13 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         } else {
             String nomeDigitado = nome.getText().toString();
             String cpfDigitado = cpf.getText().toString();
-            String cargoSelecionado = spinnerCargos.getSelectedItemPosition() == 0 ? "" : (String) spinnerCargos.getSelectedItem();
+            Cargo cargoSelecionado = (Cargo) spinnerCargos.getSelectedItem();
             String emailDigitado = email.getText().toString();
             String senhaDigitada = senha.getText().toString();
 
 //            if (nomeDigitado.isEmpty() || cpfDigitado.isEmpty() || cargoSelecionado.isEmpty() || emailDigitado.isEmpty() || senhaDigitada.isEmpty()) {
 //            }
-            if (validaCampoVazio(nomeDigitado, cpfDigitado, cargoSelecionado, emailDigitado, senhaDigitada)) {
+            if (validaCampoVazio(nomeDigitado, cpfDigitado, cargoSelecionado.getFuncao(), emailDigitado, senhaDigitada)) {
                 Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, getString(R.string.msg_erro_campos_cadastro_branco));
             } else {
                 preencheCampos(nomeDigitado, cpfDigitado, cargoSelecionado, emailDigitado, senhaDigitada);
@@ -115,7 +113,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         return false;
     }
 
-    private void preencheCampos(String nome, String cpf, String cargo, String email, String senha) {
+    private void preencheCampos(String nome, String cpf, Cargo cargo, String email, String senha) {
         try {
 
             Usuario usuario = new Usuario(nome, cpf, cargo, email, senha);
@@ -168,24 +166,23 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
      * Desloga o usuario cadastrado que o sistema loga sozinho
      * e efetua o login do usuario que ja estava logado anteriormente
      */
-    private void deslogaUsuarioEEfetuaLogin() {
-        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
-        autenticacao.signOut();
-
-        //recupero dados do usuario logado salvo nas preferencias
-        Preferencias preferencias = new Preferencias(this);
-        HashMap<String, String> usuarioLogado = preferencias.getDadosUsuarioLogado();
-        String emailSalvo = usuarioLogado.get(CHAVE_EMAIL_PREFERENCIAS);
-        String senhaSalva = usuarioLogado.get(CHAVE_SENHA_PREFERENCIAS);
-
-        autenticacao.signInWithEmailAndPassword(emailSalvo, senhaSalva).addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, getString(R.string.msg_erro_conexao_efetue_login_novamente));
-            }
-            vaiParaLogin();
-        });
-    }
-
+//    private void deslogaUsuarioEEfetuaLogin() {
+//        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+//        autenticacao.signOut();
+//
+//        //recupero dados do usuario logado salvo nas preferencias
+//        Preferencias preferencias = new Preferencias(this);
+//        HashMap<String, String> usuarioLogado = preferencias.getDadosUsuarioLogado();
+//        String emailSalvo = usuarioLogado.get(CHAVE_EMAIL_PREFERENCIAS);
+//        String senhaSalva = usuarioLogado.get(CHAVE_SENHA_PREFERENCIAS);
+//
+//        autenticacao.signInWithEmailAndPassword(emailSalvo, senhaSalva).addOnCompleteListener(task -> {
+//            if (!task.isSuccessful()) {
+//                Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, getString(R.string.msg_erro_conexao_efetue_login_novamente));
+//            }
+//            vaiParaLogin();
+//        });
+//    }
     private void vaiParaLogin() {
         Intent intent = new Intent(CadastroUsuarioActivity.this, LoginActivity.class);
         startActivity(intent);
@@ -194,9 +191,10 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
 
     private void limpaCampos() {
         nome.setText("");
+        cpf.setText("");
         email.setText("");
         senha.setText("");
-//        checkBoxPodeCadastrar.setChecked(false);
+        spinnerCargos.setSelection(0);
     }
 
     public void dialogMensagem(String titulo, String mensagem) {
@@ -209,14 +207,30 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void configuraSpinnerCargos(List<String> listCargos,
-                                        CustomSpinner spinnerCargos) {
-        SpinnerAdapter adapter = new ArrayAdapter<>(
-                this,
-                R.layout.spinner_item,
-                listCargos);
+    private void obtemDadosSpinnerCargos() {
+        FirebaseDataHelper.buscaListaDados(CHAVE_CARGOS, Cargo.class, new OnDataFetchedListener<List<Cargo>>() {
+            @Override
+            public void onDataFetched(List<Cargo> data) {
 
-        spinnerCargos.setAdapter(adapter);
+                data.add(0, new Cargo(0, "Selecione um cargo!"));
+
+                configuraSpinnerCargos(data);
+            }
+
+            @Override
+            public void onCancelled(Exception ex) {
+                Util.mensagemDeAlerta(CadastroUsuarioActivity.this, constraintLayout, ex.getMessage());
+            }
+        });
+    }
+
+    private void configuraSpinnerCargos(List<Cargo> data) {
+        SpinnerAdapter cargosAdapter = new ArrayAdapter<Cargo>(
+                CadastroUsuarioActivity.this,
+                R.layout.spinner_item,
+                data);
+
+        spinnerCargos.setAdapter(cargosAdapter);
 
         spinnerCargos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
