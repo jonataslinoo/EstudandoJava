@@ -8,4 +8,5 @@ public interface Constantes {
     String CHAVE_EMAIL_PREFERENCIAS = "emailUsuarioLogado";
     String CHAVE_SENHA_PREFERENCIAS = "senhaUsuarioLogado";
     String CHAVE_PODE_CADASTRAR_PREFERENCIAS = "permitirCadastro";
+    String CHAVE_CARGOS = "cargos";
 }

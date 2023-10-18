@@ -43,7 +43,7 @@
     <string name="msg_erro_senhas_nao_correspondem">As senhas não correspondem.</string>
     <string name="msg_erro_campos_cadastro_branco">Os campos de cadastro não podem estar em branco!</string>
     <string name="msg_erro_campos_login_branco">Os campos de email e senha não podem estar em branco!</string>
-    <string name="msg_erro_email_invalido">O e-mail digita é invalido. Digite outro e-mail.</string>
+    <string name="msg_erro_email_invalido">O e-mail digitado é invalido. Digite outro e-mail.</string>
     <string name="msg_erro_email_em_uso">Esse e-mail já está em uso. Utilize outro email.</string>
     <string name="msg_erro">Erro: </string>
     <string name="msg_erro_dados_usuario_nao_encontrados">Dados do usuário não encontrados.</string>
